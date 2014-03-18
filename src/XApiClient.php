@@ -80,7 +80,7 @@ class XApiClient implements XApiClientInterface
     public function storeStatement(StatementInterface $statement)
     {
         $request = $this->createRequest(
-            'post',
+            null !== $statement->getId() ? 'put' : 'post',
             'statements',
             array(),
             $this->serializer->serialize($statement, 'json')
@@ -147,6 +147,9 @@ class XApiClient implements XApiClientInterface
                 break;
             case 'post':
                 $request = $this->httpClient->post($uri, null, $body);
+                break;
+            case 'put':
+                $request = $this->httpClient->put($uri, null, $body);
                 break;
             default:
                 throw new \InvalidArgumentException(

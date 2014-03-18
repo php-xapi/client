@@ -57,6 +57,22 @@ class XApiClientTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($statementId, $this->client->storeStatement($statement));
     }
 
+    public function testStoreStatementWithId()
+    {
+        $statementId = '12345678-1234-5678-1234-567812345678';
+        $statement = $this->createStatement();
+        $statement->setId($statementId);
+        $this->validateStoreApiCall(
+            'put',
+            'statements',
+            200,
+            '["'.$statementId.'"]',
+            $statement
+        );
+
+        $this->assertEquals($statementId, $this->client->storeStatement($statement));
+    }
+
     public function testGetStatement()
     {
         $statementId = '12345678-1234-5678-1234-567812345678';
