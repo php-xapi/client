@@ -28,6 +28,8 @@ class XApiClient implements XApiClientInterface
 
     private $serializer;
 
+    private $version;
+
     private $username;
 
     private $password;
@@ -35,11 +37,13 @@ class XApiClient implements XApiClientInterface
     /**
      * @param ClientInterface     $httpClient The HTTP client
      * @param SerializerInterface $serializer The serializer
+     * @param string              $version    The xAPI version
      */
-    public function __construct(ClientInterface $httpClient, SerializerInterface $serializer)
+    public function __construct(ClientInterface $httpClient, SerializerInterface $serializer, $version)
     {
         $this->httpClient = $httpClient;
         $this->serializer = $serializer;
+        $this->version = $version;
     }
 
     /**
@@ -157,7 +161,7 @@ class XApiClient implements XApiClientInterface
                 );
         }
 
-        $request->addHeader('X-Experience-API-Version', '1.0.1');
+        $request->addHeader('X-Experience-API-Version', $this->version);
         $request->addHeader('Content-Type', 'application/json');
         $request->setAuth($this->username, $this->password);
 

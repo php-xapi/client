@@ -39,7 +39,7 @@ class XApiClientTest extends \PHPUnit_Framework_TestCase
     {
         $this->httpClient = $this->createHttpClientMock();
         $this->serializer = $this->createSerializerMock();
-        $this->client = new XApiClient($this->httpClient, $this->serializer);
+        $this->client = new XApiClient($this->httpClient, $this->serializer, '1.0.1');
     }
 
     public function testStoreStatement()
