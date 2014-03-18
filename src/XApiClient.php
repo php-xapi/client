@@ -79,6 +79,36 @@ class XApiClient implements XApiClientInterface
     }
 
     /**
+     * Returns the xAPI version.
+     *
+     * @return string The xAPI version
+     */
+    public function getVersion()
+    {
+        return $this->version;
+    }
+
+    /**
+     * Returns the HTTP auth username.
+     *
+     * @return string The username
+     */
+    public function getUsername()
+    {
+        return $this->username;
+    }
+
+    /**
+     * Returns the HTTP auth password.
+     *
+     * @return string The password
+     */
+    public function getPassword()
+    {
+        return $this->password;
+    }
+
+    /**
      * {@inheritDoc}
      */
     public function storeStatement(StatementInterface $statement)
