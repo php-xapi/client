@@ -1,0 +1,76 @@
+<?php
+
+/*
+ * This file is part of the XabbuhXApiClient package.
+ *
+ * (c) Christian Flothmann <christian.flothmann@xabbuh.de>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
+namespace Xabbuh\XApi\Client;
+
+use Guzzle\Http\Client;
+use Xabbuh\XApi\Common\Serializer\Serializer;
+
+/**
+ * xAPI client builder.
+ *
+ * @author Christian Flothmann <christian.flothmann@xabbuh.de>
+ */
+class XApiClientBuilder implements XApiClientBuilderInterface
+{
+    private $baseUrl;
+
+    private $version;
+
+    private $username;
+
+    private $password;
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setBaseUrl($baseUrl)
+    {
+        $this->baseUrl = $baseUrl;
+
+        return $this;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setVersion($version)
+    {
+        $this->version = $version;
+
+        return $this;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setAuth($username, $password)
+    {
+        $this->username = $username;
+        $this->password = $password;
+
+        return $this;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function build()
+    {
+        $httpClient = new Client($this->baseUrl);
+        $serializer = Serializer::createSerializer();
+        $version = null === $this->version ? '1.0.1' : $this->version;
+        $xApiClient = new XApiClient($httpClient, $serializer, $version);
+        $xApiClient->setAuth($this->username, $this->password);
+
+        return $xApiClient;
+    }
+}
