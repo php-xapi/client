@@ -12,6 +12,7 @@
 namespace Xabbuh\XApi\Client;
 
 use Guzzle\Http\Client;
+use Guzzle\Plugin\Oauth\OauthPlugin;
 use Xabbuh\XApi\Common\Serializer\Serializer;
 
 /**
@@ -28,6 +29,8 @@ class XApiClientBuilder implements XApiClientBuilderInterface
     private $username;
 
     private $password;
+
+    private $oAuthCredentials;
 
     /**
      * {@inheritDoc}
@@ -63,9 +66,29 @@ class XApiClientBuilder implements XApiClientBuilderInterface
     /**
      * {@inheritDoc}
      */
+    public function setOAuthCredentials($consumerKey, $consumerSecret, $token, $tokenSecret)
+    {
+        $this->oAuthCredentials = array(
+            'consumer_key' => $consumerKey,
+            'consumer_secret' => $consumerSecret,
+            'token' => $token,
+            'token_secret' => $tokenSecret,
+        );
+
+        return $this;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public function build()
     {
         $httpClient = new Client($this->baseUrl);
+
+        if (is_array($this->oAuthCredentials)) {
+            $httpClient->addSubscriber(new OauthPlugin($this->oAuthCredentials));
+        }
+
         $serializer = Serializer::createSerializer();
         $version = null === $this->version ? '1.0.1' : $this->version;
         $xApiClient = new XApiClient($httpClient, $serializer, $version);

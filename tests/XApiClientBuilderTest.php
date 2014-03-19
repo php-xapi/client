@@ -51,4 +51,28 @@ class XApiClientBuilderTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('foo', $xApiClient->getUsername());
         $this->assertEquals('bar', $xApiClient->getPassword());
     }
+
+    public function testSetOAuth()
+    {
+        /** @var \Xabbuh\XApi\Client\XApiClient $xApiClient */
+        $xApiClient = $this->builder
+            ->setOAuthCredentials(
+                'consumer-key',
+                'consumer-secret',
+                'token',
+                'token-secret'
+            )
+            ->build();
+        $httpClient = $xApiClient->getHttpClient();
+        $listeners = $httpClient->getEventDispatcher()
+            ->getListeners('request.before_send');
+
+        foreach ($listeners as $index => $listener) {
+            if (!$listener[0] instanceof \Guzzle\Plugin\Oauth\OauthPlugin) {
+                unset($listeners[$index]);
+            }
+        }
+
+        $this->assertCount(1, $listeners);
+    }
 }

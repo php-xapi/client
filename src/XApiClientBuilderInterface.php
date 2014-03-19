@@ -47,6 +47,18 @@ interface XApiClientBuilderInterface
     public function setAuth($username, $password);
 
     /**
+     * Sets OAuth credentials.
+     *
+     * @param string $consumerKey    The consumer key
+     * @param string $consumerSecret The consumer secret
+     * @param string $token          The token
+     * @param string $tokenSecret    The secret token
+     *
+     * @return XApiClientBuilderInterface The builder
+     */
+    public function setOAuthCredentials($consumerKey, $consumerSecret, $token, $tokenSecret);
+
+    /**
      * Builds the xAPI client.
      *
      * @return XApiClientInterface The xAPI client
