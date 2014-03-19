@@ -15,6 +15,10 @@ use Guzzle\Http\ClientInterface;
 use Guzzle\Http\Exception\ClientErrorResponseException;
 use Guzzle\Http\Message\RequestInterface;
 use JMS\Serializer\SerializerInterface;
+use Xabbuh\XApi\Common\Exception\AccessDeniedException;
+use Xabbuh\XApi\Common\Exception\ConflictException;
+use Xabbuh\XApi\Common\Exception\NotFoundException;
+use Xabbuh\XApi\Common\Exception\XApiException;
 use Xabbuh\XApi\Common\Model\StatementInterface;
 
 /**
@@ -119,7 +123,10 @@ class XApiClient implements XApiClientInterface
             array(),
             $this->serializer->serialize($statement, 'json')
         );
-        $response = $this->performRequest($request);
+        $response = $this->performRequest(
+            $request,
+            array(null !== $statement->getId() ? 204 : 200)
+        );
         $contents = json_decode($response->getBody(true));
 
         return $contents[0];
@@ -135,7 +142,7 @@ class XApiClient implements XApiClientInterface
             'statements',
             array('statementId' => $statementId)
         );
-        $response = $this->performRequest($request);
+        $response = $this->performRequest($request, array(200));
 
         return $this->serializer->deserialize(
             $response->getBody(true),
@@ -150,7 +157,7 @@ class XApiClient implements XApiClientInterface
     public function getStatements()
     {
         $request = $this->createRequest('get', 'statements');
-        $response = $this->performRequest($request);
+        $response = $this->performRequest($request, array(200));
 
         return $this->serializer->deserialize(
             $response->getBody(true),
@@ -201,16 +208,37 @@ class XApiClient implements XApiClientInterface
     /**
      * Performs the given HTTP request.
      *
-     * @param RequestInterface $request The HTTP request to perform
+     * @param RequestInterface $request          The HTTP request to perform
+     * @param array            $validStatusCodes A list of HTTP status codes
+     *                                           the calling method is able to
+     *                                           handle
      *
      * @return \Guzzle\Http\Message\Response The remote server's response
+     *
+     * @throws XApiException when the request fails
      */
-    private function performRequest(RequestInterface $request)
+    private function performRequest(RequestInterface $request, array $validStatusCodes)
     {
         try {
             $response = $request->send();
         } catch (ClientErrorResponseException $e) {
             $response = $e->getResponse();
+        }
+
+        // catch some common errors
+        if (in_array($response->getStatusCode(), array(401, 403))) {
+            throw new AccessDeniedException(
+                $response->getBody(true),
+                $response->getStatusCode()
+            );
+        } elseif (404 === $response->getStatusCode()) {
+            throw new NotFoundException($response->getBody(true));
+        } elseif (409 === $response->getStatusCode()) {
+            throw new ConflictException($response->getBody(true));
+        }
+
+        if (!in_array($response->getStatusCode(), $validStatusCodes)) {
+            throw new XApiException($response->getBody(true), $response->getStatusCode());
         }
 
         return $response;

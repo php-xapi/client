@@ -65,7 +65,7 @@ class XApiClientTest extends \PHPUnit_Framework_TestCase
         $this->validateStoreApiCall(
             'put',
             'statements',
-            200,
+            204,
             '["'.$statementId.'"]',
             $statement
         );
@@ -83,6 +83,23 @@ class XApiClientTest extends \PHPUnit_Framework_TestCase
             200,
             'Statement',
             $statement
+        );
+
+        $this->client->getStatement($statementId);
+    }
+
+    /**
+     * @expectedException \Xabbuh\XApi\Common\Exception\NotFoundException
+     */
+    public function testGetStatementWithNotExistingStatement()
+    {
+        $statementId = '12345678-1234-5678-1234-567812345678';
+        $this->validateRetrieveApiCall(
+            'get',
+            'statements?statementId='.$statementId,
+            404,
+            'Statement',
+            'There is no statement associated with this id'
         );
 
         $this->client->getStatement($statementId);
@@ -132,6 +149,9 @@ class XApiClientTest extends \PHPUnit_Framework_TestCase
             array(),
             array($statusCode)
         );
+        $response->expects($this->any())
+            ->method('getStatusCode')
+            ->will($this->returnValue($statusCode));
         $response->expects($this->any())
             ->method('getBody')
             ->will($this->returnValue($body));
@@ -197,7 +217,10 @@ class XApiClientTest extends \PHPUnit_Framework_TestCase
         $rawResponse = 'the-server-response';
         $response = $this->createResponseMock($statusCode, $rawResponse);
         $this->validateRequest($method, $uri, null, $response);
-        $this->validateDeserializer($rawResponse, $type, $transformedResult);
+
+        if ($statusCode < 400) {
+            $this->validateDeserializer($rawResponse, $type, $transformedResult);
+        }
     }
 
     private function validateStoreApiCall($method, $uri, $statusCode, $rawResponse, $object)

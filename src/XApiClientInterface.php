@@ -11,6 +11,9 @@
 
 namespace Xabbuh\XApi\Client;
 
+use Xabbuh\XApi\Common\Exception\ConflictException;
+use Xabbuh\XApi\Common\Exception\NotFoundException;
+use Xabbuh\XApi\Common\Exception\XApiException;
 use Xabbuh\XApi\Common\Model\StatementInterface;
 
 /**
@@ -26,6 +29,11 @@ interface XApiClientInterface
      * @param StatementInterface $statement The Statement to store
      *
      * @return string The id of the created statement
+     *
+     * @throws ConflictException if a Statement with the given id already exists
+     *                           and the given Statement does not match the
+     *                           stored Statement
+     * @throws XApiException     for all other xAPI related problems
      */
     public function storeStatement(StatementInterface $statement);
 
@@ -35,6 +43,9 @@ interface XApiClientInterface
      * @param string $statementId The Statement id
      *
      * @return StatementInterface The Statement
+     *
+     * @throws NotFoundException if no statement with the given id could be found
+     * @throws XApiException     for all other xAPI related problems
      */
     public function getStatement($statementId);
 
@@ -42,6 +53,8 @@ interface XApiClientInterface
      * Retrieves a collection of {@link \Xabbuh\XApi\Common\Model\StatementInterface Statements}.
      *
      * @return \Xabbuh\XApi\Common\Model\StatementResultInterface The {@link \Xabbuh\XApi\Common\Model\StatementResult}
+     *
+     * @throws XApiException in case of any problems related to the xAPI
      */
     public function getStatements();
 }
