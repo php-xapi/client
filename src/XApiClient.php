@@ -255,7 +255,7 @@ class XApiClient implements XApiClientInterface
      * Performs the given HTTP request.
      *
      * @param RequestInterface $request          The HTTP request to perform
-     * @param array            $validStatusCodes A list of HTTP status codes
+     * @param int[]            $validStatusCodes A list of HTTP status codes
      *                                           the calling method is able to
      *                                           handle
      *
