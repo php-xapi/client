@@ -73,6 +73,60 @@ class XApiClientTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(null, $this->client->storeStatement($statement));
     }
 
+    public function testStoreStatements()
+    {
+        $statementId1 = '12345678-1234-5678-1234-567812345678';
+        $statementId2 = '12345678-1234-5678-1234-567812345679';
+        $statement1 = $this->createStatement();
+        $statement2 = $this->createStatement();
+        $this->validateStoreApiCall(
+            'post',
+            'statements',
+            '200',
+            '["'.$statementId1.'","'.$statementId2.'"]',
+            array($statement1, $statement2)
+        );
+
+        $this->assertEquals(
+            array($statementId1, $statementId2),
+            $this->client->storeStatements(array($statement1, $statement2))
+        );
+    }
+
+    /**
+     * @expectedException \InvalidArgumentException
+     */
+    public function testStoreStatementsWithNonStatementObject()
+    {
+        $statement1 = $this->createStatement();
+        $statement2 = $this->createStatement();
+
+        $this->client->storeStatements(array($statement1, new \stdClass(), $statement2));
+    }
+
+    /**
+     * @expectedException \InvalidArgumentException
+     */
+    public function testStoreStatementsWithNonObject()
+    {
+        $statement1 = $this->createStatement();
+        $statement2 = $this->createStatement();
+
+        $this->client->storeStatements(array($statement1, 'foo', $statement2));
+    }
+
+    /**
+     * @expectedException \InvalidArgumentException
+     */
+    public function testStoreStatementsWithId()
+    {
+        $statement1 = $this->createStatement();
+        $statement2 = $this->createStatement();
+        $statement2->setId('12345678-1234-5678-1234-567812345679');
+
+        $this->client->storeStatements(array($statement1, $statement2));
+    }
+
     public function testGetStatement()
     {
         $statementId = '12345678-1234-5678-1234-567812345678';

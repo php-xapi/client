@@ -144,6 +144,43 @@ class XApiClient implements XApiClientInterface
     /**
      * {@inheritDoc}
      */
+    public function storeStatements(array $statements)
+    {
+        // check that only Statements without ids will be sent to the LRS
+        foreach ($statements as $statement) {
+            if (!is_object($statement)) {
+                throw new \InvalidArgumentException(
+                    'API can not handle '.gettype($statement).' values'
+                );
+            }
+
+            if (!$statement instanceof StatementInterface) {
+                throw new \InvalidArgumentException(
+                    'API can not  handle objects of type '.get_class($statement)
+                );
+            }
+
+            if (null !== $statement->getId()) {
+                throw new \InvalidArgumentException(
+                    'API can not handle Statements with ids when storing multiple Statements'
+                );
+            }
+        }
+
+        $request = $this->createRequest(
+            'post',
+            'statements',
+            array(),
+            $this->serializer->serialize($statements, 'json')
+        );
+        $response = $this->performRequest($request, array(200));
+
+        return json_decode($response->getBody(true));
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public function getStatement($statementId)
     {
         $request = $this->createRequest(

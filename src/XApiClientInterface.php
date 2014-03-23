@@ -39,6 +39,20 @@ interface XApiClientInterface
     public function storeStatement(StatementInterface $statement);
 
     /**
+     * Stores a collection of {@link \Xabbuh\XApi\Common\Model\StatementInterface Statements}.
+     *
+     * @param StatementInterface[] $statements The statements to store
+     *
+     * @return string[] The ids of the stored Statements in the order that the
+     *                  Statements were given
+     *
+     * @throws \InvalidArgumentException if a given object is no Statement or
+     *                                   if one of the Statements has an id
+     * @throws XApiException             for all other xAPI related problems
+     */
+    public function storeStatements(array $statements);
+
+    /**
      * Retrieves a single {@link \Xabbuh\XApi\Common\Model\StatementInterface Statement}.
      *
      * @param string $statementId The Statement id
