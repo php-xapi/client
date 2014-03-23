@@ -117,19 +117,28 @@ class XApiClient implements XApiClientInterface
      */
     public function storeStatement(StatementInterface $statement)
     {
-        $request = $this->createRequest(
-            null !== $statement->getId() ? 'put' : 'post',
-            'statements',
-            array(),
-            $this->serializer->serialize($statement, 'json')
-        );
-        $response = $this->performRequest(
-            $request,
-            array(null !== $statement->getId() ? 204 : 200)
-        );
-        $contents = json_decode($response->getBody(true));
+        if (null !== $statement->getId()) {
+            $request = $this->createRequest(
+                'put',
+                'statements',
+                array('statementId' => $statement->getId()),
+                $this->serializer->serialize($statement, 'json')
+            );
+            $this->performRequest($request, array(204));
 
-        return $contents[0];
+            return null;
+        } else {
+            $request = $this->createRequest(
+                'post',
+                'statements',
+                array(),
+                $this->serializer->serialize($statement, 'json')
+            );
+            $response = $this->performRequest($request, array(200));
+            $contents = json_decode($response->getBody(true));
+
+            return $contents[0];
+        }
     }
 
     /**

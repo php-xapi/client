@@ -28,7 +28,8 @@ interface XApiClientInterface
      *
      * @param StatementInterface $statement The Statement to store
      *
-     * @return string The id of the created statement
+     * @return string|null The id of the created statement or null if the Statement
+     *                     being stored already had an id
      *
      * @throws ConflictException if a Statement with the given id already exists
      *                           and the given Statement does not match the
