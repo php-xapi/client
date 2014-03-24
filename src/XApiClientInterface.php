@@ -28,8 +28,10 @@ interface XApiClientInterface
      *
      * @param StatementInterface $statement The Statement to store
      *
-     * @return string|null The id of the created statement or null if the Statement
-     *                     being stored already had an id
+     * @return StatementInterface The Statement as it has been stored in the
+     *                            remote LRS (basically this is the Statement
+     *                            that was passed to storeStatement() but with
+     *                            the id set on it
      *
      * @throws ConflictException if a Statement with the given id already exists
      *                           and the given Statement does not match the
@@ -43,8 +45,7 @@ interface XApiClientInterface
      *
      * @param StatementInterface[] $statements The statements to store
      *
-     * @return string[] The ids of the stored Statements in the order that the
-     *                  Statements were given
+     * @return StatementInterface[] The stored Statements
      *
      * @throws \InvalidArgumentException if a given object is no Statement or
      *                                   if one of the Statements has an id

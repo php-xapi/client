@@ -125,8 +125,6 @@ class XApiClient implements XApiClientInterface
                 $this->serializer->serialize($statement, 'json')
             );
             $this->performRequest($request, array(204));
-
-            return null;
         } else {
             $request = $this->createRequest(
                 'post',
@@ -136,9 +134,10 @@ class XApiClient implements XApiClientInterface
             );
             $response = $this->performRequest($request, array(200));
             $contents = json_decode($response->getBody(true));
-
-            return $contents[0];
+            $statement->setId($contents[0]);
         }
+
+        return $statement;
     }
 
     /**
@@ -175,7 +174,11 @@ class XApiClient implements XApiClientInterface
         );
         $response = $this->performRequest($request, array(200));
 
-        return json_decode($response->getBody(true));
+        foreach (json_decode($response->getBody(true)) as $key => $statementId) {
+            $statements[$key]->setId($statementId);
+        }
+
+        return $statements;
     }
 
     /**

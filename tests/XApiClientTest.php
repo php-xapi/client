@@ -53,8 +53,10 @@ class XApiClientTest extends \PHPUnit_Framework_TestCase
             '["'.$statementId.'"]',
             $statement
         );
+        $returnedStatement = $this->client->storeStatement($statement);
 
-        $this->assertEquals($statementId, $this->client->storeStatement($statement));
+        $this->assertEquals($statementId, $returnedStatement->getId());
+        $this->assertSame($statement, $returnedStatement);
     }
 
     public function testStoreStatementWithId()
@@ -69,8 +71,10 @@ class XApiClientTest extends \PHPUnit_Framework_TestCase
             '["'.$statementId.'"]',
             $statement
         );
+        $returnedStatement = $this->client->storeStatement($statement);
 
-        $this->assertEquals(null, $this->client->storeStatement($statement));
+        $this->assertEquals($statementId, $returnedStatement->getId());
+        $this->assertSame($statement, $returnedStatement);
     }
 
     public function testStoreStatements()
@@ -86,11 +90,12 @@ class XApiClientTest extends \PHPUnit_Framework_TestCase
             '["'.$statementId1.'","'.$statementId2.'"]',
             array($statement1, $statement2)
         );
+        $statements = $this->client->storeStatements(array($statement1, $statement2));
 
-        $this->assertEquals(
-            array($statementId1, $statementId2),
-            $this->client->storeStatements(array($statement1, $statement2))
-        );
+        $this->assertEquals($statementId1, $statements[0]->getId());
+        $this->assertSame($statement1, $statements[0]);
+        $this->assertEquals($statementId2, $statements[1]->getId());
+        $this->assertSame($statement2, $statements[1]);
     }
 
     /**
