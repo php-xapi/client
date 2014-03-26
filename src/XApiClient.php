@@ -186,18 +186,7 @@ class XApiClient implements XApiClientInterface
      */
     public function getStatement($statementId)
     {
-        $request = $this->createRequest(
-            'get',
-            'statements',
-            array('statementId' => $statementId)
-        );
-        $response = $this->performRequest($request, array(200));
-
-        return $this->serializer->deserialize(
-            $response->getBody(true),
-            'Xabbuh\XApi\Common\Model\Statement',
-            'json'
-        );
+        return $this->doGetStatements(array('statementId' => $statementId));
     }
 
     /**
@@ -219,12 +208,30 @@ class XApiClient implements XApiClientInterface
             );
         }
 
+        return $this->doGetStatements($urlParameters);
+    }
+
+    /**
+     * Fetch one or more Statements.
+     *
+     * @param array $urlParameters URL parameters
+     *
+     * @return StatementInterface|\Xabbuh\XApi\Common\Model\StatementResultInterface
+     */
+    private function doGetStatements(array $urlParameters)
+    {
         $request = $this->createRequest('get', 'statements', $urlParameters);
         $response = $this->performRequest($request, array(200));
 
+        if (isset($urlParameters['statementId'])) {
+            $class = 'Xabbuh\XApi\Common\Model\Statement';
+        } else {
+            $class = 'Xabbuh\XApi\Common\Model\StatementResult';
+        }
+
         return $this->serializer->deserialize(
             $response->getBody(true),
-            'Xabbuh\XApi\Common\Model\StatementResult',
+            $class,
             'json'
         );
     }
