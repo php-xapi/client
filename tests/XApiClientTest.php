@@ -11,9 +11,12 @@
 
 namespace Xabbuh\XApi\Client\Tests;
 
+use Xabbuh\XApi\Client\StatementsFilter;
 use Xabbuh\XApi\Client\XApiClient;
+use Xabbuh\XApi\Common\Model\Agent;
 use Xabbuh\XApi\Common\Model\Statement;
 use Xabbuh\XApi\Common\Model\StatementResult;
+use Xabbuh\XApi\Common\Model\Verb;
 
 /**
  * @author Christian Flothmann <christian.flothmann@xabbuh.de>
@@ -176,6 +179,66 @@ class XApiClientTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->assertEquals($statementResult, $this->client->getStatements());
+    }
+
+    public function testGetStatementsWithStatementsFilter()
+    {
+        $filter = new StatementsFilter();
+        $filter->limit(10)->ascending();
+        $statementResult = $this->createStatementResult();
+        $this->validateRetrieveApiCall(
+            'get',
+            'statements?limit=10&ascending=True',
+            200,
+            'StatementResult',
+            $statementResult
+        );
+
+        $this->assertEquals($statementResult, $this->client->getStatements($filter));
+    }
+
+    public function testGetStatementsWithAgentInStatementsFilter()
+    {
+        // {"mbox":"mailto:alice@example.com","objectType":"Agent"}
+        $filter = new StatementsFilter();
+        $agent = new Agent();
+        $agent->setMbox('mailto:alice@example.com');
+        $filter->byActor($agent);
+        $statementResult = $this->createStatementResult();
+        $agentJson = '{"mbox":"mailto:alice@example.com","objectType":"Agent"}';
+        $this->serializer
+            ->expects($this->once())
+            ->method('serialize')
+            ->with($agent, 'json')
+            ->will($this->returnValue($agentJson));
+        $this->validateRetrieveApiCall(
+            'get',
+            'statements?agent='.urlencode($agentJson),
+            200,
+            'StatementResult',
+            $statementResult
+        );
+
+        $this->assertEquals($statementResult, $this->client->getStatements($filter));
+    }
+
+    public function testGetStatementsWithVerbInStatementsFilter()
+    {
+        $filter = new StatementsFilter();
+        $verb = new Verb();
+        $verb->setId('http://adlnet.gov/expapi/verbs/attended');
+        $filter->byVerb($verb);
+        $statementResult = $this->createStatementResult();
+        $this->validateRetrieveApiCall(
+            'get',
+            'statements?verb='.urlencode('http://adlnet.gov/expapi/verbs/attended'),
+            200,
+            'StatementResult',
+            $statementResult
+        );
+
+        $this->assertEquals($statementResult, $this->client->getStatements($filter));
+
     }
 
     private function createHttpClientMock()

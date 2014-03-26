@@ -68,9 +68,11 @@ interface XApiClientInterface
     /**
      * Retrieves a collection of {@link \Xabbuh\XApi\Common\Model\StatementInterface Statements}.
      *
+     * @param StatementsFilterInterface $filter Optional Statements filter
+     *
      * @return \Xabbuh\XApi\Common\Model\StatementResultInterface The {@link \Xabbuh\XApi\Common\Model\StatementResult}
      *
      * @throws XApiException in case of any problems related to the xAPI
      */
-    public function getStatements();
+    public function getStatements(StatementsFilterInterface $filter = null);
 }

@@ -203,9 +203,23 @@ class XApiClient implements XApiClientInterface
     /**
      * {@inheritDoc}
      */
-    public function getStatements()
+    public function getStatements(StatementsFilterInterface $filter = null)
     {
-        $request = $this->createRequest('get', 'statements');
+        $urlParameters = array();
+
+        if (null !== $filter) {
+            $urlParameters = $filter->getFilter();
+        }
+
+        // the Agent must be JSON encoded
+        if (isset($urlParameters['agent'])) {
+            $urlParameters['agent'] = $this->serializer->serialize(
+                $urlParameters['agent'],
+                'json'
+            );
+        }
+
+        $request = $this->createRequest('get', 'statements', $urlParameters);
         $response = $this->performRequest($request, array(200));
 
         return $this->serializer->deserialize(
