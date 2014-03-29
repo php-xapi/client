@@ -52,6 +52,43 @@ interface StatementsFilterInterface
     public function byActivity(ActivityInterface $activity);
 
     /**
+     * Filters for Statements matching the given registration id.
+     *
+     * @param string $registration A registration id
+     *
+     * @return StatementsFilterInterface The statements filter
+     */
+    public function byRegistration($registration);
+
+    /**
+     * Applies the Activity filter to Sub-Statements.
+     *
+     * @return StatementsFilterInterface The statements filter
+     */
+    public function enableRelatedActivityFilter();
+
+    /**
+     * Don't apply the Activity filter to Sub-Statements.
+     *
+     * @return StatementsFilterInterface The statements filter
+     */
+    public function disableRelatedActivityFilter();
+
+    /**
+     * Applies the Agent filter to Sub-Statements.
+     *
+     * @return StatementsFilterInterface The statements filter
+     */
+    public function enableRelatedAgentFilter();
+
+    /**
+     * Don't apply the Agent filter to Sub-Statements.
+     *
+     * @return StatementsFilterInterface The statements filter
+     */
+    public function disableRelatedAgentFilter();
+
+    /**
      * Filters for Statements stored since the specified timestamp (exclusive).
      *
      * @param \DateTime $timestamp The timestamp
@@ -81,6 +118,42 @@ interface StatementsFilterInterface
      *                                   integer
      */
     public function limit($limit);
+
+    /**
+     * Specifies the format of the StatementResult being returned.
+     *
+     * "ids": Includes only information for the Agent, Activity and Group
+     * needed to identify them.
+     *
+     * "exact": Agents, Groups and Activities will be returned as they were when
+     * the Statements where received by the LRS.
+     *
+     * "canonical": For objects containing language maps, only the most appropriate
+     * language will be returned. Agent objects will be returned as if the "exact"
+     * format was given.
+     *
+     * @param string $format A valid format identifier (one of "ids", "exact"
+     *                       or "canonical"
+     *
+     * @return StatementsFilterInterface The statements filter
+     *
+     * @throws \InvalidArgumentException if no valid format is given
+     */
+    public function format($format);
+
+    /**
+     * Query attachments for each Statement being returned.
+     *
+     * @return StatementsFilterInterface The statements filter
+     */
+    public function includeAttachments();
+
+    /**
+     * Don't query for Statement attachments (the default behavior).
+     *
+     * @return StatementsFilterInterface The statements filter
+     */
+    public function excludeAttachments();
 
     /**
      * Return statements in ascending order of stored time.

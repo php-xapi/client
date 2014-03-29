@@ -64,6 +64,46 @@ class StatementsFilter implements StatementsFilterInterface
     /**
      * {@inheritDoc}
      */
+    public function byRegistration($registration)
+    {
+        $this->filter['registration'] = $registration;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function enableRelatedActivityFilter()
+    {
+        $this->filter['related_activities'] = true;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function disableRelatedActivityFilter()
+    {
+        $this->filter['related_activities'] = false;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function enableRelatedAgentFilter()
+    {
+        $this->filter['related_agents'] = true;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function disableRelatedAgentFilter()
+    {
+        $this->filter['related_agents'] = false;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public function since(\DateTime $timestamp)
     {
         $this->filter['since'] = $timestamp->format('c');
@@ -93,6 +133,34 @@ class StatementsFilter implements StatementsFilterInterface
         $this->filter['limit'] = $limit;
 
         return $this;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function format($format)
+    {
+        if (!in_array($format, array('ids', 'exact', 'canonical'))) {
+            throw new \InvalidArgumentException('Unknown format '.$format.' given');
+        }
+
+        $this->filter['format'] = $format;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function includeAttachments()
+    {
+        $this->filter['attachments'] = true;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function excludeAttachments()
+    {
+        $this->filter['attachments'] = false;
     }
 
     /**

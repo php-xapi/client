@@ -76,6 +76,46 @@ class StatementsFilterTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    public function testByRegistration()
+    {
+        $this->statementsFilter->byRegistration('foo');
+        $filter = $this->statementsFilter->getFilter();
+
+        $this->assertEquals($filter['registration'], 'foo');
+    }
+
+    public function testEnableRelatedActivityFilter()
+    {
+        $this->statementsFilter->enableRelatedActivityFilter();
+        $filter = $this->statementsFilter->getFilter();
+
+        $this->assertTrue($filter['related_activities']);
+    }
+
+    public function testDisableRelatedActivityFilter()
+    {
+        $this->statementsFilter->disableRelatedActivityFilter();
+        $filter = $this->statementsFilter->getFilter();
+
+        $this->assertFalse($filter['related_activities']);
+    }
+
+    public function testEnableRelatedAgentFilter()
+    {
+        $this->statementsFilter->enableRelatedAgentFilter();
+        $filter = $this->statementsFilter->getFilter();
+
+        $this->assertTrue($filter['related_agents']);
+    }
+
+    public function testDisableRelatedAgentFilter()
+    {
+        $this->statementsFilter->disableRelatedAgentFilter();
+        $filter = $this->statementsFilter->getFilter();
+
+        $this->assertFalse($filter['related_agents']);
+    }
+
     public function testSince()
     {
         $timestamp = \DateTime::createFromFormat(\DateTime::ISO8601, '2013-05-18T05:32:34Z');
@@ -106,6 +146,54 @@ class StatementsFilterTest extends \PHPUnit_Framework_TestCase
         $filter = $this->statementsFilter->getFilter();
 
         $this->assertEquals(10, $filter['limit']);
+    }
+
+    public function testIdsFormat()
+    {
+        $this->statementsFilter->format('ids');
+        $filter = $this->statementsFilter->getFilter();
+
+        $this->assertEquals('ids', $filter['format']);
+    }
+
+    public function testExactFormat()
+    {
+        $this->statementsFilter->format('exact');
+        $filter = $this->statementsFilter->getFilter();
+
+        $this->assertEquals('exact', $filter['format']);
+    }
+
+    public function testCanonicalFormat()
+    {
+        $this->statementsFilter->format('canonical');
+        $filter = $this->statementsFilter->getFilter();
+
+        $this->assertEquals('canonical', $filter['format']);
+    }
+
+    /**
+     * @expectedException \InvalidArgumentException
+     */
+    public function testInvalidFormat()
+    {
+        $this->statementsFilter->format('minimal');
+    }
+
+    public function testIncludeAttachments()
+    {
+        $this->statementsFilter->includeAttachments();
+        $filter = $this->statementsFilter->getFilter();
+
+        $this->assertTrue($filter['attachments']);
+    }
+
+    public function testExcludeAttachments()
+    {
+        $this->statementsFilter->excludeAttachments();
+        $filter = $this->statementsFilter->getFilter();
+
+        $this->assertFalse($filter['attachments']);
     }
 
     /**

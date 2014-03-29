@@ -107,16 +107,27 @@ use Xabbuh\XApi\Client\StatementsFilter;
 
 // ...
 $filter = new StatementsFilter();
-$filter->byActor($actor)        // filter by Actor
-    ->byVerb($verb)             // filter by Verb
-    ->byActivity($activity)     // filter by Activity
-    ->since(new \DateTime(...)) // filter for Statements stored since
-                                // the given timestamp
-    ->until(new \DateTime(...)) // filter for Statements stored before
-                                // the given timestamp
-    ->limit(5)                  // limit the number of Statements returned
-    ->ascending()               // ascending order of stored time
-    ->descending();              // ascending order of stored time
+$filter
+    ->byActor($actor)                // filter by Actor
+    ->byVerb($verb)                  // filter by Verb
+    ->byActivity($activity)          // filter by Activity
+    ->byRegistration(...)            // filter for Statements matching the given
+                                     // registration id
+    ->enableRelatedActivityFilter()  // apply the Activity filter to Sub-Statements
+    ->disableRelatedActivityFilter() // apply the Activity filter to Sub-Statements
+    ->enableRelatedAgentFilter()     // apply the Agent filter to Sub-Statements
+    ->disableRelatedAgentFilter()    // apply the Agent filter to Sub-Statements
+    ->since(new \DateTime(...))      // filter for Statements stored since
+                                     // the given timestamp
+    ->until(new \DateTime(...))      // filter for Statements stored before
+                                     // the given timestamp
+    ->limit(5)                       // limit the number of Statements returned
+    ->format(...)                    // the result format (one of "ids", "exact",
+                                     // "canonical")
+    ->includeAttachments()           // return Statements with attachments included
+    ->excludeAttachments()           // return Statements without attachments
+    ->ascending()                    // ascending order of stored time
+    ->descending();                  // ascending order of stored time
 
 $result = $xApiClient->getStatements($filter->getFilter());
 ```
