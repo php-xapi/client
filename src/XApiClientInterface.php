@@ -14,6 +14,7 @@ namespace Xabbuh\XApi\Client;
 use Xabbuh\XApi\Common\Exception\ConflictException;
 use Xabbuh\XApi\Common\Exception\NotFoundException;
 use Xabbuh\XApi\Common\Exception\XApiException;
+use Xabbuh\XApi\Common\Model\ActorInterface;
 use Xabbuh\XApi\Common\Model\StatementInterface;
 
 /**
@@ -53,6 +54,23 @@ interface XApiClientInterface
     public function storeStatements(array $statements);
 
     /**
+     * Marks a {@link \Xabbuh\XApi\Common\Model\StatementInterface Statement}
+     * as voided.
+     *
+     * @param StatementInterface $statement
+     * @return mixed
+     *
+     * @param StatementInterface $statement The Statement to void
+     * @param ActorInterface     $actor     The Actor voiding the given Statement
+     *
+     * @return StatementInterface The Statement sent to the remote LRS to void
+     *                            the given Statement
+     *
+     * @throws XApiException for all other xAPI related problems
+     */
+    public function voidStatement(StatementInterface $statement, ActorInterface $actor);
+
+    /**
      * Retrieves a single {@link \Xabbuh\XApi\Common\Model\StatementInterface Statement}.
      *
      * @param string $statementId The Statement id
@@ -63,6 +81,18 @@ interface XApiClientInterface
      * @throws XApiException     for all other xAPI related problems
      */
     public function getStatement($statementId);
+
+    /**
+     * Retrieves a voided {@link \Xabbuh\XApi\Common\Model\StatementInterface Statement}.
+     *
+     * @param string $statementId The id of the voided Statement
+     *
+     * @return StatementInterface The voided Statement
+     *
+     * @throws NotFoundException if no statement with the given id could be found
+     * @throws XApiException     for all other xAPI related problems
+     */
+    public function getVoidedStatement($statementId);
 
     /**
      * Retrieves a collection of {@link \Xabbuh\XApi\Common\Model\StatementInterface Statements}.

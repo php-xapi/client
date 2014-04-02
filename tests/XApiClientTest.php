@@ -15,6 +15,7 @@ use Xabbuh\XApi\Client\StatementsFilter;
 use Xabbuh\XApi\Client\XApiClient;
 use Xabbuh\XApi\Common\Model\Agent;
 use Xabbuh\XApi\Common\Model\Statement;
+use Xabbuh\XApi\Common\Model\StatementReference;
 use Xabbuh\XApi\Common\Model\StatementResult;
 use Xabbuh\XApi\Common\Model\Verb;
 
@@ -140,6 +141,37 @@ class XApiClientTest extends \PHPUnit_Framework_TestCase
         $this->client->storeStatements(array($statement1, $statement2));
     }
 
+    public function testVoidStatement()
+    {
+        $voidedStatementId = '12345678-1234-5678-1234-567812345679';
+        $voidingStatementId = '12345678-1234-5678-1234-567812345678';
+        $agent = new Agent();
+        $agent->setMbox('mailto:john.doe@example.com');
+        $statementReference = new StatementReference();
+        $statementReference->setStatementId($voidedStatementId);
+        $voidingStatement = $this->createStatement();
+        $voidingStatement->setActor($agent);
+        $voidingStatement->setVerb(Verb::createVoidVerb());
+        $voidingStatement->setObject($statementReference);
+        $voidedStatement = $this->createStatement();
+        $voidedStatement->setId($voidedStatementId);
+        $this->validateStoreApiCall(
+            'post',
+            'statements',
+            200,
+            '["'.$voidingStatementId.'"]',
+            $voidingStatement
+        );
+        $returnedVoidingStatement = $this->client->voidStatement($voidedStatement, $agent);
+        $expectedVoidingStatement = $this->createStatement();
+        $expectedVoidingStatement->setId($voidingStatementId);
+        $expectedVoidingStatement->setActor($agent);
+        $expectedVoidingStatement->setVerb(Verb::createVoidVerb());
+        $expectedVoidingStatement->setObject($statementReference);
+
+        $this->assertEquals($expectedVoidingStatement, $returnedVoidingStatement);
+    }
+
     public function testGetStatement()
     {
         $statementId = '12345678-1234-5678-1234-567812345678';
@@ -170,6 +202,38 @@ class XApiClientTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->client->getStatement($statementId);
+    }
+
+    public function testGetVoidedStatement()
+    {
+        $statementId = '12345678-1234-5678-1234-567812345678';
+        $statement = $this->createStatement();
+        $this->validateRetrieveApiCall(
+            'get',
+            'statements?voidedStatementId='.$statementId,
+            200,
+            'Statement',
+            $statement
+        );
+
+        $this->client->getVoidedStatement($statementId);
+    }
+
+    /**
+     * @expectedException \Xabbuh\XApi\Common\Exception\NotFoundException
+     */
+    public function testGetVoidedStatementWithNotExistingStatement()
+    {
+        $statementId = '12345678-1234-5678-1234-567812345678';
+        $this->validateRetrieveApiCall(
+            'get',
+            'statements?voidedStatementId='.$statementId,
+            404,
+            'Statement',
+            'There is no statement associated with this id'
+        );
+
+        $this->client->getVoidedStatement($statementId);
     }
 
     public function testGetStatements()
@@ -307,7 +371,7 @@ class XApiClientTest extends \PHPUnit_Framework_TestCase
         $this->serializer
             ->expects($this->once())
             ->method('serialize')
-            ->with($data, 'json')
+            ->with($this->equalTo($data), 'json')
             ->will($this->returnValue($returnValue));
     }
 

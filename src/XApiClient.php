@@ -19,6 +19,7 @@ use Xabbuh\XApi\Common\Exception\AccessDeniedException;
 use Xabbuh\XApi\Common\Exception\ConflictException;
 use Xabbuh\XApi\Common\Exception\NotFoundException;
 use Xabbuh\XApi\Common\Exception\XApiException;
+use Xabbuh\XApi\Common\Model\ActorInterface;
 use Xabbuh\XApi\Common\Model\Statement;
 use Xabbuh\XApi\Common\Model\StatementInterface;
 
@@ -191,9 +192,25 @@ class XApiClient implements XApiClientInterface
     /**
      * {@inheritDoc}
      */
+    public function voidStatement(StatementInterface $statement, ActorInterface $actor)
+    {
+        return $this->storeStatement($statement->getVoidStatement($actor));
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public function getStatement($statementId)
     {
         return $this->doGetStatements(array('statementId' => $statementId));
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getVoidedStatement($statementId)
+    {
+        return $this->doGetStatements(array('voidedStatementId' => $statementId));
     }
 
     /**
@@ -230,7 +247,7 @@ class XApiClient implements XApiClientInterface
         $request = $this->createRequest('get', 'statements', $urlParameters);
         $response = $this->performRequest($request, array(200));
 
-        if (isset($urlParameters['statementId'])) {
+        if (isset($urlParameters['statementId']) || isset($urlParameters['voidedStatementId'])) {
             $class = 'Xabbuh\XApi\Common\Model\Statement';
         } else {
             $class = 'Xabbuh\XApi\Common\Model\StatementResult';
