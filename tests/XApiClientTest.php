@@ -54,12 +54,13 @@ class XApiClientTest extends \PHPUnit_Framework_TestCase
             'statements',
             200,
             '["'.$statementId.'"]',
-            $statement
+            $this->createStatement()
         );
         $returnedStatement = $this->client->storeStatement($statement);
+        $expectedStatement = $this->createStatement();
+        $expectedStatement->setId($statementId);
 
-        $this->assertEquals($statementId, $returnedStatement->getId());
-        $this->assertSame($statement, $returnedStatement);
+        $this->assertEquals($expectedStatement, $returnedStatement);
     }
 
     public function testStoreStatementWithId()
@@ -74,10 +75,8 @@ class XApiClientTest extends \PHPUnit_Framework_TestCase
             '["'.$statementId.'"]',
             $statement
         );
-        $returnedStatement = $this->client->storeStatement($statement);
 
-        $this->assertEquals($statementId, $returnedStatement->getId());
-        $this->assertSame($statement, $returnedStatement);
+        $this->assertEquals($statement, $this->client->storeStatement($statement));
     }
 
     public function testStoreStatements()
@@ -91,14 +90,20 @@ class XApiClientTest extends \PHPUnit_Framework_TestCase
             'statements',
             '200',
             '["'.$statementId1.'","'.$statementId2.'"]',
-            array($statement1, $statement2)
+            array($this->createStatement(), $this->createStatement())
         );
         $statements = $this->client->storeStatements(array($statement1, $statement2));
+        $expectedStatement1 = $this->createStatement();
+        $expectedStatement1->setId($statementId1);
+        $expectedStatement2 = $this->createStatement();
+        $expectedStatement2->setId($statementId2);
+        $expectedStatements = array($expectedStatement1, $expectedStatement2);
 
+        $this->assertNotContains($statements[0], array($statement1, $statement2));
+        $this->assertNotContains($statements[1], array($statement1, $statement2));
+        $this->assertEquals($expectedStatements, $statements);
         $this->assertEquals($statementId1, $statements[0]->getId());
-        $this->assertSame($statement1, $statements[0]);
         $this->assertEquals($statementId2, $statements[1]->getId());
-        $this->assertSame($statement2, $statements[1]);
     }
 
     /**

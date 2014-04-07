@@ -19,6 +19,7 @@ use Xabbuh\XApi\Common\Exception\AccessDeniedException;
 use Xabbuh\XApi\Common\Exception\ConflictException;
 use Xabbuh\XApi\Common\Exception\NotFoundException;
 use Xabbuh\XApi\Common\Exception\XApiException;
+use Xabbuh\XApi\Common\Model\Statement;
 use Xabbuh\XApi\Common\Model\StatementInterface;
 
 /**
@@ -117,6 +118,8 @@ class XApiClient implements XApiClientInterface
      */
     public function storeStatement(StatementInterface $statement)
     {
+        $createdStatement = clone $statement;
+
         if (null !== $statement->getId()) {
             $request = $this->createRequest(
                 'put',
@@ -134,10 +137,10 @@ class XApiClient implements XApiClientInterface
             );
             $response = $this->performRequest($request, array(200));
             $contents = json_decode($response->getBody(true));
-            $statement->setId($contents[0]);
+            $createdStatement->setId($contents[0]);
         }
 
-        return $statement;
+        return $createdStatement;
     }
 
     /**
@@ -145,6 +148,9 @@ class XApiClient implements XApiClientInterface
      */
     public function storeStatements(array $statements)
     {
+        /** @var Statement[] $createdStatements */
+        $createdStatements = array();
+
         // check that only Statements without ids will be sent to the LRS
         foreach ($statements as $statement) {
             if (!is_object($statement)) {
@@ -175,10 +181,11 @@ class XApiClient implements XApiClientInterface
         $response = $this->performRequest($request, array(200));
 
         foreach (json_decode($response->getBody(true)) as $key => $statementId) {
-            $statements[$key]->setId($statementId);
+            $createdStatements[$key] = clone $statements[$key];
+            $createdStatements[$key]->setId($statementId);
         }
 
-        return $statements;
+        return $createdStatements;
     }
 
     /**

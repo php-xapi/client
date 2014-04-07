@@ -29,9 +29,8 @@ interface XApiClientInterface
      * @param StatementInterface $statement The Statement to store
      *
      * @return StatementInterface The Statement as it has been stored in the
-     *                            remote LRS (basically this is the Statement
-     *                            that was passed to storeStatement() but with
-     *                            the id set on it
+     *                            remote LRS, this is not necessarily the same
+     *                            object that was passed to storeStatement()
      *
      * @throws ConflictException if a Statement with the given id already exists
      *                           and the given Statement does not match the
