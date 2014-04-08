@@ -145,3 +145,22 @@ $firstStatementResult = $xApiClient->getStatements($filter);
 // get the next Statements
 $nextStatementResult = $xApiClient->getNextStatements($firstStatementResult);
 ```
+
+The Experience API doesn't allow to delete Statements. You have to mark them as
+voided instead:
+
+```php
+// ...
+$statement = ...; // The Statement being voided
+$actor = ...; // The Actor voiding the Statement
+$xApiClient->voidStatement($statement, $actor);
+```
+
+Voided Statements won't be returned when requesting either a single Statement or
+a collection of Statements. Though, you can retrieve a single voided Statement
+using the ``getVoidedStatement()`` method:
+
+```php
+// ...
+$voidedStatement = $xApiClient->getVoidedStatement($statementId);
+```
