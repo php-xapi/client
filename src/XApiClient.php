@@ -22,6 +22,7 @@ use Xabbuh\XApi\Common\Exception\XApiException;
 use Xabbuh\XApi\Common\Model\ActorInterface;
 use Xabbuh\XApi\Common\Model\Statement;
 use Xabbuh\XApi\Common\Model\StatementInterface;
+use Xabbuh\XApi\Common\Model\StatementResultInterface;
 
 /**
  * An Experience API client.
@@ -202,7 +203,7 @@ class XApiClient implements XApiClientInterface
      */
     public function getStatement($statementId)
     {
-        return $this->doGetStatements(array('statementId' => $statementId));
+        return $this->doGetStatements('statements', array('statementId' => $statementId));
     }
 
     /**
@@ -210,7 +211,7 @@ class XApiClient implements XApiClientInterface
      */
     public function getVoidedStatement($statementId)
     {
-        return $this->doGetStatements(array('voidedStatementId' => $statementId));
+        return $this->doGetStatements('statements', array('voidedStatementId' => $statementId));
     }
 
     /**
@@ -232,19 +233,28 @@ class XApiClient implements XApiClientInterface
             );
         }
 
-        return $this->doGetStatements($urlParameters);
+        return $this->doGetStatements('statements', $urlParameters);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getNextStatements(StatementResultInterface $statementResult)
+    {
+        return $this->doGetStatements($statementResult->getMoreUrlPath());
     }
 
     /**
      * Fetch one or more Statements.
      *
-     * @param array $urlParameters URL parameters
+     * @param string $url           URL to request
+     * @param array  $urlParameters URL parameters
      *
      * @return StatementInterface|\Xabbuh\XApi\Common\Model\StatementResultInterface
      */
-    private function doGetStatements(array $urlParameters)
+    private function doGetStatements($url, array $urlParameters = array())
     {
-        $request = $this->createRequest('get', 'statements', $urlParameters);
+        $request = $this->createRequest('get', $url, $urlParameters);
         $response = $this->performRequest($request, array(200));
 
         if (isset($urlParameters['statementId']) || isset($urlParameters['voidedStatementId'])) {

@@ -307,7 +307,27 @@ class XApiClientTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->assertEquals($statementResult, $this->client->getStatements($filter));
+    }
 
+    public function testGetNextStatements()
+    {
+        $moreUrl = '/xapi/statements/more/b381d8eca64a61a42c7b9b4ecc2fabb6';
+        $previousStatementResult = new StatementResult();
+        $previousStatementResult->setMoreUrlPath($moreUrl);
+        $this->validateRetrieveApiCall(
+            'get',
+            $moreUrl,
+            200,
+            'StatementResult',
+            $previousStatementResult
+        );
+
+        $statementResult = $this->client->getNextStatements($previousStatementResult);
+
+        $this->assertInstanceOf(
+            '\Xabbuh\XApi\Common\Model\StatementResultInterface',
+            $statementResult
+        );
     }
 
     private function createHttpClientMock()

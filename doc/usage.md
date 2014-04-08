@@ -131,3 +131,17 @@ $filter
 
 $result = $xApiClient->getStatements($filter->getFilter());
 ```
+
+If you limited the number of returned results, you can get the next Statements
+by calling the ``getNextStatements()`` method passing the ``StatementResult``
+of the previous request to it:
+
+```php
+// ....
+$filter = new StatementsFilter();
+$filter->limit(3);
+$firstStatementResult = $xApiClient->getStatements($filter);
+
+// get the next Statements
+$nextStatementResult = $xApiClient->getNextStatements($firstStatementResult);
+```

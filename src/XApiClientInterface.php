@@ -16,6 +16,7 @@ use Xabbuh\XApi\Common\Exception\NotFoundException;
 use Xabbuh\XApi\Common\Exception\XApiException;
 use Xabbuh\XApi\Common\Model\ActorInterface;
 use Xabbuh\XApi\Common\Model\StatementInterface;
+use Xabbuh\XApi\Common\Model\StatementResultInterface;
 
 /**
  * An Experience API client.
@@ -99,9 +100,21 @@ interface XApiClientInterface
      *
      * @param StatementsFilterInterface $filter Optional Statements filter
      *
-     * @return \Xabbuh\XApi\Common\Model\StatementResultInterface The {@link \Xabbuh\XApi\Common\Model\StatementResult}
+     * @return StatementResultInterface The {@link \Xabbuh\XApi\Common\Model\StatementResult}
      *
      * @throws XApiException in case of any problems related to the xAPI
      */
     public function getStatements(StatementsFilterInterface $filter = null);
+
+    /**
+     * Returns the next {@link \Xabbuh\XApi\Common\Model\StatementInterface Statements}
+     * for a limited Statement result.
+     *
+     * @param StatementResultInterface $statementResult The former StatementResult
+     *
+     * @return StatementResultInterface The {@link \Xabbuh\XApi\Common\Model\StatementResult}
+     *
+     * @throws XApiException in case of any problems related to the xAPI
+     */
+    public function getNextStatements(StatementResultInterface $statementResult);
 }
