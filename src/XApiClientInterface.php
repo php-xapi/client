@@ -58,9 +58,6 @@ interface XApiClientInterface
      * Marks a {@link \Xabbuh\XApi\Common\Model\StatementInterface Statement}
      * as voided.
      *
-     * @param StatementInterface $statement
-     * @return mixed
-     *
      * @param StatementInterface $statement The Statement to void
      * @param ActorInterface     $actor     The Actor voiding the given Statement
      *
