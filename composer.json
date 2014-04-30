@@ -18,7 +18,7 @@
     },
     "autoload": {
         "psr-4": {
-            "Xabbuh\\XApi\\Client\\": "./"
+            "Xabbuh\\XApi\\Client\\": ""
         }
     },
     "extra": {
