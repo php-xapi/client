@@ -120,29 +120,16 @@ class XApiClient implements XApiClientInterface
      */
     public function storeStatement(StatementInterface $statement)
     {
-        $createdStatement = clone $statement;
-
         if (null !== $statement->getId()) {
-            $request = $this->createRequest(
+            return $this->doStoreStatements(
+                $statement,
                 'put',
-                'statements',
                 array('statementId' => $statement->getId()),
-                $this->serializer->serialize($statement, 'json')
+                204
             );
-            $this->performRequest($request, array(204));
         } else {
-            $request = $this->createRequest(
-                'post',
-                'statements',
-                array(),
-                $this->serializer->serialize($statement, 'json')
-            );
-            $response = $this->performRequest($request, array(200));
-            $contents = json_decode($response->getBody(true));
-            $createdStatement->setId($contents[0]);
+            return $this->doStoreStatements($statement);
         }
-
-        return $createdStatement;
     }
 
     /**
@@ -150,44 +137,16 @@ class XApiClient implements XApiClientInterface
      */
     public function storeStatements(array $statements)
     {
-        /** @var Statement[] $createdStatements */
-        $createdStatements = array();
-
         // check that only Statements without ids will be sent to the LRS
         foreach ($statements as $statement) {
-            if (!is_object($statement)) {
-                throw new \InvalidArgumentException(
-                    'API can not handle '.gettype($statement).' values'
-                );
-            }
+            $isStatement = is_object($statement) && $statement instanceof StatementInterface;
 
-            if (!$statement instanceof StatementInterface) {
-                throw new \InvalidArgumentException(
-                    'API can not  handle objects of type '.get_class($statement)
-                );
-            }
-
-            if (null !== $statement->getId()) {
-                throw new \InvalidArgumentException(
-                    'API can not handle Statements with ids when storing multiple Statements'
-                );
+            if (!$isStatement || null !== $statement->getId()) {
+                throw new \InvalidArgumentException('API can only handle statements without ids');
             }
         }
 
-        $request = $this->createRequest(
-            'post',
-            'statements',
-            array(),
-            $this->serializer->serialize($statements, 'json')
-        );
-        $response = $this->performRequest($request, array(200));
-
-        foreach (json_decode($response->getBody(true)) as $key => $statementId) {
-            $createdStatements[$key] = clone $statements[$key];
-            $createdStatements[$key]->setId($statementId);
-        }
-
-        return $createdStatements;
+        return $this->doStoreStatements($statements);
     }
 
     /**
@@ -242,6 +201,45 @@ class XApiClient implements XApiClientInterface
     public function getNextStatements(StatementResultInterface $statementResult)
     {
         return $this->doGetStatements($statementResult->getMoreUrlPath());
+    }
+
+    /**
+     * @param StatementInterface|StatementInterface[] $statements
+     * @param string                                  $method
+     * @param string[]                                $parameters
+     * @param int                                     $validStatusCode
+     *
+     * @return StatementInterface|StatementInterface[] The created statement(s)
+     */
+    private function doStoreStatements($statements, $method = 'post', $parameters = array(), $validStatusCode = 200)
+    {
+        $request = $this->createRequest(
+            $method,
+            'statements',
+            $parameters,
+            $this->serializer->serialize($statements, 'json')
+        );
+
+        $response = $this->performRequest($request, array($validStatusCode));
+        $statementIds = json_decode($response->getBody(true));
+
+        if (is_array($statements)) {
+            $createdStatements = array();
+
+            foreach ($statementIds as $index => $statementId) {
+                /** @var StatementInterface $statement */
+                $statement = clone $statements[$index];
+                $statement->setId($statementId);
+                $createdStatements[] = $statement;
+            }
+
+            return $createdStatements;
+        } else {
+            $createdStatement = clone $statements;
+            $createdStatement->setId($statementIds[0]);
+
+            return $createdStatement;
+        }
     }
 
     /**
