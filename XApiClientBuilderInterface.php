@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the XabbuhXApiClient package.
+ * This file is part of the xAPI package.
  *
  * (c) Christian Flothmann <christian.flothmann@xabbuh.de>
  *
