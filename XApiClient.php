@@ -20,7 +20,9 @@ use Xabbuh\XApi\Common\Exception\ConflictException;
 use Xabbuh\XApi\Common\Exception\NotFoundException;
 use Xabbuh\XApi\Common\Exception\XApiException;
 use Xabbuh\XApi\Common\Model\ActorInterface;
-use Xabbuh\XApi\Common\Model\Statement;
+use Xabbuh\XApi\Common\Model\DocumentInterface;
+use Xabbuh\XApi\Common\Model\StateDocumentInterface;
+use Xabbuh\XApi\Common\Model\StateInterface;
 use Xabbuh\XApi\Common\Model\StatementInterface;
 use Xabbuh\XApi\Common\Model\StatementResultInterface;
 
@@ -204,6 +206,64 @@ class XApiClient implements XApiClientInterface
     }
 
     /**
+     * {@inheritDoc}
+     */
+    public function createOrUpdateStateDocument(StateDocumentInterface $document)
+    {
+        $this->doStoreStateDocument('post', $document);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function createOrReplaceStateDocument(StateDocumentInterface $document)
+    {
+        $this->doStoreStateDocument('put', $document);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function deleteStateDocument(StateInterface $state)
+    {
+        $request = $this->createRequest(
+            'delete',
+            'activities/state',
+            array(
+                'activityId' => $state->getActivity()->getId(),
+                'agent' => $this->serializer->serialize($state->getActor(), 'json'),
+                'stateId' => $state->getStateId(),
+            )
+        );
+        $this->performRequest($request, array(204));
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getStateDocument(StateInterface $state)
+    {
+        $request = $this->createRequest(
+            'get',
+            'activities/state',
+            array(
+                'activityId' => $state->getActivity()->getId(),
+                'agent' => $this->serializer->serialize($state->getActor(), 'json'),
+                'stateId' => $state->getStateId(),
+            )
+        );
+        $response = $this->performRequest($request, array(200));
+        $document = $this->serializer->deserialize(
+            $response->getBody(true),
+            'Xabbuh\XApi\Common\Model\StateDocument',
+            'json'
+        );
+        $document->setState($state);
+
+        return $document;
+    }
+
+    /**
      * @param StatementInterface|StatementInterface[] $statements
      * @param string                                  $method
      * @param string[]                                $parameters
@@ -269,6 +329,46 @@ class XApiClient implements XApiClientInterface
     }
 
     /**
+     * Stores a document.
+     *
+     * @param string            $method        HTTP method to use
+     * @param string            $uri           Endpoint URI
+     * @param array             $urlParameters URL parameters
+     * @param DocumentInterface $document      The document to store
+     */
+    private function doStoreDocument($method, $uri, $urlParameters, DocumentInterface $document)
+    {
+        $request = $this->createRequest(
+            $method,
+            $uri,
+            $urlParameters,
+            $this->serializer->serialize($document, 'json')
+        );
+        $this->performRequest($request, array(204));
+    }
+
+    /**
+     * Stores a state document.
+     *
+     * @param string                 $method   HTTP method to use
+     * @param StateDocumentInterface $document The document to store
+     */
+    private function doStoreStateDocument($method, StateDocumentInterface $document)
+    {
+        $state = $document->getState();
+        $this->doStoreDocument(
+            $method,
+            'activities/state',
+            array(
+                'activityId' => $state->getActivity()->getId(),
+                'agent' => $this->serializer->serialize($state->getActor(), 'json'),
+                'stateId' => $state->getStateId(),
+            ),
+            $document
+        );
+    }
+
+    /**
      * @param string $method        The HTTP method
      * @param string $uri           The URI to send the request to
      * @param array  $urlParameters Optional url parameters
@@ -293,6 +393,9 @@ class XApiClient implements XApiClientInterface
                 break;
             case 'put':
                 $request = $this->httpClient->put($uri, null, $body);
+                break;
+            case 'delete':
+                $request = $this->httpClient->delete($uri);
                 break;
             default:
                 throw new \InvalidArgumentException(

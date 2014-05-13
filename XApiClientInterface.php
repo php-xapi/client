@@ -15,6 +15,8 @@ use Xabbuh\XApi\Common\Exception\ConflictException;
 use Xabbuh\XApi\Common\Exception\NotFoundException;
 use Xabbuh\XApi\Common\Exception\XApiException;
 use Xabbuh\XApi\Common\Model\ActorInterface;
+use Xabbuh\XApi\Common\Model\StateDocumentInterface;
+use Xabbuh\XApi\Common\Model\StateInterface;
 use Xabbuh\XApi\Common\Model\StatementInterface;
 use Xabbuh\XApi\Common\Model\StatementResultInterface;
 
@@ -114,4 +116,36 @@ interface XApiClientInterface
      * @throws XApiException in case of any problems related to the xAPI
      */
     public function getNextStatements(StatementResultInterface $statementResult);
+
+    /**
+     * Stores a document for a state. Updates an existing document for this
+     * state if one exists.
+     *
+     * @param StateDocumentInterface $document The document to store
+     */
+    public function createOrUpdateStateDocument(StateDocumentInterface $document);
+
+    /**
+     * Stores a document for a state. Replaces any existing document for this
+     * state.
+     *
+     * @param StateDocumentInterface $document The document to store
+     */
+    public function createOrReplaceStateDocument(StateDocumentInterface $document);
+
+    /**
+     * Deletes a document stored for the given state.
+     *
+     * @param StateInterface $state The state
+     */
+    public function deleteStateDocument(StateInterface $state);
+
+    /**
+     * Returns the document for a state.
+     *
+     * @param StateInterface $state The state to request the document for
+     *
+     * @return StateDocumentInterface The document
+     */
+    public function getStateDocument(StateInterface $state);
 }

@@ -13,7 +13,10 @@ namespace Xabbuh\XApi\Client\Tests;
 
 use Xabbuh\XApi\Client\StatementsFilter;
 use Xabbuh\XApi\Client\XApiClient;
+use Xabbuh\XApi\Common\Model\Activity;
 use Xabbuh\XApi\Common\Model\Agent;
+use Xabbuh\XApi\Common\Model\State;
+use Xabbuh\XApi\Common\Model\StateDocument;
 use Xabbuh\XApi\Common\Model\Statement;
 use Xabbuh\XApi\Common\Model\StatementReference;
 use Xabbuh\XApi\Common\Model\StatementResult;
@@ -330,6 +333,71 @@ class XApiClientTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    public function testCreateOrUpdateStateDocument()
+    {
+        $document = $this->createStateDocument();
+
+        $this->validateStoreApiCall(
+            'post',
+            'activities/state?activityId=activity-id&agent=agent-as-json&stateId=state-id',
+            204,
+            '',
+            $document,
+            array(array('data' => $document->getState()->getActor(), 'result' => 'agent-as-json'))
+        );
+
+        $this->client->createOrUpdateStateDocument($document);
+    }
+
+    public function testCreateOrReplaceStateDocument()
+    {
+        $document = $this->createStateDocument();
+
+        $this->validateStoreApiCall(
+            'put',
+            'activities/state?activityId=activity-id&agent=agent-as-json&stateId=state-id',
+            204,
+            '',
+            $document,
+            array(array('data' => $document->getState()->getActor(), 'result' => 'agent-as-json'))
+        );
+
+        $this->client->createOrReplaceStateDocument($document);
+    }
+
+    public function testDeleteStatement()
+    {
+        $state = $this->createState();
+
+        $this->validateDeleteDocumentCall(
+            'activities/state?activityId=activity-id&agent=agent-as-json&stateId=state-id',
+            array(array('data' => $state->getActor(), 'result' => 'agent-as-json'))
+        );
+
+        $this->client->deleteStateDocument($state);
+    }
+
+    public function testGetStateDocument()
+    {
+        $state = $this->createState();
+        $document = new StateDocument();
+        $document['x'] = 'foo';
+
+        $this->validateRetrieveApiCall(
+            'get',
+            'activities/state?activityId=activity-id&agent=agent-as-json&stateId=state-id',
+            200,
+            'StateDocument',
+            $document,
+            array(array('data' => $state->getActor(), 'result' => 'agent-as-json'))
+        );
+
+        $document = $this->client->getStateDocument($state);
+
+        $this->assertInstanceOf('Xabbuh\XApi\Common\Model\StateDocument', $document);
+        $this->assertEquals($state, $document->getState());
+    }
+
     private function createHttpClientMock()
     {
         return $this->getMock('\Guzzle\Http\ClientInterface');
@@ -386,13 +454,29 @@ class XApiClientTest extends \PHPUnit_Framework_TestCase
         return new StatementResult();
     }
 
-    private function validateSerializer($data, $returnValue)
+    private function createState()
     {
-        $this->serializer
-            ->expects($this->once())
-            ->method('serialize')
-            ->with($this->equalTo($data), 'json')
-            ->will($this->returnValue($returnValue));
+        $agent = new Agent();
+        $agent->setMbox('mailto:alice@example.com');
+        $activity = new Activity();
+        $activity->setId('activity-id');
+        $state = new State();
+        $state->setActor($agent);
+        $state->setActivity($activity);
+        $state->setStateId('state-id');
+
+        return $state;
+    }
+
+    private function createStateDocument()
+    {
+        $state = $this->createState();
+        $document = new StateDocument();
+        $document['x'] = 'foo';
+        $document['y'] = 'bar';
+        $document->setState($state);
+
+        return $document;
     }
 
     private function validateDeserializer($data, $type, $returnValue)
@@ -404,9 +488,29 @@ class XApiClientTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($returnValue));
     }
 
+    private function validateSerializer(array $serializerMap)
+    {
+        $this
+            ->serializer
+            ->expects($this->any())
+            ->method('serialize')
+            ->will($this->returnCallback(function ($data) use ($serializerMap) {
+                foreach ($serializerMap as $entry) {
+                    if ($data == $entry['data']) {
+                        return $entry['result'];
+                    }
+                }
+
+                return '';
+            }));
+    }
+
     private function validateRequest($method, $uri, $body = null, $response = null)
     {
         $request = $this->createRequestMock($response);
+        $request
+            ->expects($this->once())
+            ->method('send');
 
         if (null !== $body) {
             $this->httpClient
@@ -423,22 +527,31 @@ class XApiClientTest extends \PHPUnit_Framework_TestCase
         }
     }
 
-    private function validateRetrieveApiCall($method, $uri, $statusCode, $type, $transformedResult)
+    private function validateRetrieveApiCall($method, $uri, $statusCode, $type, $transformedResult, array $serializerMap = array())
     {
         $rawResponse = 'the-server-response';
         $response = $this->createResponseMock($statusCode, $rawResponse);
         $this->validateRequest($method, $uri, null, $response);
+        $this->validateSerializer($serializerMap);
 
         if ($statusCode < 400) {
             $this->validateDeserializer($rawResponse, $type, $transformedResult);
         }
     }
 
-    private function validateStoreApiCall($method, $uri, $statusCode, $rawResponse, $object)
+    private function validateStoreApiCall($method, $uri, $statusCode, $rawResponse, $object, array $serializerMap = array())
     {
         $rawRequest = 'the-request-body';
         $response = $this->createResponseMock($statusCode, $rawResponse);
-        $this->validateSerializer($object, $rawRequest);
         $this->validateRequest($method, $uri, $rawRequest, $response);
+        $serializerMap[] = array('data' => $object, 'result' => $rawRequest);
+        $this->validateSerializer($serializerMap);
+    }
+
+    private function validateDeleteDocumentCall($uri, array $serializerMap = array())
+    {
+        $response = $this->createResponseMock(204, '');
+        $this->validateRequest('delete', $uri, '', $response);
+        $this->validateSerializer($serializerMap);
     }
 }

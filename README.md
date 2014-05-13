@@ -45,7 +45,7 @@ The recommended way to install the xAPI client is using
 Usage
 -----
 
-Read the [documentation](doc/usage.md) to find out how to use the library.
+Read the [documentation](doc/index.md) to find out how to use the library.
 
 Issues
 ------
