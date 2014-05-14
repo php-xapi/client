@@ -20,19 +20,12 @@ The recommended way to install the xAPI client is using
    For more details on how to install composer have a look at the official
    [documentation](http://getcomposer.org/doc/00-intro.md).
 
-1. Add ``xabbuh/xapi-client`` and ``xabbuh/xapi-common`` as dependencies in your
+1. Add the ``xabbuh/xapi-client`` and ``xabbuh/xapi-common`` dependencies to your
    project's ``composer.json`` file:
 
     ```yaml
     {
-        "repositories": [
-            {
-                "type": "vcs",
-                "url": "https://github.com/xabbuh/serializer.git"
-            }
-        ],
         "require": {
-            "jms/serializer": "dev-polymorphic-bugfix",
             "xabbuh/xapi-client": "~1.0@dev",
             "xabbuh/xapi-common": "~1.0@dev"
         }
