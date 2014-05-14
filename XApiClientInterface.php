@@ -14,6 +14,8 @@ namespace Xabbuh\XApi\Client;
 use Xabbuh\XApi\Common\Exception\ConflictException;
 use Xabbuh\XApi\Common\Exception\NotFoundException;
 use Xabbuh\XApi\Common\Exception\XApiException;
+use Xabbuh\XApi\Common\Model\ActivityProfileDocumentInterface;
+use Xabbuh\XApi\Common\Model\ActivityProfileInterface;
 use Xabbuh\XApi\Common\Model\ActorInterface;
 use Xabbuh\XApi\Common\Model\StateDocumentInterface;
 use Xabbuh\XApi\Common\Model\StateInterface;
@@ -148,4 +150,37 @@ interface XApiClientInterface
      * @return StateDocumentInterface The document
      */
     public function getStateDocument(StateInterface $state);
+
+    /**
+     * Stores a document for an activity profile. Updates an existing document
+     * for this activity profile if one exists.
+     *
+     * @param ActivityProfileDocumentInterface $document The document to store
+     */
+    public function createOrUpdateActivityProfileDocument(ActivityProfileDocumentInterface $document);
+
+    /**
+     * Stores a document for an activity profile. Replaces any existing document
+     * for this activity profile.
+     *
+     * @param ActivityProfileDocumentInterface $document The document to store
+     */
+    public function createOrReplaceActivityProfileDocument(ActivityProfileDocumentInterface $document);
+
+    /**
+     * Deletes a document stored for the given activity profile.
+     *
+     * @param ActivityProfileInterface $profile The state
+     */
+    public function deleteActivityProfileDocument(ActivityProfileInterface $profile);
+
+    /**
+     * Returns the document for an activity profile.
+     *
+     * @param ActivityProfileInterface $profile The activity profile to request
+     *                                          the document for
+     *
+     * @return ActivityProfileDocumentInterface The document
+     */
+    public function getActivityProfileDocument(ActivityProfileInterface $profile);
 }

@@ -14,6 +14,8 @@ namespace Xabbuh\XApi\Client\Tests;
 use Xabbuh\XApi\Client\StatementsFilter;
 use Xabbuh\XApi\Client\XApiClient;
 use Xabbuh\XApi\Common\Model\Activity;
+use Xabbuh\XApi\Common\Model\ActivityProfile;
+use Xabbuh\XApi\Common\Model\ActivityProfileDocument;
 use Xabbuh\XApi\Common\Model\Agent;
 use Xabbuh\XApi\Common\Model\State;
 use Xabbuh\XApi\Common\Model\StateDocument;
@@ -365,7 +367,7 @@ class XApiClientTest extends \PHPUnit_Framework_TestCase
         $this->client->createOrReplaceStateDocument($document);
     }
 
-    public function testDeleteStatement()
+    public function testDeleteStateDocument()
     {
         $state = $this->createState();
 
@@ -396,6 +398,65 @@ class XApiClientTest extends \PHPUnit_Framework_TestCase
 
         $this->assertInstanceOf('Xabbuh\XApi\Common\Model\StateDocument', $document);
         $this->assertEquals($state, $document->getState());
+    }
+
+    public function testCreateOrUpdateActivityProfileDocument()
+    {
+        $document = $this->createActivityProfileDocument();
+
+        $this->validateStoreApiCall(
+            'post',
+            'activities/profile?activityId=activity-id&profileId=profile-id',
+            204,
+            '',
+            $document
+        );
+
+        $this->client->createOrUpdateActivityProfileDocument($document);
+    }
+
+    public function testCreateOrReplaceActivityProfileDocument()
+    {
+        $document = $this->createActivityProfileDocument();
+
+        $this->validateStoreApiCall(
+            'put',
+            'activities/profile?activityId=activity-id&profileId=profile-id',
+            204,
+            '',
+            $document
+        );
+
+        $this->client->createOrReplaceActivityProfileDocument($document);
+    }
+
+    public function testDeleteActivityProfileDocument()
+    {
+        $activityProfile = $this->createActivityProfile();
+
+        $this->validateDeleteDocumentCall('activities/profile?activityId=activity-id&profileId=profile-id');
+
+        $this->client->deleteActivityProfileDocument($activityProfile);
+    }
+
+    public function testGetActivityProfileDocument()
+    {
+        $activityProfile = $this->createActivityProfile();
+        $document = new ActivityProfileDocument();
+        $document['x'] = 'foo';
+
+        $this->validateRetrieveApiCall(
+            'get',
+            'activities/profile?activityId=activity-id&profileId=profile-id',
+            200,
+            'ActivityProfileDocument',
+            $document
+        );
+
+        $document = $this->client->getActivityProfileDocument($activityProfile);
+
+        $this->assertInstanceOf('Xabbuh\XApi\Common\Model\ActivityProfileDocument', $document);
+        $this->assertEquals($activityProfile, $document->getActivityProfile());
     }
 
     private function createHttpClientMock()
@@ -475,6 +536,26 @@ class XApiClientTest extends \PHPUnit_Framework_TestCase
         $document['x'] = 'foo';
         $document['y'] = 'bar';
         $document->setState($state);
+
+        return $document;
+    }
+
+    private function createActivityProfile()
+    {
+        $activity = new Activity();
+        $activity->setId('activity-id');
+        $activityProfile = new ActivityProfile();
+        $activityProfile->setActivity($activity);
+        $activityProfile->setProfileId('profile-id');
+
+        return $activityProfile;
+    }
+
+    private function createActivityProfileDocument()
+    {
+        $activityProfile = $this->createActivityProfile();
+        $document = new ActivityProfileDocument();
+        $document->setActivityProfile($activityProfile);
 
         return $document;
     }

@@ -19,6 +19,8 @@ use Xabbuh\XApi\Common\Exception\AccessDeniedException;
 use Xabbuh\XApi\Common\Exception\ConflictException;
 use Xabbuh\XApi\Common\Exception\NotFoundException;
 use Xabbuh\XApi\Common\Exception\XApiException;
+use Xabbuh\XApi\Common\Model\ActivityProfileDocumentInterface;
+use Xabbuh\XApi\Common\Model\ActivityProfileInterface;
 use Xabbuh\XApi\Common\Model\ActorInterface;
 use Xabbuh\XApi\Common\Model\DocumentInterface;
 use Xabbuh\XApi\Common\Model\StateDocumentInterface;
@@ -226,16 +228,11 @@ class XApiClient implements XApiClientInterface
      */
     public function deleteStateDocument(StateInterface $state)
     {
-        $request = $this->createRequest(
-            'delete',
-            'activities/state',
-            array(
-                'activityId' => $state->getActivity()->getId(),
-                'agent' => $this->serializer->serialize($state->getActor(), 'json'),
-                'stateId' => $state->getStateId(),
-            )
-        );
-        $this->performRequest($request, array(204));
+        $this->doDeleteDocument('activities/state', array(
+            'activityId' => $state->getActivity()->getId(),
+            'agent' => $this->serializer->serialize($state->getActor(), 'json'),
+            'stateId' => $state->getStateId(),
+        ));
     }
 
     /**
@@ -243,22 +240,59 @@ class XApiClient implements XApiClientInterface
      */
     public function getStateDocument(StateInterface $state)
     {
-        $request = $this->createRequest(
-            'get',
-            'activities/state',
+        /** @var \Xabbuh\XApi\Common\Model\StateDocument $document */
+        $document = $this->doGetDocument('Xabbuh\XApi\Common\Model\StateDocument', 'activities/state', array(
+            'activityId' => $state->getActivity()->getId(),
+            'agent' => $this->serializer->serialize($state->getActor(), 'json'),
+            'stateId' => $state->getStateId(),
+        ));
+        $document->setState($state);
+
+        return $document;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function createOrUpdateActivityProfileDocument(ActivityProfileDocumentInterface $document)
+    {
+        $this->doStoreActivityProfileDocument('post', $document);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function createOrReplaceActivityProfileDocument(ActivityProfileDocumentInterface $document)
+    {
+        $this->doStoreActivityProfileDocument('put', $document);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function deleteActivityProfileDocument(ActivityProfileInterface $profile)
+    {
+        $this->doDeleteDocument('activities/profile', array(
+            'activityId' => $profile->getActivity()->getId(),
+            'profileId' => $profile->getProfileId(),
+        ));
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getActivityProfileDocument(ActivityProfileInterface $profile)
+    {
+        /** @var \Xabbuh\XApi\Common\Model\ActivityProfileDocument $document */
+        $document = $this->doGetDocument(
+            'Xabbuh\XApi\Common\Model\ActivityProfileDocument',
+            'activities/profile',
             array(
-                'activityId' => $state->getActivity()->getId(),
-                'agent' => $this->serializer->serialize($state->getActor(), 'json'),
-                'stateId' => $state->getStateId(),
+                'activityId' => $profile->getActivity()->getId(),
+                'profileId' => $profile->getProfileId(),
             )
         );
-        $response = $this->performRequest($request, array(200));
-        $document = $this->serializer->deserialize(
-            $response->getBody(true),
-            'Xabbuh\XApi\Common\Model\StateDocument',
-            'json'
-        );
-        $document->setState($state);
+        $document->setActivityProfile($profile);
 
         return $document;
     }
@@ -366,6 +400,56 @@ class XApiClient implements XApiClientInterface
             ),
             $document
         );
+    }
+
+    /**
+     * Stores a state document.
+     *
+     * @param string                           $method   HTTP method to use
+     * @param ActivityProfileDocumentInterface $document The document to store
+     */
+    private function doStoreActivityProfileDocument($method, ActivityProfileDocumentInterface $document)
+    {
+        $profile = $document->getActivityProfile();
+        $this->doStoreDocument(
+            $method,
+            'activities/profile',
+            array(
+                'activityId' => $profile->getActivity()->getId(),
+                'profileId' => $profile->getProfileId(),
+            ),
+            $document
+        );
+    }
+
+    /**
+     * Deletes a document.
+     *
+     * @param string $uri           The endpoint URI
+     * @param array  $urlParameters The URL parameters
+     */
+    private function doDeleteDocument($uri, array $urlParameters)
+    {
+        $request = $this->createRequest('delete', $uri, $urlParameters);
+        $this->performRequest($request, array(204));
+    }
+
+    /**
+     * Returns a document.
+     *
+     * @param string $type          The document type
+     * @param string $uri           The endpoint URI
+     * @param array  $urlParameters The URL parameters
+     *
+     * @return \Xabbuh\XApi\Common\Model\DocumentInterface The document
+     */
+    private function doGetDocument($type, $uri, array $urlParameters)
+    {
+        $request = $this->createRequest('get', $uri, $urlParameters);
+        $response = $this->performRequest($request, array(200));
+        $document = $this->serializer->deserialize($response->getBody(true), $type, 'json');
+
+        return $document;
     }
 
     /**
