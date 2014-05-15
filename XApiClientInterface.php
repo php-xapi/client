@@ -17,6 +17,8 @@ use Xabbuh\XApi\Common\Exception\XApiException;
 use Xabbuh\XApi\Common\Model\ActivityProfileDocumentInterface;
 use Xabbuh\XApi\Common\Model\ActivityProfileInterface;
 use Xabbuh\XApi\Common\Model\ActorInterface;
+use Xabbuh\XApi\Common\Model\AgentProfileDocumentInterface;
+use Xabbuh\XApi\Common\Model\AgentProfileInterface;
 use Xabbuh\XApi\Common\Model\StateDocumentInterface;
 use Xabbuh\XApi\Common\Model\StateInterface;
 use Xabbuh\XApi\Common\Model\StatementInterface;
@@ -170,7 +172,7 @@ interface XApiClientInterface
     /**
      * Deletes a document stored for the given activity profile.
      *
-     * @param ActivityProfileInterface $profile The state
+     * @param ActivityProfileInterface $profile The activity profile
      */
     public function deleteActivityProfileDocument(ActivityProfileInterface $profile);
 
@@ -183,4 +185,37 @@ interface XApiClientInterface
      * @return ActivityProfileDocumentInterface The document
      */
     public function getActivityProfileDocument(ActivityProfileInterface $profile);
+
+    /**
+     * Stores a document for an agent profile. Updates an existing document for
+     * this agent profile if one exists.
+     *
+     * @param AgentProfileDocumentInterface $document The document to store
+     */
+    public function createOrUpdateAgentProfileDocument(AgentProfileDocumentInterface $document);
+
+    /**
+     * Stores a document for an agent profile. Replaces any existing document
+     * for this agent profile.
+     *
+     * @param AgentProfileDocumentInterface $document The document to store
+     */
+    public function createOrReplaceAgentProfileDocument(AgentProfileDocumentInterface $document);
+
+    /**
+     * Deletes a document stored for the given agent profile.
+     *
+     * @param AgentProfileInterface $profile The agent profile
+     */
+    public function deleteAgentProfileDocument(AgentProfileInterface $profile);
+
+    /**
+     * Returns the document for an agent profile.
+     *
+     * @param AgentProfileInterface $profile The agent profile to request the
+     *                                       document for
+     *
+     * @return AgentProfileDocumentInterface The document
+     */
+    public function getAgentProfileDocument(AgentProfileInterface $profile);
 }

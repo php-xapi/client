@@ -22,6 +22,8 @@ use Xabbuh\XApi\Common\Exception\XApiException;
 use Xabbuh\XApi\Common\Model\ActivityProfileDocumentInterface;
 use Xabbuh\XApi\Common\Model\ActivityProfileInterface;
 use Xabbuh\XApi\Common\Model\ActorInterface;
+use Xabbuh\XApi\Common\Model\AgentProfileDocumentInterface;
+use Xabbuh\XApi\Common\Model\AgentProfileInterface;
 use Xabbuh\XApi\Common\Model\DocumentInterface;
 use Xabbuh\XApi\Common\Model\StateDocumentInterface;
 use Xabbuh\XApi\Common\Model\StateInterface;
@@ -293,6 +295,60 @@ class XApiClient implements XApiClientInterface
             )
         );
         $document->setActivityProfile($profile);
+
+        return $document;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function createOrUpdateAgentProfileDocument(AgentProfileDocumentInterface $document)
+    {
+        $profile = $document->getAgentProfile();
+        $this->doStoreDocument('post', 'agents/profile', array(
+            'agent' => $this->serializer->serialize($profile->getAgent(), 'json'),
+            'profileId' => $profile->getProfileId(),
+        ), $document);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function createOrReplaceAgentProfileDocument(AgentProfileDocumentInterface $document)
+    {
+        $profile = $document->getAgentProfile();
+        $this->doStoreDocument('put', 'agents/profile', array(
+            'agent' => $this->serializer->serialize($profile->getAgent(), 'json'),
+            'profileId' => $profile->getProfileId(),
+        ), $document);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function deleteAgentProfileDocument(AgentProfileInterface $profile)
+    {
+        $this->doDeleteDocument('agents/profile', array(
+            'agent' => $this->serializer->serialize($profile->getAgent(), 'json'),
+            'profileId' => $profile->getProfileId(),
+        ));
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getAgentProfileDocument(AgentProfileInterface $profile)
+    {
+        /** @var \Xabbuh\XApi\Common\Model\AgentProfileDocument $document */
+        $document = $this->doGetDocument(
+            'Xabbuh\XApi\Common\Model\AgentProfileDocument',
+            'agents/profile',
+            array(
+                'agent' => $this->serializer->serialize($profile->getAgent(), 'json'),
+                'profileId' => $profile->getProfileId(),
+            )
+        );
+        $document->setAgentProfile($profile);
 
         return $document;
     }

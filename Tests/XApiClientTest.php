@@ -17,6 +17,8 @@ use Xabbuh\XApi\Common\Model\Activity;
 use Xabbuh\XApi\Common\Model\ActivityProfile;
 use Xabbuh\XApi\Common\Model\ActivityProfileDocument;
 use Xabbuh\XApi\Common\Model\Agent;
+use Xabbuh\XApi\Common\Model\AgentProfile;
+use Xabbuh\XApi\Common\Model\AgentProfileDocument;
 use Xabbuh\XApi\Common\Model\State;
 use Xabbuh\XApi\Common\Model\StateDocument;
 use Xabbuh\XApi\Common\Model\Statement;
@@ -459,6 +461,75 @@ class XApiClientTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($activityProfile, $document->getActivityProfile());
     }
 
+    public function testCreateOrUpdateAgentProfileDocument()
+    {
+        $document = $this->createAgentProfileDocument();
+        $profile = $document->getAgentProfile();
+
+        $this->validateStoreApiCall(
+            'post',
+            'agents/profile?agent=agent-as-json&profileId=profile-id',
+            204,
+            '',
+            $document,
+            array(array('data' => $profile->getAgent(), 'result' => 'agent-as-json'))
+        );
+
+        $this->client->createOrUpdateAgentProfileDocument($document);
+    }
+
+    public function testCreateOrReplaceAgentProfileDocument()
+    {
+        $document = $this->createAgentProfileDocument();
+        $profile = $document->getAgentProfile();
+
+        $this->validateStoreApiCall(
+            'put',
+            'agents/profile?agent=agent-as-json&profileId=profile-id',
+            204,
+            '',
+            $document,
+            array(array('data' => $profile->getAgent(), 'result' => 'agent-as-json'))
+        );
+
+        $this->client->createOrReplaceAgentProfileDocument($document);
+    }
+
+    public function testDeleteAgentProfileDocument()
+    {
+        $profile = $this->createAgentProfile();
+
+        $this->validateDeleteDocumentCall(
+            'agents/profile?agent=agent-as-json&profileId=profile-id',
+            array(array('data' => $profile->getAgent(), 'result' => 'agent-as-json'))
+        );
+
+        $this->client->deleteAgentProfileDocument(
+            $profile
+        );
+    }
+
+    public function testGetAgentProfileDocument()
+    {
+        $profile = $this->createAgentProfile();
+        $document = new AgentProfileDocument();
+        $document['x'] = 'foo';
+
+        $this->validateRetrieveApiCall(
+            'get',
+            'agents/profile?agent=agent-as-json&profileId=profile-id',
+            200,
+            'AgentProfileDocument',
+            $document,
+            array(array('data' => $profile->getAgent(), 'result' => 'agent-as-json'))
+        );
+
+        $document = $this->client->getAgentProfileDocument($profile);
+
+        $this->assertInstanceOf('Xabbuh\XApi\Common\Model\AgentProfileDocument', $document);
+        $this->assertEquals($profile, $document->getAgentProfile());
+    }
+
     private function createHttpClientMock()
     {
         return $this->getMock('\Guzzle\Http\ClientInterface');
@@ -556,6 +627,25 @@ class XApiClientTest extends \PHPUnit_Framework_TestCase
         $activityProfile = $this->createActivityProfile();
         $document = new ActivityProfileDocument();
         $document->setActivityProfile($activityProfile);
+
+        return $document;
+    }
+
+    private function createAgentProfile()
+    {
+        $agent = new Agent();
+        $profile = new AgentProfile();
+        $profile->setAgent($agent);
+        $profile->setProfileId('profile-id');
+
+        return $profile;
+    }
+
+    private function createAgentProfileDocument()
+    {
+        $profile = $this->createAgentProfile();
+        $document = new AgentProfileDocument();
+        $document->setAgentProfile($profile);
 
         return $document;
     }
