@@ -21,7 +21,7 @@ $state->setStateId($stateId);
 Documents
 ---------
 
-Documents are simple collections of key-value pairs and can be accessed like array:
+Documents are simple collections of key-value pairs and can be accessed like arrays:
 
 ```php
 use Xabbuh\XApi\Common\Model\StateDocument;
