@@ -30,7 +30,9 @@ class XApiClientBuilderTest extends \PHPUnit_Framework_TestCase
     {
         $this->builder->setBaseUrl('http://www.example.com');
         $xApiClient = $this->builder->build();
-        $httpClient = $xApiClient->getHttpClient();
+        /** @var \Xabbuh\XApi\Client\Api\RequestExecutor $requestExecutor */
+        $requestExecutor = $xApiClient->getRequestExecutor();
+        $httpClient = $requestExecutor->getHttpClient();
 
         $this->assertEquals('http://www.example.com', $httpClient->getBaseUrl());
     }
@@ -48,8 +50,8 @@ class XApiClientBuilderTest extends \PHPUnit_Framework_TestCase
         $this->builder->setAuth('foo', 'bar');
         $xApiClient = $this->builder->build();
 
-        $this->assertEquals('foo', $xApiClient->getUsername());
-        $this->assertEquals('bar', $xApiClient->getPassword());
+        $this->assertEquals('foo', $xApiClient->getRequestExecutor()->getUsername());
+        $this->assertEquals('bar', $xApiClient->getRequestExecutor()->getPassword());
     }
 
     public function testSetOAuth()
@@ -63,7 +65,9 @@ class XApiClientBuilderTest extends \PHPUnit_Framework_TestCase
                 'token-secret'
             )
             ->build();
-        $httpClient = $xApiClient->getHttpClient();
+        /** @var \Xabbuh\XApi\Client\Api\RequestExecutor $requestExecutor */
+        $requestExecutor = $xApiClient->getRequestExecutor();
+        $httpClient = $requestExecutor->getHttpClient();
         $listeners = $httpClient->getEventDispatcher()
             ->getListeners('request.before_send');
 

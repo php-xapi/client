@@ -44,3 +44,27 @@ $xApiClient = $builder->setBaseUrl('http://example.com/lrs/api')
     ->setOAuthCredentials('consumer-key', 'consumer-secret', 'token', 'token-secret')
     ->build();
 ```
+
+Using the APIs
+--------------
+
+The Experience API consists of four sub APIs: the statements API, the state API,
+the activity profile API and the agent profile API. A client for each of these
+APIs can be obtained from the global ``XApiClient`` instance:
+
+```php
+$statementsApiClient = $xApiClient->getStatementsApiClient();
+$stateApiClient = $xApiClient->getStateApiClient();
+$activityProfileApiClient = $xApiClient->getActivityProfileApiClient();
+$agentProfileApiClient = $xApiClient->getAgentProfileApiClient();
+```
+
+Read the dedicated chapters of the sub APIs to learn how to make use of them:
+
+1. [The Statements API](statements.md)
+
+1. [The State API](state.md)
+
+1. [The Activity Profile API](activity_profile.md)
+
+1. [The Agent profile API](agent_profile.md)

@@ -1,6 +1,16 @@
 The Statements API
 ==================
 
+Obtaining the Agent Profile API Client
+--------------------------------------
+
+After you have [built the global xAPI client](client.md), you can obtain a statements
+API client by calling its ``getStatementsApiClient()`` method:
+
+```php
+$statementsApiClient = $xApiClient->getStatementsApiClient();
+```
+
 Storing Statements
 ------------------
 
@@ -12,19 +22,17 @@ Statement(s) each having a unique id created by the remote LRS.
 
 use Xabbuh\XApi\Common\Model\Statement;
 
-$xApiClient = ...;
-
 $statement = new Statement();
 // ...
 
 // store a single Statement
-$xApiClient->storeStatement($statement);
+$statementsApiClient->storeStatement($statement);
 
 $statement2 = new Statement();
 // ...
 
 // store a collection of clients
-$xApiClient->storeStatements(array($statement, $statement2));
+$statementsApiClient->storeStatements(array($statement, $statement2));
 ```
 
 Retrieving Statements
@@ -36,7 +44,7 @@ Use the ``getStatement()`` method to obtain a certain Statement given its id:
 // ...
 
 // get a single Statement
-$statement = $xApiClient->getStatement($statementId);
+$statement = $statementsApiClient->getStatement($statementId);
 ```
 
 ``getStatements()`` returns a collection of Statements encapsulated in a
@@ -46,7 +54,7 @@ StatementResult instance:
 // ...
 
 // returns all accessible Statements
-$result = $xApiClient->getStatements();
+$result = $statementsApiClient->getStatements();
 ```
 
 You can even filter Statements using a StatementFilter:
@@ -78,7 +86,7 @@ $filter
     ->ascending()                    // ascending order of stored time
     ->descending();                  // ascending order of stored time
 
-$result = $xApiClient->getStatements($filter->getFilter());
+$result = $statementsApiClient->getStatements($filter->getFilter());
 ```
 
 If you limited the number of returned results, you can get the next Statements
@@ -89,10 +97,10 @@ of the previous request to it:
 // ....
 $filter = new StatementsFilter();
 $filter->limit(3);
-$firstStatementResult = $xApiClient->getStatements($filter);
+$firstStatementResult = $statementsApiClient->getStatements($filter);
 
 // get the next Statements
-$nextStatementResult = $xApiClient->getNextStatements($firstStatementResult);
+$nextStatementResult = $statementsApiClient->getNextStatements($firstStatementResult);
 ```
 
 The Experience API doesn't allow to delete Statements. You have to mark them as
@@ -102,7 +110,7 @@ voided instead:
 // ...
 $statement = ...; // The Statement being voided
 $actor = ...; // The Actor voiding the Statement
-$xApiClient->voidStatement($statement, $actor);
+$statementsApiClient->voidStatement($statement, $actor);
 ```
 
 Voided Statements won't be returned when requesting either a single Statement or
@@ -111,5 +119,5 @@ using the ``getVoidedStatement()`` method:
 
 ```php
 // ...
-$voidedStatement = $xApiClient->getVoidedStatement($statementId);
+$voidedStatement = $statementsApiClient->getVoidedStatement($statementId);
 ```

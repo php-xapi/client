@@ -31,6 +31,16 @@ $document['x'] = 'foo';
 $document['y'] = 'bar';
 ```
 
+Obtaining the Agent Profile API Client
+--------------------------------------
+
+After you have [built the global xAPI client](client.md), you can obtain an agent
+profile API client by calling its ``getAgentProfileApiClient()`` method:
+
+```php
+$agentProfileApiClient = $xApiClient->getAgentProfileApiClient();
+```
+
 Storing Agent Profile Documents
 -------------------------------
 
@@ -39,7 +49,7 @@ You can simply store an ``AgentProfileDocument`` passing it to the
 
 ```php
 $document = ...; // the agent profile document
-$xApiClient->createOrUpdateAgentProfileDocument($document);
+$agentProfileApiClient->createOrUpdateAgentProfileDocument($document);
 ```
 
 If a document already exists for this agent profile, the existing document will
@@ -52,7 +62,7 @@ method instead:
 
 ```php
 $document = ...; // the agent profile document
-$xApiClient->createOrReplaceAgentProfileDocument($document);
+$agentProfileApiClient->createOrReplaceAgentProfileDocument($document);
 ```
 
 Deleting Agent Profile Documents
@@ -63,7 +73,7 @@ to the ``deleteAgentProfileDocument()`` method:
 
 ```php
 $profile = ...; // the agent profile the document should be deleted from
-$xApiClient->deleteAgentProfileDocument($profile);
+$agentProfileApiClient->deleteAgentProfileDocument($profile);
 ```
 
 Retrieving Agent Profile Documents
@@ -74,5 +84,5 @@ profile to the ``getAgentProfileDocument()`` method:
 
 ```php
 $profile = ...; // the agent profile the document should be retrieved from
-$document = $xApiClient->getAgentProfileDocument($profile);
+$document = $agentProfileApiClient->getAgentProfileDocument($profile);
 ```

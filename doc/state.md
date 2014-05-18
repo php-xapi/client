@@ -33,6 +33,16 @@ $document['x'] = 'foo';
 $document['y'] = 'bar';
 ```
 
+Obtaining the State API Client
+------------------------------
+
+After you have [built the global xAPI client](client.md), you can obtain a state
+API client by calling its ``getStateApiClient()`` method:
+
+```php
+$stateApiClient = $xApiClient->getStateApiClient();
+```
+
 Storing State Documents
 -----------------------
 
@@ -41,7 +51,7 @@ method of the xAPI client:
 
 ```php
 $document = ...; // the state document
-$xApiClient->createOrUpdateStateDocument($document);
+$stateApiClient->createOrUpdateStateDocument($document);
 ```
 
 If a document already exists for this state, the existing document will be updated.
@@ -54,7 +64,7 @@ instead:
 
 ```php
 $document = ...; // the state document
-$xApiClient->createOrReplaceStateDocument($document);
+$stateApiClient->createOrReplaceStateDocument($document);
 ```
 
 Deleting State Documents
@@ -65,7 +75,7 @@ method:
 
 ```php
 $state = ...; // the state the document should be deleted from
-$xApiClient->deleteStateDocument($state);
+$stateApiClient->deleteStateDocument($state);
 ```
 
 Retrieving State Documents
@@ -76,5 +86,5 @@ the ``getStateDocument()`` method:
 
 ```php
 $state = ...; // the state the document should be retrieved from
-$document = $xApiClient->getStateDocument($state);
+$document = $stateApiClient->getStateDocument($state);
 ```

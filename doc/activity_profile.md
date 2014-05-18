@@ -32,6 +32,16 @@ $document['x'] = 'foo';
 $document['y'] = 'bar';
 ```
 
+Obtaining the Activity Profile API Client
+-----------------------------------------
+
+After you have [built the global xAPI client](client.md), you can obtain an activity
+profile API client by calling its ``getActivityProfileApiClient()`` method:
+
+```php
+$activityProfileApiClient = $xApiClient->getActivityProfileApiClient();
+```
+
 Storing Activity Profile Documents
 ----------------------------------
 
@@ -40,7 +50,7 @@ You can simply store an ``ActivityProfileDocument`` passing it to the
 
 ```php
 $document = ...; // the activity profile document
-$xApiClient->createOrUpdateActivityProfileDocument($document);
+$activityProfileApiClient->createOrUpdateActivityProfileDocument($document);
 ```
 
 If a document already exists for this activity profile, the existing document will
@@ -53,7 +63,7 @@ method instead:
 
 ```php
 $document = ...; // the activity profile document
-$xApiClient->createOrReplaceActivityProfileDocument($document);
+$activityProfileApiClient->createOrReplaceActivityProfileDocument($document);
 ```
 
 Deleting Activity Profile Documents
@@ -64,7 +74,7 @@ to the ``deleteActivityProfileDocument()`` method:
 
 ```php
 $profile = ...; // the activity profile the document should be deleted from
-$xApiClient->deleteActivityProfileDocument($profile);
+$activityProfileApiClient->deleteActivityProfileDocument($profile);
 ```
 
 Retrieving Activity Profile Documents
@@ -75,5 +85,5 @@ the profile to the ``getActivityProfileDocument()`` method:
 
 ```php
 $profile = ...; // the activity profile the document should be retrieved from
-$document = $xApiClient->getActivityProfileDocument($profile);
+$document = $activityProfileApiClient->getActivityProfileDocument($profile);
 ```
