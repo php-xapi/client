@@ -19,9 +19,9 @@ use Xabbuh\XApi\Common\Exception\NotFoundException;
 abstract class ApiClientTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Xabbuh\XApi\Client\Api\RequestExecutorInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Xabbuh\XApi\Client\Request\HandlerInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $requestExecutor;
+    protected $requestHandler;
 
     /**
      * @var \JMS\Serializer\SerializerInterface|\PHPUnit_Framework_MockObject_MockObject
@@ -30,13 +30,13 @@ abstract class ApiClientTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->requestExecutor = $this->createRequestExecutorMock();
+        $this->requestHandler = $this->createRequestHandlerMock();
         $this->serializer = $this->createSerializerMock();
     }
 
-    protected function createRequestExecutorMock()
+    protected function createRequestHandlerMock()
     {
-        return $this->getMock('\Xabbuh\XApi\Client\Api\RequestExecutorInterface');
+        return $this->getMock('\Xabbuh\XApi\Client\Request\HandlerInterface');
     }
 
     protected function createSerializerMock()
@@ -104,7 +104,7 @@ abstract class ApiClientTest extends \PHPUnit_Framework_TestCase
     {
         $request = $this->createRequestMock($response);
         $this
-            ->requestExecutor
+            ->requestHandler
             ->expects($this->once())
             ->method('createRequest')
             ->with($method, $uri, $urlParameters, $body)
@@ -121,14 +121,14 @@ abstract class ApiClientTest extends \PHPUnit_Framework_TestCase
 
         if (404 === $statusCode) {
             $this
-                ->requestExecutor
+                ->requestHandler
                 ->expects($this->once())
                 ->method('executeRequest')
                 ->with($request)
                 ->will($this->throwException(new NotFoundException('Not found')));
         } else {
             $this
-                ->requestExecutor
+                ->requestHandler
                 ->expects($this->once())
                 ->method('executeRequest')
                 ->with($request)
@@ -148,7 +148,7 @@ abstract class ApiClientTest extends \PHPUnit_Framework_TestCase
         $response = $this->createResponseMock($statusCode, $rawResponse);
         $request = $this->validateRequest($method, $uri, $urlParameters, $rawRequest, $response);
         $this
-            ->requestExecutor
+            ->requestHandler
             ->expects($this->once())
             ->method('executeRequest')
             ->with($request, array($statusCode))

@@ -13,7 +13,7 @@ namespace Xabbuh\XApi\Client;
 
 use Guzzle\Http\Client;
 use Guzzle\Plugin\Oauth\OauthPlugin;
-use Xabbuh\XApi\Client\Api\RequestExecutor;
+use Xabbuh\XApi\Client\Request\Handler;
 use Xabbuh\XApi\Common\Serializer\Serializer;
 
 /**
@@ -92,8 +92,8 @@ class XApiClientBuilder implements XApiClientBuilderInterface
 
         $serializer = Serializer::createSerializer();
         $version = null === $this->version ? '1.0.1' : $this->version;
-        $requestExecutor = new RequestExecutor($httpClient, $version, $this->username, $this->password);
-        $xApiClient = new XApiClient($requestExecutor, $serializer, $this->version);
+        $requestHandler = new Handler($httpClient, $version, $this->username, $this->password);
+        $xApiClient = new XApiClient($requestHandler, $serializer, $this->version);
 
         return $xApiClient;
     }

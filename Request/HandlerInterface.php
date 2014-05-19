@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Xabbuh\XApi\Client\Api;
+namespace Xabbuh\XApi\Client\Request;
 
 use Guzzle\Http\Message\RequestInterface;
 use Xabbuh\XApi\Common\Exception\XApiException;
@@ -19,7 +19,7 @@ use Xabbuh\XApi\Common\Exception\XApiException;
  *
  * @author Christian Flothmann <christian.flothmann@xabbuh.de>
  */
-interface RequestExecutorInterface
+interface HandlerInterface
 {
     /**
      * Returns the HTTP auth username.

@@ -12,6 +12,7 @@
 namespace Xabbuh\XApi\Client\Api;
 
 use JMS\Serializer\SerializerInterface;
+use Xabbuh\XApi\Client\Request\HandlerInterface;
 
 /**
  * Base class for all API client classes.
@@ -20,27 +21,27 @@ use JMS\Serializer\SerializerInterface;
  */
 abstract class ApiClient
 {
-    protected $requestExecutor;
+    protected $requestHandler;
 
     protected $serializer;
 
     protected $version;
 
     /**
-     * @param RequestExecutorInterface $requestExecutor
+     * @param HandlerInterface         $requestHandler
      * @param SerializerInterface      $serializer
      * @param string                   $version         The xAPI version
      */
-    public function __construct(RequestExecutorInterface $requestExecutor, SerializerInterface $serializer, $version)
+    public function __construct(HandlerInterface $requestHandler, SerializerInterface $serializer, $version)
     {
-        $this->requestExecutor = $requestExecutor;
+        $this->requestHandler = $requestHandler;
         $this->serializer = $serializer;
         $this->version = $version;
     }
 
-    public function getRequestExecutor()
+    public function getRequestHandler()
     {
-        return $this->requestExecutor;
+        return $this->requestHandler;
     }
 
     public function getSerializer()

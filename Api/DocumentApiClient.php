@@ -30,13 +30,13 @@ abstract class DocumentApiClient extends ApiClient
      */
     protected function doStoreDocument($method, $uri, $urlParameters, DocumentInterface $document)
     {
-        $request = $this->requestExecutor->createRequest(
+        $request = $this->requestHandler->createRequest(
             $method,
             $uri,
             $urlParameters,
             $this->serializer->serialize($document, 'json')
         );
-        $this->requestExecutor->executeRequest($request, array(204));
+        $this->requestHandler->executeRequest($request, array(204));
     }
 
     /**
@@ -47,8 +47,8 @@ abstract class DocumentApiClient extends ApiClient
      */
     protected function doDeleteDocument($uri, array $urlParameters)
     {
-        $request = $this->requestExecutor->createRequest('delete', $uri, $urlParameters);
-        $this->requestExecutor->executeRequest($request, array(204));
+        $request = $this->requestHandler->createRequest('delete', $uri, $urlParameters);
+        $this->requestHandler->executeRequest($request, array(204));
     }
 
     /**
@@ -62,8 +62,8 @@ abstract class DocumentApiClient extends ApiClient
      */
     protected function doGetDocument($type, $uri, array $urlParameters)
     {
-        $request = $this->requestExecutor->createRequest('get', $uri, $urlParameters);
-        $response = $this->requestExecutor->executeRequest($request, array(200));
+        $request = $this->requestHandler->createRequest('get', $uri, $urlParameters);
+        $response = $this->requestHandler->executeRequest($request, array(200));
         $document = $this->serializer->deserialize($response->getBody(true), $type, 'json');
 
         return $document;

@@ -30,7 +30,7 @@ class StateApiClientTest extends ApiClientTest
     protected function setUp()
     {
         parent::setUp();
-        $this->client = new StateApiClient($this->requestExecutor, $this->serializer, '1.0.1');
+        $this->client = new StateApiClient($this->requestHandler, $this->serializer, '1.0.1');
     }
 
     public function testCreateOrUpdateDocument()

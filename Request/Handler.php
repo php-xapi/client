@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Xabbuh\XApi\Client\Api;
+namespace Xabbuh\XApi\Client\Request;
 
 use Guzzle\Http\ClientInterface;
 use Guzzle\Http\Exception\ClientErrorResponseException;
@@ -24,7 +24,7 @@ use Xabbuh\XApi\Common\Exception\XApiException;
  *
  * @author Christian Flothmann <christian.flothmann@xabbuh.de>
  */
-class RequestExecutor implements RequestExecutorInterface
+class Handler implements HandlerInterface
 {
     private $httpClient;
 

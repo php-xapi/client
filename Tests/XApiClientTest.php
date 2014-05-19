@@ -19,9 +19,9 @@ use Xabbuh\XApi\Client\XApiClient;
 class XApiClientTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Xabbuh\XApi\Client\Api\RequestExecutorInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Xabbuh\XApi\Client\Request\HandlerInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $requestExecutor;
+    private $requestHandler;
 
     /**
      * @var \JMS\Serializer\SerializerInterface|\PHPUnit_Framework_MockObject_MockObject
@@ -35,14 +35,14 @@ class XApiClientTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->requestExecutor = $this->createRequestExecutorMock();
+        $this->requestHandler = $this->createRequestHandlerMock();
         $this->serializer = $this->createSerializerMock();
-        $this->client = new XApiClient($this->requestExecutor, $this->serializer, '1.0.1');
+        $this->client = new XApiClient($this->requestHandler, $this->serializer, '1.0.1');
     }
 
-    public function testGetRequestExecutor()
+    public function testGetRequestHandler()
     {
-        $this->assertSame($this->requestExecutor, $this->client->getRequestExecutor());
+        $this->assertSame($this->requestHandler, $this->client->getRequestHandler());
     }
 
     public function testGetSerializer()
@@ -83,11 +83,11 @@ class XApiClientTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return \Xabbuh\XApi\Client\Api\RequestExecutorInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @return \Xabbuh\XApi\Client\Request\HandlerInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    private function createRequestExecutorMock()
+    private function createRequestHandlerMock()
     {
-        return $this->getMock('\Xabbuh\XApi\Client\Api\RequestExecutorInterface');
+        return $this->getMock('\Xabbuh\XApi\Client\Request\HandlerInterface');
     }
 
     /**

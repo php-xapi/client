@@ -29,7 +29,7 @@ class XApiClient extends ApiClient implements XApiClientInterface
      */
     public function getStatementsApiClient()
     {
-        return new StatementsApiClient($this->requestExecutor, $this->serializer, $this->version);
+        return new StatementsApiClient($this->requestHandler, $this->serializer, $this->version);
     }
 
     /**
@@ -37,7 +37,7 @@ class XApiClient extends ApiClient implements XApiClientInterface
      */
     public function getStateApiClient()
     {
-        return new StateApiClient($this->requestExecutor, $this->serializer, $this->version);
+        return new StateApiClient($this->requestHandler, $this->serializer, $this->version);
     }
 
     /**
@@ -45,7 +45,7 @@ class XApiClient extends ApiClient implements XApiClientInterface
      */
     public function getActivityProfileApiClient()
     {
-        return new ActivityProfileApiClient($this->requestExecutor, $this->serializer, $this->version);
+        return new ActivityProfileApiClient($this->requestHandler, $this->serializer, $this->version);
     }
 
     /**
@@ -53,6 +53,6 @@ class XApiClient extends ApiClient implements XApiClientInterface
      */
     public function getAgentProfileApiClient()
     {
-        return new AgentProfileApiClient($this->requestExecutor, $this->serializer, $this->version);
+        return new AgentProfileApiClient($this->requestHandler, $this->serializer, $this->version);
     }
 }
