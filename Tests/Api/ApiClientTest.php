@@ -12,6 +12,11 @@
 namespace Xabbuh\XApi\Client\Tests\Api;
 
 use Xabbuh\XApi\Common\Exception\NotFoundException;
+use Xabbuh\XApi\Common\Serializer\ActorSerializer;
+use Xabbuh\XApi\Common\Serializer\DocumentSerializer;
+use Xabbuh\XApi\Common\Serializer\SerializerRegistry;
+use Xabbuh\XApi\Common\Serializer\StatementResultSerializer;
+use Xabbuh\XApi\Common\Serializer\StatementSerializer;
 
 /**
  * @author Christian Flothmann <christian.flothmann@xabbuh.de>
@@ -28,15 +33,32 @@ abstract class ApiClientTest extends \PHPUnit_Framework_TestCase
      */
     protected $serializer;
 
+    /**
+     * @var SerializerRegistry
+     */
+    protected $serializerRegistry;
+
     protected function setUp()
     {
         $this->requestHandler = $this->createRequestHandlerMock();
         $this->serializer = $this->createSerializerMock();
+        $this->serializerRegistry = $this->createSerializerRegistry();
     }
 
     protected function createRequestHandlerMock()
     {
         return $this->getMock('\Xabbuh\XApi\Client\Request\HandlerInterface');
+    }
+
+    protected function createSerializerRegistry()
+    {
+        $registry = new SerializerRegistry();
+        $registry->setStatementSerializer(new StatementSerializer($this->serializer));
+        $registry->setStatementResultSerializer(new StatementResultSerializer($this->serializer));
+        $registry->setActorSerializer(new ActorSerializer($this->serializer));
+        $registry->setDocumentSerializer(new DocumentSerializer($this->serializer));
+
+        return $registry;
     }
 
     protected function createSerializerMock()

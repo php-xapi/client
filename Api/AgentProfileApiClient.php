@@ -29,7 +29,10 @@ class AgentProfileApiClient extends DocumentApiClient implements AgentProfileApi
     {
         $profile = $document->getAgentProfile();
         $this->doStoreDocument('post', 'agents/profile', array(
-            'agent' => $this->serializer->serialize($profile->getAgent(), 'json'),
+            'agent' => $this
+                    ->serializerRegistry
+                    ->getActorSerializer()
+                    ->serializeActor($profile->getAgent()),
             'profileId' => $profile->getProfileId(),
         ), $document);
     }
@@ -41,7 +44,10 @@ class AgentProfileApiClient extends DocumentApiClient implements AgentProfileApi
     {
         $profile = $document->getAgentProfile();
         $this->doStoreDocument('put', 'agents/profile', array(
-            'agent' => $this->serializer->serialize($profile->getAgent(), 'json'),
+            'agent' => $this
+                    ->serializerRegistry
+                    ->getActorSerializer()
+                    ->serializeActor($profile->getAgent()),
             'profileId' => $profile->getProfileId(),
         ), $document);
     }
@@ -52,7 +58,10 @@ class AgentProfileApiClient extends DocumentApiClient implements AgentProfileApi
     public function deleteDocument(AgentProfileInterface $profile)
     {
         $this->doDeleteDocument('agents/profile', array(
-            'agent' => $this->serializer->serialize($profile->getAgent(), 'json'),
+            'agent' => $this
+                    ->serializerRegistry
+                    ->getActorSerializer()
+                    ->serializeActor($profile->getAgent()),
             'profileId' => $profile->getProfileId(),
         ));
     }
@@ -63,16 +72,26 @@ class AgentProfileApiClient extends DocumentApiClient implements AgentProfileApi
     public function getDocument(AgentProfileInterface $profile)
     {
         /** @var \Xabbuh\XApi\Common\Model\AgentProfileDocument $document */
-        $document = $this->doGetDocument(
-            'Xabbuh\XApi\Common\Model\AgentProfileDocument',
-            'agents/profile',
-            array(
-                'agent' => $this->serializer->serialize($profile->getAgent(), 'json'),
-                'profileId' => $profile->getProfileId(),
-            )
-        );
+        $document = $this->doGetDocument('agents/profile', array(
+            'agent' => $this
+                    ->serializerRegistry
+                    ->getActorSerializer()
+                    ->serializeActor($profile->getAgent()),
+            'profileId' => $profile->getProfileId(),
+        ));
         $document->setAgentProfile($profile);
 
         return $document;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    protected function deserializeDocument($serializedDocument)
+    {
+        return $this
+            ->serializerRegistry
+            ->getDocumentSerializer()
+            ->deserializeAgentProfileDocument($serializedDocument);
     }
 }

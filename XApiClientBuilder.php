@@ -14,7 +14,12 @@ namespace Xabbuh\XApi\Client;
 use Guzzle\Http\Client;
 use Guzzle\Plugin\Oauth\OauthPlugin;
 use Xabbuh\XApi\Client\Request\Handler;
+use Xabbuh\XApi\Common\Serializer\ActorSerializer;
+use Xabbuh\XApi\Common\Serializer\DocumentSerializer;
 use Xabbuh\XApi\Common\Serializer\Serializer;
+use Xabbuh\XApi\Common\Serializer\SerializerRegistry;
+use Xabbuh\XApi\Common\Serializer\StatementResultSerializer;
+use Xabbuh\XApi\Common\Serializer\StatementSerializer;
 
 /**
  * xAPI client builder.
@@ -91,9 +96,15 @@ class XApiClientBuilder implements XApiClientBuilderInterface
         }
 
         $serializer = Serializer::createSerializer();
+        $serializerRegistry = new SerializerRegistry();
+        $serializerRegistry->setStatementSerializer(new StatementSerializer($serializer));
+        $serializerRegistry->setStatementResultSerializer(new StatementResultSerializer($serializer));
+        $serializerRegistry->setActorSerializer(new ActorSerializer($serializer));
+        $serializerRegistry->setDocumentSerializer(new DocumentSerializer($serializer));
+
         $version = null === $this->version ? '1.0.1' : $this->version;
         $requestHandler = new Handler($httpClient, $version, $this->username, $this->password);
-        $xApiClient = new XApiClient($requestHandler, $serializer, $this->version);
+        $xApiClient = new XApiClient($requestHandler, $serializerRegistry, $this->version);
 
         return $xApiClient;
     }

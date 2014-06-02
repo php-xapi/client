@@ -29,7 +29,7 @@ class AgentProfileApiClientTest extends ApiClientTest
     protected function setUp()
     {
         parent::setUp();
-        $this->client = new AgentProfileApiClient($this->requestHandler, $this->serializer, '1.0.1');
+        $this->client = new AgentProfileApiClient($this->requestHandler, $this->serializerRegistry, '1.0.1');
     }
 
     public function testCreateOrUpdateDocument()

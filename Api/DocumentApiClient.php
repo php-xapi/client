@@ -34,7 +34,10 @@ abstract class DocumentApiClient extends ApiClient
             $method,
             $uri,
             $urlParameters,
-            $this->serializer->serialize($document, 'json')
+            $this
+                ->serializerRegistry
+                ->getDocumentSerializer()
+                ->serializeDocument($document)
         );
         $this->requestHandler->executeRequest($request, array(204));
     }
@@ -54,18 +57,19 @@ abstract class DocumentApiClient extends ApiClient
     /**
      * Returns a document.
      *
-     * @param string $type          The document type
      * @param string $uri           The endpoint URI
      * @param array  $urlParameters The URL parameters
      *
      * @return \Xabbuh\XApi\Common\Model\DocumentInterface The document
      */
-    protected function doGetDocument($type, $uri, array $urlParameters)
+    protected function doGetDocument($uri, array $urlParameters)
     {
         $request = $this->requestHandler->createRequest('get', $uri, $urlParameters);
         $response = $this->requestHandler->executeRequest($request, array(200));
-        $document = $this->serializer->deserialize($response->getBody(true), $type, 'json');
+        $document = $this->deserializeDocument($response->getBody(true));
 
         return $document;
     }
+
+    abstract protected function deserializeDocument($serializedDocument);
 }

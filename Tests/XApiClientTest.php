@@ -24,9 +24,9 @@ class XApiClientTest extends \PHPUnit_Framework_TestCase
     private $requestHandler;
 
     /**
-     * @var \JMS\Serializer\SerializerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Xabbuh\XApi\Common\Serializer\SerializerRegistryInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $serializer;
+    private $serializerRegistry;
 
     /**
      * @var XApiClient
@@ -36,8 +36,8 @@ class XApiClientTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->requestHandler = $this->createRequestHandlerMock();
-        $this->serializer = $this->createSerializerMock();
-        $this->client = new XApiClient($this->requestHandler, $this->serializer, '1.0.1');
+        $this->serializerRegistry = $this->createSerializerRegistryMock();
+        $this->client = new XApiClient($this->requestHandler, $this->serializerRegistry, '1.0.1');
     }
 
     public function testGetRequestHandler()
@@ -45,9 +45,9 @@ class XApiClientTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($this->requestHandler, $this->client->getRequestHandler());
     }
 
-    public function testGetSerializer()
+    public function testGetSerializerRegistry()
     {
-        $this->assertSame($this->serializer, $this->client->getSerializer());
+        $this->assertSame($this->serializerRegistry, $this->client->getSerializerRegistry());
     }
 
     public function testGetStatementsApi()
@@ -91,10 +91,10 @@ class XApiClientTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return \JMS\Serializer\SerializerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @return \Xabbuh\XApi\Common\Serializer\SerializerRegistryInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    private function createSerializerMock()
+    private function createSerializerRegistryMock()
     {
-        return $this->getMock('\JMS\Serializer\SerializerInterface');
+        return $this->getMock('\Xabbuh\XApi\Common\Serializer\SerializerRegistryInterface');
     }
 }

@@ -44,7 +44,10 @@ class StateApiClient extends DocumentApiClient implements StateApiClientInterfac
     {
         $this->doDeleteDocument('activities/state', array(
             'activityId' => $state->getActivity()->getId(),
-            'agent' => $this->serializer->serialize($state->getActor(), 'json'),
+            'agent' => $this
+                    ->serializerRegistry
+                    ->getActorSerializer()
+                    ->serializeActor($state->getActor()),
             'stateId' => $state->getStateId(),
         ));
     }
@@ -55,14 +58,28 @@ class StateApiClient extends DocumentApiClient implements StateApiClientInterfac
     public function getDocument(StateInterface $state)
     {
         /** @var \Xabbuh\XApi\Common\Model\StateDocument $document */
-        $document = $this->doGetDocument('Xabbuh\XApi\Common\Model\StateDocument', 'activities/state', array(
+        $document = $this->doGetDocument('activities/state', array(
             'activityId' => $state->getActivity()->getId(),
-            'agent' => $this->serializer->serialize($state->getActor(), 'json'),
+            'agent' => $this
+                    ->serializerRegistry
+                    ->getActorSerializer()
+                    ->serializeActor($state->getActor()),
             'stateId' => $state->getStateId(),
         ));
         $document->setState($state);
 
         return $document;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    protected function deserializeDocument($serializedDocument)
+    {
+        return $this
+            ->serializerRegistry
+            ->getDocumentSerializer()
+            ->deserializeStateDocument($serializedDocument);
     }
 
     /**
@@ -79,7 +96,10 @@ class StateApiClient extends DocumentApiClient implements StateApiClientInterfac
             'activities/state',
             array(
                 'activityId' => $state->getActivity()->getId(),
-                'agent' => $this->serializer->serialize($state->getActor(), 'json'),
+                'agent' => $this
+                        ->serializerRegistry
+                        ->getActorSerializer()
+                        ->serializeActor($state->getActor()),
                 'stateId' => $state->getStateId(),
             ),
             $document

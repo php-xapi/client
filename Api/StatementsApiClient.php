@@ -96,10 +96,10 @@ class StatementsApiClient extends ApiClient implements StatementsApiClientInterf
 
         // the Agent must be JSON encoded
         if (isset($urlParameters['agent'])) {
-            $urlParameters['agent'] = $this->serializer->serialize(
-                $urlParameters['agent'],
-                'json'
-            );
+            $urlParameters['agent'] = $this
+                ->serializerRegistry
+                ->getActorSerializer()
+                ->serializeActor($urlParameters['agent']);
         }
 
         return $this->doGetStatements('statements', $urlParameters);
@@ -123,13 +123,24 @@ class StatementsApiClient extends ApiClient implements StatementsApiClientInterf
      */
     private function doStoreStatements($statements, $method = 'post', $parameters = array(), $validStatusCode = 200)
     {
+        if (is_array($statements)) {
+            $serializedStatements = $this
+                ->serializerRegistry
+                ->getStatementSerializer()
+                ->serializeStatements($statements);
+        } else {
+            $serializedStatements = $this
+                ->serializerRegistry
+                ->getStatementSerializer()
+                ->serializeStatement($statements);
+        }
+
         $request = $this->requestHandler->createRequest(
             $method,
             'statements',
             $parameters,
-            $this->serializer->serialize($statements, 'json')
+            $serializedStatements
         );
-
         $response = $this->requestHandler->executeRequest($request, array($validStatusCode));
         $statementIds = json_decode($response->getBody(true));
 
@@ -169,15 +180,15 @@ class StatementsApiClient extends ApiClient implements StatementsApiClientInterf
         $response = $this->requestHandler->executeRequest($request, array(200));
 
         if (isset($urlParameters['statementId']) || isset($urlParameters['voidedStatementId'])) {
-            $class = 'Xabbuh\XApi\Common\Model\Statement';
+            return $this
+                ->serializerRegistry
+                ->getStatementSerializer()
+                ->deserializeStatement($response->getBody(true));
         } else {
-            $class = 'Xabbuh\XApi\Common\Model\StatementResult';
+            return $this
+                ->serializerRegistry
+                ->getStatementResultSerializer()
+                ->deserializeStatementResult($response->getBody(true));
         }
-
-        return $this->serializer->deserialize(
-            $response->getBody(true),
-            $class,
-            'json'
-        );
     }
 }
