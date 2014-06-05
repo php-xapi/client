@@ -11,8 +11,11 @@
 
 namespace Xabbuh\XApi\Client\Api;
 
+use Xabbuh\XApi\Client\Request\HandlerInterface;
 use Xabbuh\XApi\Common\Model\StateDocumentInterface;
 use Xabbuh\XApi\Common\Model\StateInterface;
+use Xabbuh\XApi\Common\Serializer\ActorSerializerInterface;
+use Xabbuh\XApi\Common\Serializer\DocumentSerializerInterface;
 
 /**
  * Client to access the state API of an xAPI based learning record store.
@@ -21,6 +24,27 @@ use Xabbuh\XApi\Common\Model\StateInterface;
  */
 class StateApiClient extends DocumentApiClient implements StateApiClientInterface
 {
+    /**
+     * @var \Xabbuh\XApi\Common\Serializer\ActorSerializerInterface
+     */
+    private $actorSerializer;
+
+    /**
+     * @param HandlerInterface            $requestHandler     The HTTP request handler
+     * @param string                      $version            The xAPI version
+     * @param DocumentSerializerInterface $documentSerializer The document serializer
+     * @param ActorSerializerInterface    $actorSerializer    The actor serializer
+     */
+    public function __construct(
+        HandlerInterface $requestHandler,
+        $version,
+        DocumentSerializerInterface $documentSerializer,
+        ActorSerializerInterface $actorSerializer
+    ) {
+        parent::__construct($requestHandler, $version, $documentSerializer);
+        $this->actorSerializer = $actorSerializer;
+    }
+
     /**
      * {@inheritDoc}
      */
@@ -44,10 +68,7 @@ class StateApiClient extends DocumentApiClient implements StateApiClientInterfac
     {
         $this->doDeleteDocument('activities/state', array(
             'activityId' => $state->getActivity()->getId(),
-            'agent' => $this
-                    ->serializerRegistry
-                    ->getActorSerializer()
-                    ->serializeActor($state->getActor()),
+            'agent' => $this->actorSerializer->serializeActor($state->getActor()),
             'stateId' => $state->getStateId(),
         ));
     }
@@ -60,10 +81,7 @@ class StateApiClient extends DocumentApiClient implements StateApiClientInterfac
         /** @var \Xabbuh\XApi\Common\Model\StateDocument $document */
         $document = $this->doGetDocument('activities/state', array(
             'activityId' => $state->getActivity()->getId(),
-            'agent' => $this
-                    ->serializerRegistry
-                    ->getActorSerializer()
-                    ->serializeActor($state->getActor()),
+            'agent' => $this->actorSerializer->serializeActor($state->getActor()),
             'stateId' => $state->getStateId(),
         ));
         $document->setState($state);
@@ -76,10 +94,7 @@ class StateApiClient extends DocumentApiClient implements StateApiClientInterfac
      */
     protected function deserializeDocument($serializedDocument)
     {
-        return $this
-            ->serializerRegistry
-            ->getDocumentSerializer()
-            ->deserializeStateDocument($serializedDocument);
+        return $this->documentSerializer->deserializeStateDocument($serializedDocument);
     }
 
     /**
@@ -96,10 +111,7 @@ class StateApiClient extends DocumentApiClient implements StateApiClientInterfac
             'activities/state',
             array(
                 'activityId' => $state->getActivity()->getId(),
-                'agent' => $this
-                        ->serializerRegistry
-                        ->getActorSerializer()
-                        ->serializeActor($state->getActor()),
+                'agent' => $this->actorSerializer->serializeActor($state->getActor()),
                 'stateId' => $state->getStateId(),
             ),
             $document

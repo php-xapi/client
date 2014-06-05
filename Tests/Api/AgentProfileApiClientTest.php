@@ -15,6 +15,8 @@ use Xabbuh\XApi\Client\Api\AgentProfileApiClient;
 use Xabbuh\XApi\Common\Model\Agent;
 use Xabbuh\XApi\Common\Model\AgentProfile;
 use Xabbuh\XApi\Common\Model\AgentProfileDocument;
+use Xabbuh\XApi\Common\Serializer\ActorSerializer;
+use Xabbuh\XApi\Common\Serializer\DocumentSerializer;
 
 /**
  * @author Christian Flothmann <christian.flothmann@xabbuh.de>
@@ -29,7 +31,12 @@ class AgentProfileApiClientTest extends ApiClientTest
     protected function setUp()
     {
         parent::setUp();
-        $this->client = new AgentProfileApiClient($this->requestHandler, $this->serializerRegistry, '1.0.1');
+        $this->client = new AgentProfileApiClient(
+            $this->requestHandler,
+            '1.0.1',
+            new DocumentSerializer($this->serializer),
+            new ActorSerializer($this->serializer)
+        );
     }
 
     public function testCreateOrUpdateDocument()

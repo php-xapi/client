@@ -69,10 +69,7 @@ class ActivityProfileApiClient extends DocumentApiClient implements ActivityProf
      */
     protected function deserializeDocument($serializedDocument)
     {
-        return $this
-            ->serializerRegistry
-            ->getDocumentSerializer()
-            ->deserializeActivityProfileDocument($serializedDocument);
+        return $this->documentSerializer->deserializeActivityProfileDocument($serializedDocument);
     }
 
     /**

@@ -95,6 +95,32 @@ class XApiClientTest extends \PHPUnit_Framework_TestCase
      */
     private function createSerializerRegistryMock()
     {
-        return $this->getMock('\Xabbuh\XApi\Common\Serializer\SerializerRegistryInterface');
+        $serializerRegistry = $this->getMock('\Xabbuh\XApi\Common\Serializer\SerializerRegistryInterface');
+
+        $statementSerializer = $this->getMock('\Xabbuh\XApi\Common\Serializer\StatementSerializerInterface');
+        $serializerRegistry
+            ->expects($this->any())
+            ->method('getStatementSerializer')
+            ->will($this->returnValue($statementSerializer));
+
+        $statementResultSerializer = $this->getMock('\Xabbuh\XApi\Common\Serializer\StatementResultSerializerInterface');
+        $serializerRegistry
+            ->expects($this->any())
+            ->method('getStatementResultSerializer')
+            ->will($this->returnValue($statementResultSerializer));
+
+        $actorSerializer = $this->getMock('\Xabbuh\XApi\Common\Serializer\ActorSerializerInterface');
+        $serializerRegistry
+            ->expects($this->any())
+            ->method('getActorSerializer')
+            ->will($this->returnValue($actorSerializer));
+
+        $documentSerializer = $this->getMock('\Xabbuh\XApi\Common\Serializer\DocumentSerializerInterface');
+        $serializerRegistry
+            ->expects($this->any())
+            ->method('getDocumentSerializer')
+            ->will($this->returnValue($documentSerializer));
+
+        return $serializerRegistry;
     }
 }

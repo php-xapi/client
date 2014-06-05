@@ -15,6 +15,7 @@ use Xabbuh\XApi\Client\Api\ActivityProfileApiClient;
 use Xabbuh\XApi\Common\Model\Activity;
 use Xabbuh\XApi\Common\Model\ActivityProfile;
 use Xabbuh\XApi\Common\Model\ActivityProfileDocument;
+use Xabbuh\XApi\Common\Serializer\DocumentSerializer;
 
 /**
  * @author Christian Flothmann <christian.flothmann@xabbuh.de>
@@ -29,7 +30,11 @@ class ActivityProfileApiClientTest extends ApiClientTest
     protected function setUp()
     {
         parent::setUp();
-        $this->client = new ActivityProfileApiClient($this->requestHandler, $this->serializerRegistry, '1.0.1');
+        $this->client = new ActivityProfileApiClient(
+            $this->requestHandler,
+            '1.0.1',
+            new DocumentSerializer($this->serializer)
+        );
     }
 
     public function testCreateOrUpdateDocument()

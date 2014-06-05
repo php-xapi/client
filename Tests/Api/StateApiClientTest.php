@@ -16,6 +16,8 @@ use Xabbuh\XApi\Common\Model\Activity;
 use Xabbuh\XApi\Common\Model\Agent;
 use Xabbuh\XApi\Common\Model\State;
 use Xabbuh\XApi\Common\Model\StateDocument;
+use Xabbuh\XApi\Common\Serializer\ActorSerializer;
+use Xabbuh\XApi\Common\Serializer\DocumentSerializer;
 
 /**
  * @author Christian Flothmann <christian.flothmann@xabbuh.de>
@@ -30,7 +32,12 @@ class StateApiClientTest extends ApiClientTest
     protected function setUp()
     {
         parent::setUp();
-        $this->client = new StateApiClient($this->requestHandler, $this->serializerRegistry, '1.0.1');
+        $this->client = new StateApiClient(
+            $this->requestHandler,
+            '1.0.1',
+            new DocumentSerializer($this->serializer),
+            new ActorSerializer($this->serializer)
+        );
     }
 
     public function testCreateOrUpdateDocument()

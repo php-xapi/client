@@ -16,6 +16,8 @@ use Xabbuh\XApi\Client\Api\AgentProfileApiClient;
 use Xabbuh\XApi\Client\Api\ApiClient;
 use Xabbuh\XApi\Client\Api\StateApiClient;
 use Xabbuh\XApi\Client\Api\StatementsApiClient;
+use Xabbuh\XApi\Client\Request\HandlerInterface;
+use Xabbuh\XApi\Common\Serializer\SerializerRegistryInterface;
 
 /**
  * An Experience API client.
@@ -25,11 +27,39 @@ use Xabbuh\XApi\Client\Api\StatementsApiClient;
 class XApiClient extends ApiClient implements XApiClientInterface
 {
     /**
+     * @var SerializerRegistryInterface
+     */
+    private $serializerRegistry;
+
+    /**
+     * @param HandlerInterface            $requestHandler     The HTTP request handler
+     * @param SerializerRegistryInterface $serializerRegistry The serializer registry
+     * @param string                      $version            The xAPI version
+     */
+    public function __construct(HandlerInterface $requestHandler, SerializerRegistryInterface $serializerRegistry, $version)
+    {
+        $this->requestHandler = $requestHandler;
+        $this->serializerRegistry = $serializerRegistry;
+        $this->version = $version;
+    }
+
+    public function getSerializerRegistry()
+    {
+        return $this->serializerRegistry;
+    }
+
+    /**
      * {@inheritDoc}
      */
     public function getStatementsApiClient()
     {
-        return new StatementsApiClient($this->requestHandler, $this->serializerRegistry, $this->version);
+        return new StatementsApiClient(
+            $this->requestHandler,
+            $this->version,
+            $this->serializerRegistry->getStatementSerializer(),
+            $this->serializerRegistry->getStatementResultSerializer(),
+            $this->serializerRegistry->getActorSerializer()
+        );
     }
 
     /**
@@ -37,7 +67,12 @@ class XApiClient extends ApiClient implements XApiClientInterface
      */
     public function getStateApiClient()
     {
-        return new StateApiClient($this->requestHandler, $this->serializerRegistry, $this->version);
+        return new StateApiClient(
+            $this->requestHandler,
+            $this->version,
+            $this->serializerRegistry->getDocumentSerializer(),
+            $this->serializerRegistry->getActorSerializer()
+        );
     }
 
     /**
@@ -45,7 +80,11 @@ class XApiClient extends ApiClient implements XApiClientInterface
      */
     public function getActivityProfileApiClient()
     {
-        return new ActivityProfileApiClient($this->requestHandler, $this->serializerRegistry, $this->version);
+        return new ActivityProfileApiClient(
+            $this->requestHandler,
+            $this->version,
+            $this->serializerRegistry->getDocumentSerializer()
+        );
     }
 
     /**
@@ -53,6 +92,11 @@ class XApiClient extends ApiClient implements XApiClientInterface
      */
     public function getAgentProfileApiClient()
     {
-        return new AgentProfileApiClient($this->requestHandler, $this->serializerRegistry, $this->version);
+        return new AgentProfileApiClient(
+            $this->requestHandler,
+            $this->version,
+            $this->serializerRegistry->getDocumentSerializer(),
+            $this->serializerRegistry->getActorSerializer()
+        );
     }
 }

@@ -18,6 +18,9 @@ use Xabbuh\XApi\Common\Model\Statement;
 use Xabbuh\XApi\Common\Model\StatementReference;
 use Xabbuh\XApi\Common\Model\StatementResult;
 use Xabbuh\XApi\Common\Model\Verb;
+use Xabbuh\XApi\Common\Serializer\ActorSerializer;
+use Xabbuh\XApi\Common\Serializer\StatementResultSerializer;
+use Xabbuh\XApi\Common\Serializer\StatementSerializer;
 
 /**
  * @author Christian Flothmann <christian.flothmann@xabbuh.de>
@@ -32,7 +35,13 @@ class StatementsApiClientTest extends ApiClientTest
     protected function setUp()
     {
         parent::setUp();
-        $this->client = new StatementsApiClient($this->requestHandler, $this->serializerRegistry, '1.0.1');
+        $this->client = new StatementsApiClient(
+            $this->requestHandler,
+            '1.0.1',
+            new StatementSerializer($this->serializer),
+            new StatementResultSerializer($this->serializer),
+            new ActorSerializer($this->serializer)
+        );
     }
 
     public function testStoreStatement()

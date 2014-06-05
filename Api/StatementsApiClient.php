@@ -11,10 +11,14 @@
 
 namespace Xabbuh\XApi\Client\Api;
 
+use Xabbuh\XApi\Client\Request\HandlerInterface;
 use Xabbuh\XApi\Client\StatementsFilterInterface;
 use Xabbuh\XApi\Common\Model\ActorInterface;
 use Xabbuh\XApi\Common\Model\StatementInterface;
 use Xabbuh\XApi\Common\Model\StatementResultInterface;
+use Xabbuh\XApi\Common\Serializer\ActorSerializerInterface;
+use Xabbuh\XApi\Common\Serializer\StatementResultSerializerInterface;
+use Xabbuh\XApi\Common\Serializer\StatementSerializerInterface;
 
 /**
  * Client to access the statements API of an xAPI based learning record store.
@@ -23,6 +27,41 @@ use Xabbuh\XApi\Common\Model\StatementResultInterface;
  */
 class StatementsApiClient extends ApiClient implements StatementsApiClientInterface
 {
+    /**
+     * @var \Xabbuh\XApi\Common\Serializer\StatementSerializerInterface
+     */
+    private $statementSerializer;
+
+    /**
+     * @var \Xabbuh\XApi\Common\Serializer\StatementResultSerializerInterface
+     */
+    private $statementResultSerializer;
+
+    /**
+     * @var \Xabbuh\XApi\Common\Serializer\ActorSerializerInterface
+     */
+    private $actorSerializer;
+
+    /**
+     * @param HandlerInterface                   $requestHandler            The HTTP request handler
+     * @param string                             $version                   The xAPI version
+     * @param StatementSerializerInterface       $statementSerializer       The statement serializer
+     * @param StatementResultSerializerInterface $statementResultSerializer The statement result serializer
+     * @param ActorSerializerInterface           $actorSerializer           The actor serializer
+     */
+    public function __construct(
+        HandlerInterface $requestHandler,
+        $version,
+        StatementSerializerInterface $statementSerializer,
+        StatementResultSerializerInterface $statementResultSerializer,
+        ActorSerializerInterface $actorSerializer
+    ) {
+        parent::__construct($requestHandler, $version);
+        $this->statementSerializer = $statementSerializer;
+        $this->statementResultSerializer = $statementResultSerializer;
+        $this->actorSerializer = $actorSerializer;
+    }
+
     /**
      * {@inheritDoc}
      */
@@ -96,10 +135,7 @@ class StatementsApiClient extends ApiClient implements StatementsApiClientInterf
 
         // the Agent must be JSON encoded
         if (isset($urlParameters['agent'])) {
-            $urlParameters['agent'] = $this
-                ->serializerRegistry
-                ->getActorSerializer()
-                ->serializeActor($urlParameters['agent']);
+            $urlParameters['agent'] = $this->actorSerializer->serializeActor($urlParameters['agent']);
         }
 
         return $this->doGetStatements('statements', $urlParameters);
@@ -124,15 +160,9 @@ class StatementsApiClient extends ApiClient implements StatementsApiClientInterf
     private function doStoreStatements($statements, $method = 'post', $parameters = array(), $validStatusCode = 200)
     {
         if (is_array($statements)) {
-            $serializedStatements = $this
-                ->serializerRegistry
-                ->getStatementSerializer()
-                ->serializeStatements($statements);
+            $serializedStatements = $this->statementSerializer->serializeStatements($statements);
         } else {
-            $serializedStatements = $this
-                ->serializerRegistry
-                ->getStatementSerializer()
-                ->serializeStatement($statements);
+            $serializedStatements = $this->statementSerializer->serializeStatement($statements);
         }
 
         $request = $this->requestHandler->createRequest(
@@ -180,15 +210,9 @@ class StatementsApiClient extends ApiClient implements StatementsApiClientInterf
         $response = $this->requestHandler->executeRequest($request, array(200));
 
         if (isset($urlParameters['statementId']) || isset($urlParameters['voidedStatementId'])) {
-            return $this
-                ->serializerRegistry
-                ->getStatementSerializer()
-                ->deserializeStatement($response->getBody(true));
+            return $this->statementSerializer->deserializeStatement($response->getBody(true));
         } else {
-            return $this
-                ->serializerRegistry
-                ->getStatementResultSerializer()
-                ->deserializeStatementResult($response->getBody(true));
+            return $this->statementResultSerializer->deserializeStatementResult($response->getBody(true));
         }
     }
 }

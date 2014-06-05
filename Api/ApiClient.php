@@ -12,7 +12,6 @@
 namespace Xabbuh\XApi\Client\Api;
 
 use Xabbuh\XApi\Client\Request\HandlerInterface;
-use Xabbuh\XApi\Common\Serializer\SerializerRegistryInterface;
 
 /**
  * Base class for all API client classes.
@@ -23,30 +22,21 @@ abstract class ApiClient
 {
     protected $requestHandler;
 
-    protected $serializerRegistry;
-
     protected $version;
 
     /**
-     * @param HandlerInterface            $requestHandler
-     * @param SerializerRegistryInterface $serializerRegistry
-     * @param string                      $version            The xAPI version
+     * @param HandlerInterface $requestHandler The HTTP request handler
+     * @param string           $version        The xAPI version
      */
-    public function __construct(HandlerInterface $requestHandler, SerializerRegistryInterface $serializerRegistry, $version)
+    public function __construct(HandlerInterface $requestHandler, $version)
     {
         $this->requestHandler = $requestHandler;
-        $this->serializerRegistry = $serializerRegistry;
         $this->version = $version;
     }
 
     public function getRequestHandler()
     {
         return $this->requestHandler;
-    }
-
-    public function getSerializerRegistry()
-    {
-        return $this->serializerRegistry;
     }
 
     public function getVersion()
