@@ -12,10 +12,10 @@
 namespace Xabbuh\XApi\Client\Tests\Api;
 
 use Xabbuh\XApi\Client\Api\StateApiClient;
-use Xabbuh\XApi\Common\Model\Activity;
-use Xabbuh\XApi\Common\Model\Agent;
-use Xabbuh\XApi\Common\Model\State;
-use Xabbuh\XApi\Common\Model\StateDocument;
+use Xabbuh\XApi\Model\Activity;
+use Xabbuh\XApi\Model\Agent;
+use Xabbuh\XApi\Model\State;
+use Xabbuh\XApi\Model\StateDocument;
 use Xabbuh\XApi\Common\Serializer\ActorSerializer;
 use Xabbuh\XApi\Common\Serializer\DocumentSerializer;
 
@@ -121,7 +121,7 @@ class StateApiClientTest extends ApiClientTest
 
         $document = $this->client->getDocument($state);
 
-        $this->assertInstanceOf('Xabbuh\XApi\Common\Model\StateDocument', $document);
+        $this->assertInstanceOf('Xabbuh\XApi\Model\StateDocument', $document);
         $this->assertEquals($state, $document->getState());
     }
 

@@ -20,7 +20,7 @@ Statement(s) each having a unique id created by the remote LRS.
 
 ```php
 
-use Xabbuh\XApi\Common\Model\Statement;
+use Xabbuh\XApi\Model\Statement;
 
 $statement = new Statement();
 // ...

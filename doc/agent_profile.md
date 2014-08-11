@@ -8,7 +8,7 @@ A LMS can use the xAPI to store documents associated to a certain agent using
 agent profiles. An agent profile is dedicated to an agent and a profile id:
 
 ```php
-use Xabbuh\XApi\Common\Model\AgentProfile;
+use Xabbuh\XApi\Model\AgentProfile;
 
 // ...
 $profile = new AgentProfile();
@@ -22,7 +22,7 @@ Documents
 Documents are simple collections of key-value pairs and can be accessed like arrays:
 
 ```php
-use Xabbuh\XApi\Common\Model\AgentProfileDocument;
+use Xabbuh\XApi\Model\AgentProfileDocument;
 
 // ...
 $document = new AgentProfileDocument();

@@ -12,10 +12,10 @@
 namespace Xabbuh\XApi\Client\Api;
 
 use Xabbuh\XApi\Client\Request\HandlerInterface;
-use Xabbuh\XApi\Common\Model\AgentProfileDocumentInterface;
-use Xabbuh\XApi\Common\Model\AgentProfileInterface;
 use Xabbuh\XApi\Common\Serializer\ActorSerializerInterface;
 use Xabbuh\XApi\Common\Serializer\DocumentSerializerInterface;
+use Xabbuh\XApi\Model\AgentProfileDocumentInterface;
+use Xabbuh\XApi\Model\AgentProfileInterface;
 
 /**
  * Client to access the agent profile API of an xAPI based learning record
@@ -86,7 +86,7 @@ class AgentProfileApiClient extends DocumentApiClient implements AgentProfileApi
      */
     public function getDocument(AgentProfileInterface $profile)
     {
-        /** @var \Xabbuh\XApi\Common\Model\AgentProfileDocument $document */
+        /** @var \Xabbuh\XApi\Model\AgentProfileDocument $document */
         $document = $this->doGetDocument('agents/profile', array(
             'agent' => $this->actorSerializer->serializeActor($profile->getAgent()),
             'profileId' => $profile->getProfileId(),

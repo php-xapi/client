@@ -15,9 +15,9 @@ use Xabbuh\XApi\Client\StatementsFilterInterface;
 use Xabbuh\XApi\Common\Exception\ConflictException;
 use Xabbuh\XApi\Common\Exception\NotFoundException;
 use Xabbuh\XApi\Common\Exception\XApiException;
-use Xabbuh\XApi\Common\Model\ActorInterface;
-use Xabbuh\XApi\Common\Model\StatementInterface;
-use Xabbuh\XApi\Common\Model\StatementResultInterface;
+use Xabbuh\XApi\Model\ActorInterface;
+use Xabbuh\XApi\Model\StatementInterface;
+use Xabbuh\XApi\Model\StatementResultInterface;
 
 /**
  * Client to access the statements API of an xAPI based learning record store.
@@ -34,7 +34,7 @@ interface StatementsApiClientInterface
     public function getVersion();
 
     /**
-     * Stores a single {@link \Xabbuh\XApi\Common\Model\StatementInterface Statement}.
+     * Stores a single {@link \Xabbuh\XApi\Model\StatementInterface Statement}.
      *
      * @param StatementInterface $statement The Statement to store
      *
@@ -50,7 +50,7 @@ interface StatementsApiClientInterface
     public function storeStatement(StatementInterface $statement);
 
     /**
-     * Stores a collection of {@link \Xabbuh\XApi\Common\Model\StatementInterface Statements}.
+     * Stores a collection of {@link \Xabbuh\XApi\Model\StatementInterface Statements}.
      *
      * @param StatementInterface[] $statements The statements to store
      *
@@ -63,7 +63,7 @@ interface StatementsApiClientInterface
     public function storeStatements(array $statements);
 
     /**
-     * Marks a {@link \Xabbuh\XApi\Common\Model\StatementInterface Statement}
+     * Marks a {@link \Xabbuh\XApi\Model\StatementInterface Statement}
      * as voided.
      *
      * @param StatementInterface $statement The Statement to void
@@ -77,7 +77,7 @@ interface StatementsApiClientInterface
     public function voidStatement(StatementInterface $statement, ActorInterface $actor);
 
     /**
-     * Retrieves a single {@link \Xabbuh\XApi\Common\Model\StatementInterface Statement}.
+     * Retrieves a single {@link \Xabbuh\XApi\Model\StatementInterface Statement}.
      *
      * @param string $statementId The Statement id
      *
@@ -89,7 +89,7 @@ interface StatementsApiClientInterface
     public function getStatement($statementId);
 
     /**
-     * Retrieves a voided {@link \Xabbuh\XApi\Common\Model\StatementInterface Statement}.
+     * Retrieves a voided {@link \Xabbuh\XApi\Model\StatementInterface Statement}.
      *
      * @param string $statementId The id of the voided Statement
      *
@@ -101,23 +101,23 @@ interface StatementsApiClientInterface
     public function getVoidedStatement($statementId);
 
     /**
-     * Retrieves a collection of {@link \Xabbuh\XApi\Common\Model\StatementInterface Statements}.
+     * Retrieves a collection of {@link \Xabbuh\XApi\Model\StatementInterface Statements}.
      *
      * @param StatementsFilterInterface $filter Optional Statements filter
      *
-     * @return StatementResultInterface The {@link \Xabbuh\XApi\Common\Model\StatementResult}
+     * @return StatementResultInterface The {@link \Xabbuh\XApi\Model\StatementResult}
      *
      * @throws XApiException in case of any problems related to the xAPI
      */
     public function getStatements(StatementsFilterInterface $filter = null);
 
     /**
-     * Returns the next {@link \Xabbuh\XApi\Common\Model\StatementInterface Statements}
+     * Returns the next {@link \Xabbuh\XApi\Model\StatementInterface Statements}
      * for a limited Statement result.
      *
      * @param StatementResultInterface $statementResult The former StatementResult
      *
-     * @return StatementResultInterface The {@link \Xabbuh\XApi\Common\Model\StatementResult}
+     * @return StatementResultInterface The {@link \Xabbuh\XApi\Model\StatementResult}
      *
      * @throws XApiException in case of any problems related to the xAPI
      */

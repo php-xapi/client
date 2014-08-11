@@ -12,10 +12,10 @@
 namespace Xabbuh\XApi\Client\Api;
 
 use Xabbuh\XApi\Client\Request\HandlerInterface;
-use Xabbuh\XApi\Common\Model\StateDocumentInterface;
-use Xabbuh\XApi\Common\Model\StateInterface;
 use Xabbuh\XApi\Common\Serializer\ActorSerializerInterface;
 use Xabbuh\XApi\Common\Serializer\DocumentSerializerInterface;
+use Xabbuh\XApi\Model\StateDocumentInterface;
+use Xabbuh\XApi\Model\StateInterface;
 
 /**
  * Client to access the state API of an xAPI based learning record store.
@@ -78,7 +78,7 @@ class StateApiClient extends DocumentApiClient implements StateApiClientInterfac
      */
     public function getDocument(StateInterface $state)
     {
-        /** @var \Xabbuh\XApi\Common\Model\StateDocument $document */
+        /** @var \Xabbuh\XApi\Model\StateDocument $document */
         $document = $this->doGetDocument('activities/state', array(
             'activityId' => $state->getActivity()->getId(),
             'agent' => $this->actorSerializer->serializeActor($state->getActor()),

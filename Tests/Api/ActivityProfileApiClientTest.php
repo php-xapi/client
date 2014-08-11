@@ -12,9 +12,9 @@
 namespace Xabbuh\XApi\Client\Tests\Api;
 
 use Xabbuh\XApi\Client\Api\ActivityProfileApiClient;
-use Xabbuh\XApi\Common\Model\Activity;
-use Xabbuh\XApi\Common\Model\ActivityProfile;
-use Xabbuh\XApi\Common\Model\ActivityProfileDocument;
+use Xabbuh\XApi\Model\Activity;
+use Xabbuh\XApi\Model\ActivityProfile;
+use Xabbuh\XApi\Model\ActivityProfileDocument;
 use Xabbuh\XApi\Common\Serializer\DocumentSerializer;
 
 /**
@@ -107,7 +107,7 @@ class ActivityProfileApiClientTest extends ApiClientTest
 
         $document = $this->client->getDocument($activityProfile);
 
-        $this->assertInstanceOf('Xabbuh\XApi\Common\Model\ActivityProfileDocument', $document);
+        $this->assertInstanceOf('Xabbuh\XApi\Model\ActivityProfileDocument', $document);
         $this->assertEquals($activityProfile, $document->getActivityProfile());
     }
 

@@ -71,7 +71,7 @@ abstract class ApiClientTest extends \PHPUnit_Framework_TestCase
         $this->serializer
             ->expects($this->once())
             ->method('deserialize')
-            ->with($data, 'Xabbuh\XApi\Common\Model\\'.$type, 'json')
+            ->with($data, 'Xabbuh\XApi\Model\\'.$type, 'json')
             ->will($this->returnValue($returnValue));
     }
 

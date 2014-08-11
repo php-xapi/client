@@ -9,7 +9,7 @@ activity profiles. An activity profile is dedicated to an activity and a profile
 id:
 
 ```php
-use Xabbuh\XApi\Common\Model\ActivityProfile;
+use Xabbuh\XApi\Model\ActivityProfile;
 
 // ...
 $profile = new ActivityProfile();
@@ -23,7 +23,7 @@ Documents
 Documents are simple collections of key-value pairs and can be accessed like arrays:
 
 ```php
-use Xabbuh\XApi\Common\Model\ActivityProfileDocument;
+use Xabbuh\XApi\Model\ActivityProfileDocument;
 
 // ...
 $document = new ActivityProfileDocument();

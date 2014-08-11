@@ -11,8 +11,8 @@
 
 namespace Xabbuh\XApi\Client\Api;
 
-use Xabbuh\XApi\Common\Model\StateDocumentInterface;
-use Xabbuh\XApi\Common\Model\StateInterface;
+use Xabbuh\XApi\Model\StateDocumentInterface;
+use Xabbuh\XApi\Model\StateInterface;
 
 /**
  * Client to access the state API of an xAPI based learning record store.

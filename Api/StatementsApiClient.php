@@ -13,12 +13,12 @@ namespace Xabbuh\XApi\Client\Api;
 
 use Xabbuh\XApi\Client\Request\HandlerInterface;
 use Xabbuh\XApi\Client\StatementsFilterInterface;
-use Xabbuh\XApi\Common\Model\ActorInterface;
-use Xabbuh\XApi\Common\Model\StatementInterface;
-use Xabbuh\XApi\Common\Model\StatementResultInterface;
 use Xabbuh\XApi\Common\Serializer\ActorSerializerInterface;
 use Xabbuh\XApi\Common\Serializer\StatementResultSerializerInterface;
 use Xabbuh\XApi\Common\Serializer\StatementSerializerInterface;
+use Xabbuh\XApi\Model\ActorInterface;
+use Xabbuh\XApi\Model\StatementInterface;
+use Xabbuh\XApi\Model\StatementResultInterface;
 
 /**
  * Client to access the statements API of an xAPI based learning record store.
@@ -202,7 +202,7 @@ class StatementsApiClient extends ApiClient implements StatementsApiClientInterf
      * @param string $url           URL to request
      * @param array  $urlParameters URL parameters
      *
-     * @return StatementInterface|\Xabbuh\XApi\Common\Model\StatementResultInterface
+     * @return StatementInterface|\Xabbuh\XApi\Model\StatementResultInterface
      */
     private function doGetStatements($url, array $urlParameters = array())
     {

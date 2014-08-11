@@ -11,8 +11,8 @@
 
 namespace Xabbuh\XApi\Client\Api;
 
-use Xabbuh\XApi\Common\Model\ActivityProfileDocumentInterface;
-use Xabbuh\XApi\Common\Model\ActivityProfileInterface;
+use Xabbuh\XApi\Model\ActivityProfileDocumentInterface;
+use Xabbuh\XApi\Model\ActivityProfileInterface;
 
 /**
  * Client to access the activity profile API of an xAPI based learning record

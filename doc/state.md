@@ -9,7 +9,7 @@ is dedicated to an activity, an actor, a state id and an optional registration
 id (for example a user id):
 
 ```php
-use Xabbuh\XApi\Common\Model\State;
+use Xabbuh\XApi\Model\State;
 
 // ...
 $state = new State();
@@ -24,7 +24,7 @@ Documents
 Documents are simple collections of key-value pairs and can be accessed like arrays:
 
 ```php
-use Xabbuh\XApi\Common\Model\StateDocument;
+use Xabbuh\XApi\Model\StateDocument;
 
 // ...
 $document = new StateDocument();

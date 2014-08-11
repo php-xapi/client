@@ -11,8 +11,8 @@
 
 namespace Xabbuh\XApi\Client\Api;
 
-use Xabbuh\XApi\Common\Model\AgentProfileDocumentInterface;
-use Xabbuh\XApi\Common\Model\AgentProfileInterface;
+use Xabbuh\XApi\Model\AgentProfileDocumentInterface;
+use Xabbuh\XApi\Model\AgentProfileInterface;
 
 /**
  * Client to access the agent profile API of an xAPI based learning record

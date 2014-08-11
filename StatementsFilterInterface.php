@@ -11,9 +11,9 @@
 
 namespace Xabbuh\XApi\Client;
 
-use Xabbuh\XApi\Common\Model\ActivityInterface;
-use Xabbuh\XApi\Common\Model\ActorInterface;
-use Xabbuh\XApi\Common\Model\VerbInterface;
+use Xabbuh\XApi\Model\ActivityInterface;
+use Xabbuh\XApi\Model\ActorInterface;
+use Xabbuh\XApi\Model\VerbInterface;
 
 /**
  * Filter to apply on GET requests to the statements API.

@@ -13,11 +13,11 @@ namespace Xabbuh\XApi\Client\Tests\Api;
 
 use Xabbuh\XApi\Client\Api\StatementsApiClient;
 use Xabbuh\XApi\Client\StatementsFilter;
-use Xabbuh\XApi\Common\Model\Agent;
-use Xabbuh\XApi\Common\Model\Statement;
-use Xabbuh\XApi\Common\Model\StatementReference;
-use Xabbuh\XApi\Common\Model\StatementResult;
-use Xabbuh\XApi\Common\Model\Verb;
+use Xabbuh\XApi\Model\Agent;
+use Xabbuh\XApi\Model\Statement;
+use Xabbuh\XApi\Model\StatementReference;
+use Xabbuh\XApi\Model\StatementResult;
+use Xabbuh\XApi\Model\Verb;
 use Xabbuh\XApi\Common\Serializer\ActorSerializer;
 use Xabbuh\XApi\Common\Serializer\StatementResultSerializer;
 use Xabbuh\XApi\Common\Serializer\StatementSerializer;
@@ -354,13 +354,13 @@ class StatementsApiClientTest extends ApiClientTest
         $statementResult = $this->client->getNextStatements($previousStatementResult);
 
         $this->assertInstanceOf(
-            '\Xabbuh\XApi\Common\Model\StatementResultInterface',
+            '\Xabbuh\XApi\Model\StatementResultInterface',
             $statementResult
         );
     }
 
     /**
-     * @return \Xabbuh\XApi\Common\Model\StatementInterface
+     * @return \Xabbuh\XApi\Model\StatementInterface
      */
     private function createStatement()
     {
@@ -368,7 +368,7 @@ class StatementsApiClientTest extends ApiClientTest
     }
 
     /**
-     * @return \Xabbuh\XApi\Common\Model\StatementResultInterface
+     * @return \Xabbuh\XApi\Model\StatementResultInterface
      */
     private function createStatementResult()
     {

@@ -12,9 +12,9 @@
 namespace Xabbuh\XApi\Client\Tests\Api;
 
 use Xabbuh\XApi\Client\Api\AgentProfileApiClient;
-use Xabbuh\XApi\Common\Model\Agent;
-use Xabbuh\XApi\Common\Model\AgentProfile;
-use Xabbuh\XApi\Common\Model\AgentProfileDocument;
+use Xabbuh\XApi\Model\Agent;
+use Xabbuh\XApi\Model\AgentProfile;
+use Xabbuh\XApi\Model\AgentProfileDocument;
 use Xabbuh\XApi\Common\Serializer\ActorSerializer;
 use Xabbuh\XApi\Common\Serializer\DocumentSerializer;
 
@@ -120,7 +120,7 @@ class AgentProfileApiClientTest extends ApiClientTest
 
         $document = $this->client->getDocument($profile);
 
-        $this->assertInstanceOf('Xabbuh\XApi\Common\Model\AgentProfileDocument', $document);
+        $this->assertInstanceOf('Xabbuh\XApi\Model\AgentProfileDocument', $document);
         $this->assertEquals($profile, $document->getAgentProfile());
     }
 
