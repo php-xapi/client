@@ -20,27 +20,19 @@ The recommended way to install the xAPI client is using
    For more details on how to install composer have a look at the official
    [documentation](http://getcomposer.org/doc/00-intro.md).
 
-1. Add the ``xabbuh/xapi-client``, ``xabbuh/xapi-common`` and ``xabbuh/xapi-model``
-   dependencies to your project's ``composer.json`` file:
+1. Add ``xabbuh/xapi-client``, ``xabbuh/xapi-common`` and ``xabbuh/xapi-model``
+   as dependencies to your project:
 
-    ```yaml
-    {
-        "require": {
-            "xabbuh/xapi-client": "~1.0@dev",
-            "xabbuh/xapi-common": "~1.0@dev",
-            "xabbuh/xapi-model": "~1.0@dev"
-        }
-    }
+    ```bash
+    $ composer require --no-update xabbuh/xapi-client "~1.0@dev"
+    $ composer require --no-update xabbuh/xapi-common "~1.0@dev"
+    $ composer require xabbuh/xapi-model "~1.0@dev"
     ```
-
-1. Install your dependencies:
-
-        php composer.phar install
 
 1. Require Composer's autoloader:
 
    ``` php
-   require 'vendor/autoload.php';
+   require __DIR__.'/vendor/autoload.php';
    ```
 
 Usage
