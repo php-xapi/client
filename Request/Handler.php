@@ -35,10 +35,10 @@ class Handler implements HandlerInterface
     private $password;
 
     /**
-     * @param ClientInterface     $httpClient The HTTP client
-     * @param string              $version    The xAPI version
-     * @param string              $username   The optional HTTP auth username
-     * @param string              $password   The optional HTTP auth password
+     * @param ClientInterface $httpClient The HTTP client
+     * @param string          $version    The xAPI version
+     * @param string          $username   The optional HTTP auth username
+     * @param string          $password   The optional HTTP auth password
      */
     public function __construct(ClientInterface $httpClient, $version, $username = null, $password = null)
     {
