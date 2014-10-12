@@ -12,8 +12,8 @@
 namespace Xabbuh\XApi\Client\Api;
 
 use Xabbuh\XApi\Client\Request\HandlerInterface;
-use Xabbuh\XApi\Common\Serializer\ActorSerializerInterface;
-use Xabbuh\XApi\Common\Serializer\DocumentSerializerInterface;
+use Xabbuh\XApi\Serializer\ActorSerializerInterface;
+use Xabbuh\XApi\Serializer\DocumentSerializerInterface;
 use Xabbuh\XApi\Model\AgentProfileDocumentInterface;
 use Xabbuh\XApi\Model\AgentProfileInterface;
 
@@ -26,7 +26,7 @@ use Xabbuh\XApi\Model\AgentProfileInterface;
 class AgentProfileApiClient extends DocumentApiClient implements AgentProfileApiClientInterface
 {
     /**
-     * @var \Xabbuh\XApi\Common\Serializer\ActorSerializerInterface
+     * @var ActorSerializerInterface
      */
     private $actorSerializer;
 

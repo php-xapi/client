@@ -17,7 +17,7 @@ use Xabbuh\XApi\Client\Api\ApiClient;
 use Xabbuh\XApi\Client\Api\StateApiClient;
 use Xabbuh\XApi\Client\Api\StatementsApiClient;
 use Xabbuh\XApi\Client\Request\HandlerInterface;
-use Xabbuh\XApi\Common\Serializer\SerializerRegistryInterface;
+use Xabbuh\XApi\Serializer\SerializerRegistryInterface;
 
 /**
  * An Experience API client.

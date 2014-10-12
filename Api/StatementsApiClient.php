@@ -13,9 +13,9 @@ namespace Xabbuh\XApi\Client\Api;
 
 use Xabbuh\XApi\Client\Request\HandlerInterface;
 use Xabbuh\XApi\Client\StatementsFilterInterface;
-use Xabbuh\XApi\Common\Serializer\ActorSerializerInterface;
-use Xabbuh\XApi\Common\Serializer\StatementResultSerializerInterface;
-use Xabbuh\XApi\Common\Serializer\StatementSerializerInterface;
+use Xabbuh\XApi\Serializer\ActorSerializerInterface;
+use Xabbuh\XApi\Serializer\StatementResultSerializerInterface;
+use Xabbuh\XApi\Serializer\StatementSerializerInterface;
 use Xabbuh\XApi\Model\ActorInterface;
 use Xabbuh\XApi\Model\StatementInterface;
 use Xabbuh\XApi\Model\StatementResultInterface;
@@ -28,17 +28,17 @@ use Xabbuh\XApi\Model\StatementResultInterface;
 class StatementsApiClient extends ApiClient implements StatementsApiClientInterface
 {
     /**
-     * @var \Xabbuh\XApi\Common\Serializer\StatementSerializerInterface
+     * @var StatementSerializerInterface
      */
     private $statementSerializer;
 
     /**
-     * @var \Xabbuh\XApi\Common\Serializer\StatementResultSerializerInterface
+     * @var StatementResultSerializerInterface
      */
     private $statementResultSerializer;
 
     /**
-     * @var \Xabbuh\XApi\Common\Serializer\ActorSerializerInterface
+     * @var ActorSerializerInterface
      */
     private $actorSerializer;
 
@@ -202,7 +202,7 @@ class StatementsApiClient extends ApiClient implements StatementsApiClientInterf
      * @param string $url           URL to request
      * @param array  $urlParameters URL parameters
      *
-     * @return StatementInterface|\Xabbuh\XApi\Model\StatementResultInterface
+     * @return StatementInterface|StatementResultInterface
      */
     private function doGetStatements($url, array $urlParameters = array())
     {

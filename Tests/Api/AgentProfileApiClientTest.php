@@ -15,8 +15,8 @@ use Xabbuh\XApi\Client\Api\AgentProfileApiClient;
 use Xabbuh\XApi\Model\Agent;
 use Xabbuh\XApi\Model\AgentProfile;
 use Xabbuh\XApi\Model\AgentProfileDocument;
-use Xabbuh\XApi\Common\Serializer\ActorSerializer;
-use Xabbuh\XApi\Common\Serializer\DocumentSerializer;
+use Xabbuh\XApi\Serializer\ActorSerializer;
+use Xabbuh\XApi\Serializer\DocumentSerializer;
 
 /**
  * @author Christian Flothmann <christian.flothmann@xabbuh.de>

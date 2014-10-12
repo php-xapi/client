@@ -12,7 +12,7 @@
 namespace Xabbuh\XApi\Client\Api;
 
 use Xabbuh\XApi\Client\Request\HandlerInterface;
-use Xabbuh\XApi\Common\Serializer\DocumentSerializerInterface;
+use Xabbuh\XApi\Serializer\DocumentSerializerInterface;
 use Xabbuh\XApi\Model\DocumentInterface;
 
 /**
@@ -75,7 +75,7 @@ abstract class DocumentApiClient extends ApiClient
      * @param string $uri           The endpoint URI
      * @param array  $urlParameters The URL parameters
      *
-     * @return \Xabbuh\XApi\Model\DocumentInterface The document
+     * @return DocumentInterface The document
      */
     protected function doGetDocument($uri, array $urlParameters)
     {

@@ -12,8 +12,8 @@
 namespace Xabbuh\XApi\Client\Api;
 
 use Xabbuh\XApi\Client\Request\HandlerInterface;
-use Xabbuh\XApi\Common\Serializer\ActorSerializerInterface;
-use Xabbuh\XApi\Common\Serializer\DocumentSerializerInterface;
+use Xabbuh\XApi\Serializer\ActorSerializerInterface;
+use Xabbuh\XApi\Serializer\DocumentSerializerInterface;
 use Xabbuh\XApi\Model\StateDocumentInterface;
 use Xabbuh\XApi\Model\StateInterface;
 
@@ -25,7 +25,7 @@ use Xabbuh\XApi\Model\StateInterface;
 class StateApiClient extends DocumentApiClient implements StateApiClientInterface
 {
     /**
-     * @var \Xabbuh\XApi\Common\Serializer\ActorSerializerInterface
+     * @var ActorSerializerInterface
      */
     private $actorSerializer;
 

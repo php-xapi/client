@@ -15,7 +15,7 @@ use Xabbuh\XApi\Client\Api\ActivityProfileApiClient;
 use Xabbuh\XApi\Model\Activity;
 use Xabbuh\XApi\Model\ActivityProfile;
 use Xabbuh\XApi\Model\ActivityProfileDocument;
-use Xabbuh\XApi\Common\Serializer\DocumentSerializer;
+use Xabbuh\XApi\Serializer\DocumentSerializer;
 
 /**
  * @author Christian Flothmann <christian.flothmann@xabbuh.de>

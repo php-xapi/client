@@ -18,9 +18,9 @@ use Xabbuh\XApi\Model\Statement;
 use Xabbuh\XApi\Model\StatementReference;
 use Xabbuh\XApi\Model\StatementResult;
 use Xabbuh\XApi\Model\Verb;
-use Xabbuh\XApi\Common\Serializer\ActorSerializer;
-use Xabbuh\XApi\Common\Serializer\StatementResultSerializer;
-use Xabbuh\XApi\Common\Serializer\StatementSerializer;
+use Xabbuh\XApi\Serializer\ActorSerializer;
+use Xabbuh\XApi\Serializer\StatementResultSerializer;
+use Xabbuh\XApi\Serializer\StatementSerializer;
 
 /**
  * @author Christian Flothmann <christian.flothmann@xabbuh.de>

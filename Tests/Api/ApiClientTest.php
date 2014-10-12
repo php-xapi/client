@@ -11,12 +11,14 @@
 
 namespace Xabbuh\XApi\Client\Tests\Api;
 
+use JMS\Serializer\SerializerInterface;
+use Xabbuh\XApi\Client\Request\HandlerInterface;
 use Xabbuh\XApi\Common\Exception\NotFoundException;
-use Xabbuh\XApi\Common\Serializer\ActorSerializer;
-use Xabbuh\XApi\Common\Serializer\DocumentSerializer;
-use Xabbuh\XApi\Common\Serializer\SerializerRegistry;
-use Xabbuh\XApi\Common\Serializer\StatementResultSerializer;
-use Xabbuh\XApi\Common\Serializer\StatementSerializer;
+use Xabbuh\XApi\Serializer\ActorSerializer;
+use Xabbuh\XApi\Serializer\DocumentSerializer;
+use Xabbuh\XApi\Serializer\SerializerRegistry;
+use Xabbuh\XApi\Serializer\StatementResultSerializer;
+use Xabbuh\XApi\Serializer\StatementSerializer;
 
 /**
  * @author Christian Flothmann <christian.flothmann@xabbuh.de>
@@ -24,12 +26,12 @@ use Xabbuh\XApi\Common\Serializer\StatementSerializer;
 abstract class ApiClientTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Xabbuh\XApi\Client\Request\HandlerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var HandlerInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $requestHandler;
 
     /**
-     * @var \JMS\Serializer\SerializerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var SerializerInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $serializer;
 

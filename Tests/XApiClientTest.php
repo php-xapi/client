@@ -11,7 +11,9 @@
 
 namespace Xabbuh\XApi\Client\Tests;
 
+use Xabbuh\XApi\Client\Request\HandlerInterface;
 use Xabbuh\XApi\Client\XApiClient;
+use Xabbuh\XApi\Serializer\SerializerRegistryInterface;
 
 /**
  * @author Christian Flothmann <christian.flothmann@xabbuh.de>
@@ -19,12 +21,12 @@ use Xabbuh\XApi\Client\XApiClient;
 class XApiClientTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Xabbuh\XApi\Client\Request\HandlerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var HandlerInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     private $requestHandler;
 
     /**
-     * @var \Xabbuh\XApi\Common\Serializer\SerializerRegistryInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var SerializerRegistryInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     private $serializerRegistry;
 
@@ -83,7 +85,7 @@ class XApiClientTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return \Xabbuh\XApi\Client\Request\HandlerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @return HandlerInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     private function createRequestHandlerMock()
     {
@@ -91,31 +93,31 @@ class XApiClientTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return \Xabbuh\XApi\Common\Serializer\SerializerRegistryInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @return SerializerRegistryInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     private function createSerializerRegistryMock()
     {
-        $serializerRegistry = $this->getMock('\Xabbuh\XApi\Common\Serializer\SerializerRegistryInterface');
+        $serializerRegistry = $this->getMock('\Xabbuh\XApi\Serializer\SerializerRegistryInterface');
 
-        $statementSerializer = $this->getMock('\Xabbuh\XApi\Common\Serializer\StatementSerializerInterface');
+        $statementSerializer = $this->getMock('\Xabbuh\XApi\Serializer\StatementSerializerInterface');
         $serializerRegistry
             ->expects($this->any())
             ->method('getStatementSerializer')
             ->will($this->returnValue($statementSerializer));
 
-        $statementResultSerializer = $this->getMock('\Xabbuh\XApi\Common\Serializer\StatementResultSerializerInterface');
+        $statementResultSerializer = $this->getMock('\Xabbuh\XApi\Serializer\StatementResultSerializerInterface');
         $serializerRegistry
             ->expects($this->any())
             ->method('getStatementResultSerializer')
             ->will($this->returnValue($statementResultSerializer));
 
-        $actorSerializer = $this->getMock('\Xabbuh\XApi\Common\Serializer\ActorSerializerInterface');
+        $actorSerializer = $this->getMock('\Xabbuh\XApi\Serializer\ActorSerializerInterface');
         $serializerRegistry
             ->expects($this->any())
             ->method('getActorSerializer')
             ->will($this->returnValue($actorSerializer));
 
-        $documentSerializer = $this->getMock('\Xabbuh\XApi\Common\Serializer\DocumentSerializerInterface');
+        $documentSerializer = $this->getMock('\Xabbuh\XApi\Serializer\DocumentSerializerInterface');
         $serializerRegistry
             ->expects($this->any())
             ->method('getDocumentSerializer')

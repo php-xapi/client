@@ -14,12 +14,12 @@ namespace Xabbuh\XApi\Client;
 use Guzzle\Http\Client;
 use Guzzle\Plugin\Oauth\OauthPlugin;
 use Xabbuh\XApi\Client\Request\Handler;
-use Xabbuh\XApi\Common\Serializer\ActorSerializer;
-use Xabbuh\XApi\Common\Serializer\DocumentSerializer;
-use Xabbuh\XApi\Common\Serializer\Serializer;
-use Xabbuh\XApi\Common\Serializer\SerializerRegistry;
-use Xabbuh\XApi\Common\Serializer\StatementResultSerializer;
-use Xabbuh\XApi\Common\Serializer\StatementSerializer;
+use Xabbuh\XApi\Serializer\ActorSerializer;
+use Xabbuh\XApi\Serializer\DocumentSerializer;
+use Xabbuh\XApi\Serializer\Serializer;
+use Xabbuh\XApi\Serializer\SerializerRegistry;
+use Xabbuh\XApi\Serializer\StatementResultSerializer;
+use Xabbuh\XApi\Serializer\StatementSerializer;
 
 /**
  * xAPI client builder.

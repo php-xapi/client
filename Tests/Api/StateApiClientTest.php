@@ -16,8 +16,8 @@ use Xabbuh\XApi\Model\Activity;
 use Xabbuh\XApi\Model\Agent;
 use Xabbuh\XApi\Model\State;
 use Xabbuh\XApi\Model\StateDocument;
-use Xabbuh\XApi\Common\Serializer\ActorSerializer;
-use Xabbuh\XApi\Common\Serializer\DocumentSerializer;
+use Xabbuh\XApi\Serializer\ActorSerializer;
+use Xabbuh\XApi\Serializer\DocumentSerializer;
 
 /**
  * @author Christian Flothmann <christian.flothmann@xabbuh.de>
