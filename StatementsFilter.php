@@ -11,9 +11,9 @@
 
 namespace Xabbuh\XApi\Client;
 
-use Xabbuh\XApi\Model\ActivityInterface;
-use Xabbuh\XApi\Model\ActorInterface;
-use Xabbuh\XApi\Model\VerbInterface;
+use Xabbuh\XApi\Model\Activity;
+use Xabbuh\XApi\Model\Actor;
+use Xabbuh\XApi\Model\Verb;
 
 /**
  * Filter to apply on GET requests to the statements API.
@@ -30,7 +30,7 @@ class StatementsFilter implements StatementsFilterInterface
     /**
      * {@inheritDoc}
      */
-    public function byActor(ActorInterface $actor)
+    public function byActor(Actor $actor)
     {
         if (null === $actor->getInverseFunctionalIdentifier()) {
             throw new \InvalidArgumentException('Actor must be identified');
@@ -44,7 +44,7 @@ class StatementsFilter implements StatementsFilterInterface
     /**
      * {@inheritDoc}
      */
-    public function byVerb(VerbInterface $verb)
+    public function byVerb(Verb $verb)
     {
         $this->filter['verb'] = $verb->getId();
 
@@ -54,7 +54,7 @@ class StatementsFilter implements StatementsFilterInterface
     /**
      * {@inheritDoc}
      */
-    public function byActivity(ActivityInterface $activity)
+    public function byActivity(Activity $activity)
     {
         $this->filter['activity'] = $activity->getId();
 

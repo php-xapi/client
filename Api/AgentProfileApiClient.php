@@ -14,8 +14,8 @@ namespace Xabbuh\XApi\Client\Api;
 use Xabbuh\XApi\Client\Request\HandlerInterface;
 use Xabbuh\XApi\Serializer\ActorSerializerInterface;
 use Xabbuh\XApi\Serializer\DocumentSerializerInterface;
-use Xabbuh\XApi\Model\AgentProfileDocumentInterface;
-use Xabbuh\XApi\Model\AgentProfileInterface;
+use Xabbuh\XApi\Model\AgentProfile;
+use Xabbuh\XApi\Model\AgentProfileDocument;
 
 /**
  * Client to access the agent profile API of an xAPI based learning record
@@ -49,7 +49,7 @@ class AgentProfileApiClient extends DocumentApiClient implements AgentProfileApi
     /**
      * {@inheritDoc}
      */
-    public function createOrUpdateDocument(AgentProfileDocumentInterface $document)
+    public function createOrUpdateDocument(AgentProfileDocument $document)
     {
         $profile = $document->getAgentProfile();
         $this->doStoreDocument('post', 'agents/profile', array(
@@ -61,7 +61,7 @@ class AgentProfileApiClient extends DocumentApiClient implements AgentProfileApi
     /**
      * {@inheritDoc}
      */
-    public function createOrReplaceDocument(AgentProfileDocumentInterface $document)
+    public function createOrReplaceDocument(AgentProfileDocument $document)
     {
         $profile = $document->getAgentProfile();
         $this->doStoreDocument('put', 'agents/profile', array(
@@ -73,7 +73,7 @@ class AgentProfileApiClient extends DocumentApiClient implements AgentProfileApi
     /**
      * {@inheritDoc}
      */
-    public function deleteDocument(AgentProfileInterface $profile)
+    public function deleteDocument(AgentProfile $profile)
     {
         $this->doDeleteDocument('agents/profile', array(
             'agent' => $this->actorSerializer->serializeActor($profile->getAgent()),
@@ -84,7 +84,7 @@ class AgentProfileApiClient extends DocumentApiClient implements AgentProfileApi
     /**
      * {@inheritDoc}
      */
-    public function getDocument(AgentProfileInterface $profile)
+    public function getDocument(AgentProfile $profile)
     {
         /** @var \Xabbuh\XApi\Model\AgentProfileDocument $document */
         $document = $this->doGetDocument('agents/profile', array(

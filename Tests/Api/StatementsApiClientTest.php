@@ -353,14 +353,11 @@ class StatementsApiClientTest extends ApiClientTest
 
         $statementResult = $this->client->getNextStatements($previousStatementResult);
 
-        $this->assertInstanceOf(
-            '\Xabbuh\XApi\Model\StatementResultInterface',
-            $statementResult
-        );
+        $this->assertInstanceOf('\Xabbuh\XApi\Model\StatementResult', $statementResult);
     }
 
     /**
-     * @return \Xabbuh\XApi\Model\StatementInterface
+     * @return Statement
      */
     private function createStatement()
     {
@@ -368,7 +365,7 @@ class StatementsApiClientTest extends ApiClientTest
     }
 
     /**
-     * @return \Xabbuh\XApi\Model\StatementResultInterface
+     * @return StatementResult
      */
     private function createStatementResult()
     {

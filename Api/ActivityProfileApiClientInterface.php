@@ -11,8 +11,8 @@
 
 namespace Xabbuh\XApi\Client\Api;
 
-use Xabbuh\XApi\Model\ActivityProfileDocumentInterface;
-use Xabbuh\XApi\Model\ActivityProfileInterface;
+use Xabbuh\XApi\Model\ActivityProfile;
+use Xabbuh\XApi\Model\ActivityProfileDocument;
 
 /**
  * Client to access the activity profile API of an xAPI based learning record
@@ -33,32 +33,32 @@ interface ActivityProfileApiClientInterface
      * Stores a document for an activity profile. Updates an existing document
      * for this activity profile if one exists.
      *
-     * @param ActivityProfileDocumentInterface $document The document to store
+     * @param ActivityProfileDocument $document The document to store
      */
-    public function createOrUpdateDocument(ActivityProfileDocumentInterface $document);
+    public function createOrUpdateDocument(ActivityProfileDocument $document);
 
     /**
      * Stores a document for an activity profile. Replaces any existing document
      * for this activity profile.
      *
-     * @param ActivityProfileDocumentInterface $document The document to store
+     * @param ActivityProfileDocument $document The document to store
      */
-    public function createOrReplaceDocument(ActivityProfileDocumentInterface $document);
+    public function createOrReplaceDocument(ActivityProfileDocument $document);
 
     /**
      * Deletes a document stored for the given activity profile.
      *
-     * @param ActivityProfileInterface $profile The activity profile
+     * @param ActivityProfile $profile The activity profile
      */
-    public function deleteDocument(ActivityProfileInterface $profile);
+    public function deleteDocument(ActivityProfile $profile);
 
     /**
      * Returns the document for an activity profile.
      *
-     * @param ActivityProfileInterface $profile The activity profile to request
-     *                                          the document for
+     * @param ActivityProfile $profile The activity profile to request the
+     *                                 document for
      *
-     * @return ActivityProfileDocumentInterface The document
+     * @return ActivityProfileDocument The document
      */
-    public function getDocument(ActivityProfileInterface $profile);
+    public function getDocument(ActivityProfile $profile);
 }

@@ -14,8 +14,8 @@ namespace Xabbuh\XApi\Client\Api;
 use Xabbuh\XApi\Client\Request\HandlerInterface;
 use Xabbuh\XApi\Serializer\ActorSerializerInterface;
 use Xabbuh\XApi\Serializer\DocumentSerializerInterface;
-use Xabbuh\XApi\Model\StateDocumentInterface;
-use Xabbuh\XApi\Model\StateInterface;
+use Xabbuh\XApi\Model\StateDocument;
+use Xabbuh\XApi\Model\State;
 
 /**
  * Client to access the state API of an xAPI based learning record store.
@@ -48,7 +48,7 @@ class StateApiClient extends DocumentApiClient implements StateApiClientInterfac
     /**
      * {@inheritDoc}
      */
-    public function createOrUpdateDocument(StateDocumentInterface $document)
+    public function createOrUpdateDocument(StateDocument $document)
     {
         $this->doStoreStateDocument('post', $document);
     }
@@ -56,7 +56,7 @@ class StateApiClient extends DocumentApiClient implements StateApiClientInterfac
     /**
      * {@inheritDoc}
      */
-    public function createOrReplaceDocument(StateDocumentInterface $document)
+    public function createOrReplaceDocument(StateDocument $document)
     {
         $this->doStoreStateDocument('put', $document);
     }
@@ -64,7 +64,7 @@ class StateApiClient extends DocumentApiClient implements StateApiClientInterfac
     /**
      * {@inheritDoc}
      */
-    public function deleteDocument(StateInterface $state)
+    public function deleteDocument(State $state)
     {
         $this->doDeleteDocument('activities/state', array(
             'activityId' => $state->getActivity()->getId(),
@@ -76,7 +76,7 @@ class StateApiClient extends DocumentApiClient implements StateApiClientInterfac
     /**
      * {@inheritDoc}
      */
-    public function getDocument(StateInterface $state)
+    public function getDocument(State $state)
     {
         /** @var \Xabbuh\XApi\Model\StateDocument $document */
         $document = $this->doGetDocument('activities/state', array(
@@ -100,10 +100,10 @@ class StateApiClient extends DocumentApiClient implements StateApiClientInterfac
     /**
      * Stores a state document.
      *
-     * @param string                 $method   HTTP method to use
-     * @param StateDocumentInterface $document The document to store
+     * @param string        $method   HTTP method to use
+     * @param StateDocument $document The document to store
      */
-    private function doStoreStateDocument($method, StateDocumentInterface $document)
+    private function doStoreStateDocument($method, StateDocument $document)
     {
         $state = $document->getState();
         $this->doStoreDocument(

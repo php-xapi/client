@@ -11,8 +11,8 @@
 
 namespace Xabbuh\XApi\Client\Api;
 
-use Xabbuh\XApi\Model\AgentProfileDocumentInterface;
-use Xabbuh\XApi\Model\AgentProfileInterface;
+use Xabbuh\XApi\Model\AgentProfile;
+use Xabbuh\XApi\Model\AgentProfileDocument;
 
 /**
  * Client to access the agent profile API of an xAPI based learning record
@@ -33,32 +33,31 @@ interface AgentProfileApiClientInterface
      * Stores a document for an agent profile. Updates an existing document for
      * this agent profile if one exists.
      *
-     * @param AgentProfileDocumentInterface $document The document to store
+     * @param AgentProfileDocument $document The document to store
      */
-    public function createOrUpdateDocument(AgentProfileDocumentInterface $document);
+    public function createOrUpdateDocument(AgentProfileDocument $document);
 
     /**
      * Stores a document for an agent profile. Replaces any existing document
      * for this agent profile.
      *
-     * @param AgentProfileDocumentInterface $document The document to store
+     * @param AgentProfileDocument $document The document to store
      */
-    public function createOrReplaceDocument(AgentProfileDocumentInterface $document);
+    public function createOrReplaceDocument(AgentProfileDocument $document);
 
     /**
      * Deletes a document stored for the given agent profile.
      *
-     * @param AgentProfileInterface $profile The agent profile
+     * @param AgentProfile $profile The agent profile
      */
-    public function deleteDocument(AgentProfileInterface $profile);
+    public function deleteDocument(AgentProfile $profile);
 
     /**
      * Returns the document for an agent profile.
      *
-     * @param AgentProfileInterface $profile The agent profile to request the
-     *                                       document for
+     * @param AgentProfile $profile The agent profile to request the document for
      *
-     * @return AgentProfileDocumentInterface The document
+     * @return AgentProfileDocument The document
      */
-    public function getDocument(AgentProfileInterface $profile);
+    public function getDocument(AgentProfile $profile);
 }

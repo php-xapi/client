@@ -12,8 +12,8 @@
 namespace Xabbuh\XApi\Client\Api;
 
 use Xabbuh\XApi\Client\Request\HandlerInterface;
+use Xabbuh\XApi\Model\Document;
 use Xabbuh\XApi\Serializer\DocumentSerializerInterface;
-use Xabbuh\XApi\Model\DocumentInterface;
 
 /**
  * Base class for the document API classes.
@@ -41,12 +41,12 @@ abstract class DocumentApiClient extends ApiClient
     /**
      * Stores a document.
      *
-     * @param string            $method        HTTP method to use
-     * @param string            $uri           Endpoint URI
-     * @param array             $urlParameters URL parameters
-     * @param DocumentInterface $document      The document to store
+     * @param string   $method        HTTP method to use
+     * @param string   $uri           Endpoint URI
+     * @param array    $urlParameters URL parameters
+     * @param Document $document      The document to store
      */
-    protected function doStoreDocument($method, $uri, $urlParameters, DocumentInterface $document)
+    protected function doStoreDocument($method, $uri, $urlParameters, Document $document)
     {
         $request = $this->requestHandler->createRequest(
             $method,
@@ -75,7 +75,7 @@ abstract class DocumentApiClient extends ApiClient
      * @param string $uri           The endpoint URI
      * @param array  $urlParameters The URL parameters
      *
-     * @return DocumentInterface The document
+     * @return Document The document
      */
     protected function doGetDocument($uri, array $urlParameters)
     {

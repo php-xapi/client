@@ -11,8 +11,8 @@
 
 namespace Xabbuh\XApi\Client\Api;
 
-use Xabbuh\XApi\Model\ActivityProfileDocumentInterface;
-use Xabbuh\XApi\Model\ActivityProfileInterface;
+use Xabbuh\XApi\Model\ActivityProfile;
+use Xabbuh\XApi\Model\ActivityProfileDocument;
 
 /**
  * Client to access the activity profile API of an xAPI based learning record
@@ -25,7 +25,7 @@ class ActivityProfileApiClient extends DocumentApiClient implements ActivityProf
     /**
      * {@inheritDoc}
      */
-    public function createOrUpdateDocument(ActivityProfileDocumentInterface $document)
+    public function createOrUpdateDocument(ActivityProfileDocument $document)
     {
         $this->doStoreActivityProfileDocument('post', $document);
     }
@@ -33,7 +33,7 @@ class ActivityProfileApiClient extends DocumentApiClient implements ActivityProf
     /**
      * {@inheritDoc}
      */
-    public function createOrReplaceDocument(ActivityProfileDocumentInterface $document)
+    public function createOrReplaceDocument(ActivityProfileDocument $document)
     {
         $this->doStoreActivityProfileDocument('put', $document);
     }
@@ -41,7 +41,7 @@ class ActivityProfileApiClient extends DocumentApiClient implements ActivityProf
     /**
      * {@inheritDoc}
      */
-    public function deleteDocument(ActivityProfileInterface $profile)
+    public function deleteDocument(ActivityProfile $profile)
     {
         $this->doDeleteDocument('activities/profile', array(
             'activityId' => $profile->getActivity()->getId(),
@@ -52,7 +52,7 @@ class ActivityProfileApiClient extends DocumentApiClient implements ActivityProf
     /**
      * {@inheritDoc}
      */
-    public function getDocument(ActivityProfileInterface $profile)
+    public function getDocument(ActivityProfile $profile)
     {
         /** @var \Xabbuh\XApi\Model\ActivityProfileDocument $document */
         $document = $this->doGetDocument('activities/profile', array(
@@ -75,10 +75,10 @@ class ActivityProfileApiClient extends DocumentApiClient implements ActivityProf
     /**
      * Stores a state document.
      *
-     * @param string                           $method   HTTP method to use
-     * @param ActivityProfileDocumentInterface $document The document to store
+     * @param string                  $method   HTTP method to use
+     * @param ActivityProfileDocument $document The document to store
      */
-    private function doStoreActivityProfileDocument($method, ActivityProfileDocumentInterface $document)
+    private function doStoreActivityProfileDocument($method, ActivityProfileDocument $document)
     {
         $profile = $document->getActivityProfile();
         $this->doStoreDocument(

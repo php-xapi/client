@@ -11,9 +11,9 @@
 
 namespace Xabbuh\XApi\Client;
 
-use Xabbuh\XApi\Model\ActivityInterface;
-use Xabbuh\XApi\Model\ActorInterface;
-use Xabbuh\XApi\Model\VerbInterface;
+use Xabbuh\XApi\Model\Activity;
+use Xabbuh\XApi\Model\Actor;
+use Xabbuh\XApi\Model\Verb;
 
 /**
  * Filter to apply on GET requests to the statements API.
@@ -25,31 +25,31 @@ interface StatementsFilterInterface
     /**
      * Filters by an Agent or an identified Group.
      *
-     * @param ActorInterface $actor The Actor to filter by
+     * @param Actor $actor The Actor to filter by
      *
      * @return StatementsFilterInterface The statements filter
      *
      * @throws \InvalidArgumentException if the Actor is not identified
      */
-    public function byActor(ActorInterface $actor);
+    public function byActor(Actor $actor);
 
     /**
      * Filters by a verb.
      *
-     * @param VerbInterface $verb The Verb to filter by
+     * @param Verb $verb The Verb to filter by
      *
      * @return StatementsFilterInterface The statements filter
      */
-    public function byVerb(VerbInterface $verb);
+    public function byVerb(Verb $verb);
 
     /**
      * Filter by an Activity.
      *
-     * @param ActivityInterface $activity The Activity to filter by
+     * @param Activity $activity The Activity to filter by
      *
      * @return StatementsFilterInterface The statements filter
      */
-    public function byActivity(ActivityInterface $activity);
+    public function byActivity(Activity $activity);
 
     /**
      * Filters for Statements matching the given registration id.

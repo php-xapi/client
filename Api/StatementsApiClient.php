@@ -16,9 +16,9 @@ use Xabbuh\XApi\Client\StatementsFilterInterface;
 use Xabbuh\XApi\Serializer\ActorSerializerInterface;
 use Xabbuh\XApi\Serializer\StatementResultSerializerInterface;
 use Xabbuh\XApi\Serializer\StatementSerializerInterface;
-use Xabbuh\XApi\Model\ActorInterface;
-use Xabbuh\XApi\Model\StatementInterface;
-use Xabbuh\XApi\Model\StatementResultInterface;
+use Xabbuh\XApi\Model\Actor;
+use Xabbuh\XApi\Model\Statement;
+use Xabbuh\XApi\Model\StatementResult;
 
 /**
  * Client to access the statements API of an xAPI based learning record store.
@@ -65,7 +65,7 @@ class StatementsApiClient extends ApiClient implements StatementsApiClientInterf
     /**
      * {@inheritDoc}
      */
-    public function storeStatement(StatementInterface $statement)
+    public function storeStatement(Statement $statement)
     {
         if (null !== $statement->getId()) {
             return $this->doStoreStatements(
@@ -86,9 +86,9 @@ class StatementsApiClient extends ApiClient implements StatementsApiClientInterf
     {
         // check that only Statements without ids will be sent to the LRS
         foreach ($statements as $statement) {
-            /** @var StatementInterface $statement */
+            /** @var Statement $statement */
 
-            $isStatement = is_object($statement) && $statement instanceof StatementInterface;
+            $isStatement = is_object($statement) && $statement instanceof Statement;
 
             if (!$isStatement || null !== $statement->getId()) {
                 throw new \InvalidArgumentException('API can only handle statements without ids');
@@ -101,7 +101,7 @@ class StatementsApiClient extends ApiClient implements StatementsApiClientInterf
     /**
      * {@inheritDoc}
      */
-    public function voidStatement(StatementInterface $statement, ActorInterface $actor)
+    public function voidStatement(Statement $statement, Actor $actor)
     {
         return $this->storeStatement($statement->getVoidStatement($actor));
     }
@@ -144,18 +144,18 @@ class StatementsApiClient extends ApiClient implements StatementsApiClientInterf
     /**
      * {@inheritDoc}
      */
-    public function getNextStatements(StatementResultInterface $statementResult)
+    public function getNextStatements(StatementResult $statementResult)
     {
         return $this->doGetStatements($statementResult->getMoreUrlPath());
     }
 
     /**
-     * @param StatementInterface|StatementInterface[] $statements
+     * @param Statement|Statement[] $statements
      * @param string                                  $method
      * @param string[]                                $parameters
      * @param int                                     $validStatusCode
      *
-     * @return StatementInterface|StatementInterface[] The created statement(s)
+     * @return Statement|Statement[] The created statement(s)
      */
     private function doStoreStatements($statements, $method = 'post', $parameters = array(), $validStatusCode = 200)
     {
@@ -178,7 +178,7 @@ class StatementsApiClient extends ApiClient implements StatementsApiClientInterf
             $createdStatements = array();
 
             foreach ($statementIds as $index => $statementId) {
-                /** @var StatementInterface $statement */
+                /** @var Statement $statement */
                 $statement = clone $statements[$index];
                 $statement->setId($statementId);
                 $createdStatements[] = $statement;
@@ -202,7 +202,7 @@ class StatementsApiClient extends ApiClient implements StatementsApiClientInterf
      * @param string $url           URL to request
      * @param array  $urlParameters URL parameters
      *
-     * @return StatementInterface|StatementResultInterface
+     * @return Statement|StatementResult
      */
     private function doGetStatements($url, array $urlParameters = array())
     {
