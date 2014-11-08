@@ -15,6 +15,7 @@
         "php": ">=5.3.0",
         "guzzle/guzzle": "~3.7",
         "xabbuh/xapi-common": "~1.0",
+        "xabbuh/xapi-data-fixtures": "~1.0",
         "xabbuh/xapi-model": "~1.0",
         "xabbuh/xapi-serializer": "~1.0"
     },
