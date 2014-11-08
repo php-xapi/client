@@ -13,6 +13,7 @@ namespace Xabbuh\XApi\Client\Tests\Api;
 
 use Xabbuh\XApi\Client\Api\StatementsApiClient;
 use Xabbuh\XApi\Client\StatementsFilter;
+use Xabbuh\XApi\DataFixtures\StatementFixtures;
 use Xabbuh\XApi\Model\Agent;
 use Xabbuh\XApi\Model\Statement;
 use Xabbuh\XApi\Model\StatementReference;
@@ -57,8 +58,7 @@ class StatementsApiClientTest extends ApiClientTest
             $this->createStatement()
         );
         $returnedStatement = $this->client->storeStatement($statement);
-        $expectedStatement = $this->createStatement();
-        $expectedStatement->setId($statementId);
+        $expectedStatement = $this->createStatement($statementId);
 
         $this->assertEquals($expectedStatement, $returnedStatement);
     }
@@ -66,8 +66,7 @@ class StatementsApiClientTest extends ApiClientTest
     public function testStoreStatementWithId()
     {
         $statementId = '12345678-1234-5678-1234-567812345678';
-        $statement = $this->createStatement();
-        $statement->setId($statementId);
+        $statement = $this->createStatement($statementId);
         $this->validateStoreApiCall(
             'put',
             'statements',
@@ -83,8 +82,7 @@ class StatementsApiClientTest extends ApiClientTest
     public function testStoreStatementWithIdEnsureThatTheIdIsNotOverwritten()
     {
         $statementId = '12345678-1234-5678-1234-567812345678';
-        $statement = $this->createStatement();
-        $statement->setId($statementId);
+        $statement = $this->createStatement($statementId);
         $this->validateStoreApiCall(
             'put',
             'statements',
@@ -113,10 +111,8 @@ class StatementsApiClientTest extends ApiClientTest
             array($this->createStatement(), $this->createStatement())
         );
         $statements = $this->client->storeStatements(array($statement1, $statement2));
-        $expectedStatement1 = $this->createStatement();
-        $expectedStatement1->setId($statementId1);
-        $expectedStatement2 = $this->createStatement();
-        $expectedStatement2->setId($statementId2);
+        $expectedStatement1 = $this->createStatement($statementId1);
+        $expectedStatement2 = $this->createStatement($statementId2);
         $expectedStatements = array($expectedStatement1, $expectedStatement2);
 
         $this->assertNotContains($statements[0], array($statement1, $statement2));
@@ -154,8 +150,7 @@ class StatementsApiClientTest extends ApiClientTest
     public function testStoreStatementsWithId()
     {
         $statement1 = $this->createStatement();
-        $statement2 = $this->createStatement();
-        $statement2->setId('12345678-1234-5678-1234-567812345679');
+        $statement2 = $this->createStatement('12345678-1234-5678-1234-567812345679');
 
         $this->client->storeStatements(array($statement1, $statement2));
     }
@@ -164,16 +159,10 @@ class StatementsApiClientTest extends ApiClientTest
     {
         $voidedStatementId = '12345678-1234-5678-1234-567812345679';
         $voidingStatementId = '12345678-1234-5678-1234-567812345678';
-        $agent = new Agent();
-        $agent->setMbox('mailto:john.doe@example.com');
-        $statementReference = new StatementReference();
-        $statementReference->setStatementId($voidedStatementId);
-        $voidingStatement = $this->createStatement();
-        $voidingStatement->setActor($agent);
-        $voidingStatement->setVerb(Verb::createVoidVerb());
-        $voidingStatement->setObject($statementReference);
-        $voidedStatement = $this->createStatement();
-        $voidedStatement->setId($voidedStatementId);
+        $agent = new Agent('mailto:john.doe@example.com');
+        $statementReference = new StatementReference($voidedStatementId);
+        $voidingStatement = new Statement(null, $agent, Verb::createVoidVerb(), $statementReference);
+        $voidedStatement = $this->createStatement($voidedStatementId);
         $this->validateStoreApiCall(
             'post',
             'statements',
@@ -183,11 +172,12 @@ class StatementsApiClientTest extends ApiClientTest
             $voidingStatement
         );
         $returnedVoidingStatement = $this->client->voidStatement($voidedStatement, $agent);
-        $expectedVoidingStatement = $this->createStatement();
-        $expectedVoidingStatement->setId($voidingStatementId);
-        $expectedVoidingStatement->setActor($agent);
-        $expectedVoidingStatement->setVerb(Verb::createVoidVerb());
-        $expectedVoidingStatement->setObject($statementReference);
+        $expectedVoidingStatement = new Statement(
+            $voidingStatementId,
+            $agent,
+            Verb::createVoidVerb(),
+            $statementReference
+        );
 
         $this->assertEquals($expectedVoidingStatement, $returnedVoidingStatement);
     }
@@ -296,8 +286,7 @@ class StatementsApiClientTest extends ApiClientTest
     {
         // {"mbox":"mailto:alice@example.com","objectType":"Agent"}
         $filter = new StatementsFilter();
-        $agent = new Agent();
-        $agent->setMbox('mailto:alice@example.com');
+        $agent = new Agent('mailto:alice@example.com');
         $filter->byActor($agent);
         $statementResult = $this->createStatementResult();
         $agentJson = '{"mbox":"mailto:alice@example.com","objectType":"Agent"}';
@@ -321,8 +310,7 @@ class StatementsApiClientTest extends ApiClientTest
     public function testGetStatementsWithVerbInStatementsFilter()
     {
         $filter = new StatementsFilter();
-        $verb = new Verb();
-        $verb->setId('http://adlnet.gov/expapi/verbs/attended');
+        $verb = new Verb('http://adlnet.gov/expapi/verbs/attended');
         $filter->byVerb($verb);
         $statementResult = $this->createStatementResult();
         $this->validateRetrieveApiCall(
@@ -340,8 +328,7 @@ class StatementsApiClientTest extends ApiClientTest
     public function testGetNextStatements()
     {
         $moreUrl = '/xapi/statements/more/b381d8eca64a61a42c7b9b4ecc2fabb6';
-        $previousStatementResult = new StatementResult();
-        $previousStatementResult->setMoreUrlPath($moreUrl);
+        $previousStatementResult = new StatementResult(array(), $moreUrl);
         $this->validateRetrieveApiCall(
             'get',
             $moreUrl,
@@ -357,11 +344,13 @@ class StatementsApiClientTest extends ApiClientTest
     }
 
     /**
+     * @param int $id
+     *
      * @return Statement
      */
-    private function createStatement()
+    private function createStatement($id = null)
     {
-        return new Statement();
+        return StatementFixtures::getMinimalStatement($id);
     }
 
     /**
@@ -369,6 +358,6 @@ class StatementsApiClientTest extends ApiClientTest
      */
     private function createStatementResult()
     {
-        return new StatementResult();
+        return new StatementResult(array());
     }
 }

@@ -34,8 +34,7 @@ class StatementsFilterTest extends \PHPUnit_Framework_TestCase
 
     public function testByActor()
     {
-        $agent = new Agent();
-        $agent->setMbox('alice@example.com');
+        $agent = new Agent('alice@example.com');
         $this->statementsFilter->byActor($agent);
         $filter = $this->statementsFilter->getFilter();
 
@@ -52,8 +51,7 @@ class StatementsFilterTest extends \PHPUnit_Framework_TestCase
 
     public function testByVerb()
     {
-        $verb = new Verb();
-        $verb->setId('http://adlnet.gov/expapi/verbs/attended');
+        $verb = new Verb('http://adlnet.gov/expapi/verbs/attended');
         $this->statementsFilter->byVerb($verb);
         $filter = $this->statementsFilter->getFilter();
 
@@ -65,8 +63,7 @@ class StatementsFilterTest extends \PHPUnit_Framework_TestCase
 
     public function testByActivity()
     {
-        $activity = new Activity();
-        $activity->setId('8f87ccde-bb56-4c2e-ab83-44982ef22df0');
+        $activity = new Activity('8f87ccde-bb56-4c2e-ab83-44982ef22df0');
         $this->statementsFilter->byActivity($activity);
         $filter = $this->statementsFilter->getFilter();
 

@@ -127,9 +127,7 @@ class AgentProfileApiClientTest extends ApiClientTest
     private function createAgentProfile()
     {
         $agent = new Agent();
-        $profile = new AgentProfile();
-        $profile->setAgent($agent);
-        $profile->setProfileId('profile-id');
+        $profile = new AgentProfile('profile-id', $agent);
 
         return $profile;
     }

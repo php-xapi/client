@@ -113,11 +113,8 @@ class ActivityProfileApiClientTest extends ApiClientTest
 
     private function createActivityProfile()
     {
-        $activity = new Activity();
-        $activity->setId('activity-id');
-        $activityProfile = new ActivityProfile();
-        $activityProfile->setActivity($activity);
-        $activityProfile->setProfileId('profile-id');
+        $activity = new Activity('activity-id');
+        $activityProfile = new ActivityProfile('profile-id', $activity);
 
         return $activityProfile;
     }

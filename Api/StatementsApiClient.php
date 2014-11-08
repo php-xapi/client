@@ -175,24 +175,40 @@ class StatementsApiClient extends ApiClient implements StatementsApiClientInterf
         $statementIds = json_decode($response->getBody(true));
 
         if (is_array($statements)) {
+            /** @var Statement[] $statements */
             $createdStatements = array();
 
-            foreach ($statementIds as $index => $statementId) {
-                /** @var Statement $statement */
-                $statement = clone $statements[$index];
-                $statement->setId($statementId);
-                $createdStatements[] = $statement;
+            foreach ($statements as $index => $statement) {
+                $createdStatements[] = new Statement(
+                    $statementIds[$index],
+                    $statement->getActor(),
+                    $statement->getVerb(),
+                    $statement->getObject(),
+                    $statement->getResult()
+                );
             }
 
             return $createdStatements;
         } else {
-            $createdStatement = clone $statements;
+            /** @var Statement $statements */
 
             if (200 === $validStatusCode) {
-                $createdStatement->setId($statementIds[0]);
+                return new Statement(
+                    $statementIds[0],
+                    $statements->getActor(),
+                    $statements->getVerb(),
+                    $statements->getObject(),
+                    $statements->getResult()
+                );
+            } else {
+                return new Statement(
+                    $statements->getId(),
+                    $statements->getActor(),
+                    $statements->getVerb(),
+                    $statements->getObject(),
+                    $statements->getResult()
+                );
             }
-
-            return $createdStatement;
         }
     }
 

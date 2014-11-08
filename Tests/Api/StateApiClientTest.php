@@ -127,14 +127,9 @@ class StateApiClientTest extends ApiClientTest
 
     private function createState()
     {
-        $agent = new Agent();
-        $agent->setMbox('mailto:alice@example.com');
-        $activity = new Activity();
-        $activity->setId('activity-id');
-        $state = new State();
-        $state->setActor($agent);
-        $state->setActivity($activity);
-        $state->setStateId('state-id');
+        $agent = new Agent('mailto:alice@example.com');
+        $activity = new Activity('activity-id');
+        $state = new State($activity, $agent, 'state-id');
 
         return $state;
     }
