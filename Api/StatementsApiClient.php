@@ -12,13 +12,13 @@
 namespace Xabbuh\XApi\Client\Api;
 
 use Xabbuh\XApi\Client\Request\HandlerInterface;
-use Xabbuh\XApi\Client\StatementsFilterInterface;
 use Xabbuh\XApi\Serializer\ActorSerializerInterface;
 use Xabbuh\XApi\Serializer\StatementResultSerializerInterface;
 use Xabbuh\XApi\Serializer\StatementSerializerInterface;
 use Xabbuh\XApi\Model\Actor;
 use Xabbuh\XApi\Model\Statement;
 use Xabbuh\XApi\Model\StatementResult;
+use Xabbuh\XApi\Model\StatementsFilter;
 
 /**
  * Client to access the statements API of an xAPI based learning record store.
@@ -125,7 +125,7 @@ class StatementsApiClient extends ApiClient implements StatementsApiClientInterf
     /**
      * {@inheritDoc}
      */
-    public function getStatements(StatementsFilterInterface $filter = null)
+    public function getStatements(StatementsFilter $filter = null)
     {
         $urlParameters = array();
 

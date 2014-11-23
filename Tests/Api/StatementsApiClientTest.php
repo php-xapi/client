@@ -12,12 +12,12 @@
 namespace Xabbuh\XApi\Client\Tests\Api;
 
 use Xabbuh\XApi\Client\Api\StatementsApiClient;
-use Xabbuh\XApi\Client\StatementsFilter;
 use Xabbuh\XApi\DataFixtures\StatementFixtures;
 use Xabbuh\XApi\Model\Agent;
 use Xabbuh\XApi\Model\Statement;
 use Xabbuh\XApi\Model\StatementReference;
 use Xabbuh\XApi\Model\StatementResult;
+use Xabbuh\XApi\Model\StatementsFilter;
 use Xabbuh\XApi\Model\Verb;
 use Xabbuh\XApi\Serializer\ActorSerializer;
 use Xabbuh\XApi\Serializer\StatementResultSerializer;

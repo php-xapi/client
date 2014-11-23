@@ -11,13 +11,13 @@
 
 namespace Xabbuh\XApi\Client\Api;
 
-use Xabbuh\XApi\Client\StatementsFilterInterface;
 use Xabbuh\XApi\Common\Exception\ConflictException;
 use Xabbuh\XApi\Common\Exception\NotFoundException;
 use Xabbuh\XApi\Common\Exception\XApiException;
 use Xabbuh\XApi\Model\Actor;
 use Xabbuh\XApi\Model\Statement;
 use Xabbuh\XApi\Model\StatementResult;
+use Xabbuh\XApi\Model\StatementsFilter;
 
 /**
  * Client to access the statements API of an xAPI based learning record store.
@@ -102,13 +102,13 @@ interface StatementsApiClientInterface
     /**
      * Retrieves a collection of {@link Statement Statements}.
      *
-     * @param StatementsFilterInterface $filter Optional Statements filter
+     * @param StatementsFilter $filter Optional Statements filter
      *
      * @return StatementResult The {@link StatementResult}
      *
      * @throws XApiException in case of any problems related to the xAPI
      */
-    public function getStatements(StatementsFilterInterface $filter = null);
+    public function getStatements(StatementsFilter $filter = null);
 
     /**
      * Returns the next {@link Statement Statements} for a limited Statement
