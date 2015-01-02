@@ -151,9 +151,9 @@ class StatementsApiClient extends ApiClient implements StatementsApiClientInterf
 
     /**
      * @param Statement|Statement[] $statements
-     * @param string                                  $method
-     * @param string[]                                $parameters
-     * @param int                                     $validStatusCode
+     * @param string                $method
+     * @param string[]              $parameters
+     * @param int                   $validStatusCode
      *
      * @return Statement|Statement[] The created statement(s)
      */
