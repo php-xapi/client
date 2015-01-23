@@ -54,22 +54,13 @@ class ActivityProfileApiClient extends DocumentApiClient implements ActivityProf
      */
     public function getDocument(ActivityProfile $profile)
     {
-        /** @var \Xabbuh\XApi\Model\ActivityProfileDocument $document */
-        $document = $this->doGetDocument('activities/profile', array(
+        /** @var \Xabbuh\XApi\Model\DocumentData $documentData */
+        $documentData = $this->doGetDocument('activities/profile', array(
             'activityId' => $profile->getActivity()->getId(),
             'profileId' => $profile->getProfileId(),
         ));
-        $document->setActivityProfile($profile);
 
-        return $document;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    protected function deserializeDocument($serializedDocument)
-    {
-        return $this->documentSerializer->deserializeActivityProfileDocument($serializedDocument);
+        return new ActivityProfileDocument($profile, $documentData);
     }
 
     /**

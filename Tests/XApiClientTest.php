@@ -117,11 +117,11 @@ class XApiClientTest extends \PHPUnit_Framework_TestCase
             ->method('getActorSerializer')
             ->will($this->returnValue($actorSerializer));
 
-        $documentSerializer = $this->getMock('\Xabbuh\XApi\Serializer\DocumentSerializerInterface');
+        $documentDataSerializer = $this->getMock('\Xabbuh\XApi\Serializer\DocumentDataSerializerInterface');
         $serializerRegistry
             ->expects($this->any())
-            ->method('getDocumentSerializer')
-            ->will($this->returnValue($documentSerializer));
+            ->method('getDocumentDataSerializer')
+            ->will($this->returnValue($documentDataSerializer));
 
         return $serializerRegistry;
     }

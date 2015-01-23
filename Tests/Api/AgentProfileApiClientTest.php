@@ -12,11 +12,11 @@
 namespace Xabbuh\XApi\Client\Tests\Api;
 
 use Xabbuh\XApi\Client\Api\AgentProfileApiClient;
+use Xabbuh\XApi\DataFixtures\DocumentFixtures;
 use Xabbuh\XApi\Model\Agent;
 use Xabbuh\XApi\Model\AgentProfile;
-use Xabbuh\XApi\Model\AgentProfileDocument;
 use Xabbuh\XApi\Serializer\ActorSerializer;
-use Xabbuh\XApi\Serializer\DocumentSerializer;
+use Xabbuh\XApi\Serializer\DocumentDataSerializer;
 
 /**
  * @author Christian Flothmann <christian.flothmann@xabbuh.de>
@@ -34,14 +34,14 @@ class AgentProfileApiClientTest extends ApiClientTest
         $this->client = new AgentProfileApiClient(
             $this->requestHandler,
             '1.0.1',
-            new DocumentSerializer($this->serializer),
+            new DocumentDataSerializer($this->serializer),
             new ActorSerializer($this->serializer)
         );
     }
 
     public function testCreateOrUpdateDocument()
     {
-        $document = $this->createAgentProfileDocument();
+        $document = DocumentFixtures::getAgentProfileDocument();
         $profile = $document->getAgentProfile();
 
         $this->validateStoreApiCall(
@@ -53,7 +53,7 @@ class AgentProfileApiClientTest extends ApiClientTest
             ),
             204,
             '',
-            $document,
+            $document->getData(),
             array(array('data' => $profile->getAgent(), 'result' => 'agent-as-json'))
         );
 
@@ -62,7 +62,7 @@ class AgentProfileApiClientTest extends ApiClientTest
 
     public function testCreateOrReplaceDocument()
     {
-        $document = $this->createAgentProfileDocument();
+        $document = DocumentFixtures::getAgentProfileDocument();
         $profile = $document->getAgentProfile();
 
         $this->validateStoreApiCall(
@@ -74,7 +74,7 @@ class AgentProfileApiClientTest extends ApiClientTest
             ),
             204,
             '',
-            $document,
+            $document->getData(),
             array(array('data' => $profile->getAgent(), 'result' => 'agent-as-json'))
         );
 
@@ -101,9 +101,8 @@ class AgentProfileApiClientTest extends ApiClientTest
 
     public function testGetDocument()
     {
-        $profile = $this->createAgentProfile();
-        $document = new AgentProfileDocument();
-        $document['x'] = 'foo';
+        $document = DocumentFixtures::getAgentProfileDocument();
+        $profile = $document->getAgentProfile();
 
         $this->validateRetrieveApiCall(
             'get',
@@ -113,8 +112,8 @@ class AgentProfileApiClientTest extends ApiClientTest
                 'profileId' => 'profile-id',
             ),
             200,
-            'AgentProfileDocument',
-            $document,
+            'DocumentData',
+            $document->getData(),
             array(array('data' => $profile->getAgent(), 'result' => 'agent-as-json'))
         );
 
@@ -130,14 +129,5 @@ class AgentProfileApiClientTest extends ApiClientTest
         $profile = new AgentProfile('profile-id', $agent);
 
         return $profile;
-    }
-
-    private function createAgentProfileDocument()
-    {
-        $profile = $this->createAgentProfile();
-        $document = new AgentProfileDocument();
-        $document->setAgentProfile($profile);
-
-        return $document;
     }
 }

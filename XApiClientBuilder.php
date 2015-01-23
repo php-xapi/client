@@ -15,7 +15,7 @@ use Guzzle\Http\Client;
 use Guzzle\Plugin\Oauth\OauthPlugin;
 use Xabbuh\XApi\Client\Request\Handler;
 use Xabbuh\XApi\Serializer\ActorSerializer;
-use Xabbuh\XApi\Serializer\DocumentSerializer;
+use Xabbuh\XApi\Serializer\DocumentDataSerializer;
 use Xabbuh\XApi\Serializer\Serializer;
 use Xabbuh\XApi\Serializer\SerializerRegistry;
 use Xabbuh\XApi\Serializer\StatementResultSerializer;
@@ -100,7 +100,7 @@ class XApiClientBuilder implements XApiClientBuilderInterface
         $serializerRegistry->setStatementSerializer(new StatementSerializer($serializer));
         $serializerRegistry->setStatementResultSerializer(new StatementResultSerializer($serializer));
         $serializerRegistry->setActorSerializer(new ActorSerializer($serializer));
-        $serializerRegistry->setDocumentSerializer(new DocumentSerializer($serializer));
+        $serializerRegistry->setDocumentDataSerializer(new DocumentDataSerializer($serializer));
 
         $version = null === $this->version ? '1.0.1' : $this->version;
         $requestHandler = new Handler($httpClient, $version, $this->username, $this->password);

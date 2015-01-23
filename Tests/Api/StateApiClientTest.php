@@ -12,12 +12,12 @@
 namespace Xabbuh\XApi\Client\Tests\Api;
 
 use Xabbuh\XApi\Client\Api\StateApiClient;
+use Xabbuh\XApi\DataFixtures\DocumentFixtures;
 use Xabbuh\XApi\Model\Activity;
 use Xabbuh\XApi\Model\Agent;
 use Xabbuh\XApi\Model\State;
-use Xabbuh\XApi\Model\StateDocument;
 use Xabbuh\XApi\Serializer\ActorSerializer;
-use Xabbuh\XApi\Serializer\DocumentSerializer;
+use Xabbuh\XApi\Serializer\DocumentDataSerializer;
 
 /**
  * @author Christian Flothmann <christian.flothmann@xabbuh.de>
@@ -35,14 +35,14 @@ class StateApiClientTest extends ApiClientTest
         $this->client = new StateApiClient(
             $this->requestHandler,
             '1.0.1',
-            new DocumentSerializer($this->serializer),
+            new DocumentDataSerializer($this->serializer),
             new ActorSerializer($this->serializer)
         );
     }
 
     public function testCreateOrUpdateDocument()
     {
-        $document = $this->createStateDocument();
+        $document = DocumentFixtures::getStateDocument();
 
         $this->validateStoreApiCall(
             'post',
@@ -54,7 +54,7 @@ class StateApiClientTest extends ApiClientTest
             ),
             204,
             '',
-            $document,
+            $document->getData(),
             array(array('data' => $document->getState()->getActor(), 'result' => 'agent-as-json'))
         );
 
@@ -63,7 +63,7 @@ class StateApiClientTest extends ApiClientTest
 
     public function testCreateOrReplaceDocument()
     {
-        $document = $this->createStateDocument();
+        $document = DocumentFixtures::getStateDocument();
 
         $this->validateStoreApiCall(
             'put',
@@ -75,7 +75,7 @@ class StateApiClientTest extends ApiClientTest
             ),
             204,
             '',
-            $document,
+            $document->getData(),
             array(array('data' => $document->getState()->getActor(), 'result' => 'agent-as-json'))
         );
 
@@ -99,11 +99,10 @@ class StateApiClientTest extends ApiClientTest
         $this->client->deleteDocument($state);
     }
 
-    public function testGetStateDocument()
+    public function testGetDocument()
     {
-        $state = $this->createState();
-        $document = new StateDocument();
-        $document['x'] = 'foo';
+        $document = DocumentFixtures::getStateDocument();
+        $state = $document->getState();
 
         $this->validateRetrieveApiCall(
             'get',
@@ -114,8 +113,8 @@ class StateApiClientTest extends ApiClientTest
                 'stateId' => 'state-id',
             ),
             200,
-            'StateDocument',
-            $document,
+            'DocumentData',
+            $document->getData(),
             array(array('data' => $state->getActor(), 'result' => 'agent-as-json'))
         );
 
@@ -132,16 +131,5 @@ class StateApiClientTest extends ApiClientTest
         $state = new State($activity, $agent, 'state-id');
 
         return $state;
-    }
-
-    private function createStateDocument()
-    {
-        $state = $this->createState();
-        $document = new StateDocument();
-        $document['x'] = 'foo';
-        $document['y'] = 'bar';
-        $document->setState($state);
-
-        return $document;
     }
 }

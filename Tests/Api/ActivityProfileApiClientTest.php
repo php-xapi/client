@@ -12,10 +12,10 @@
 namespace Xabbuh\XApi\Client\Tests\Api;
 
 use Xabbuh\XApi\Client\Api\ActivityProfileApiClient;
+use Xabbuh\XApi\DataFixtures\DocumentFixtures;
 use Xabbuh\XApi\Model\Activity;
 use Xabbuh\XApi\Model\ActivityProfile;
-use Xabbuh\XApi\Model\ActivityProfileDocument;
-use Xabbuh\XApi\Serializer\DocumentSerializer;
+use Xabbuh\XApi\Serializer\DocumentDataSerializer;
 
 /**
  * @author Christian Flothmann <christian.flothmann@xabbuh.de>
@@ -33,13 +33,13 @@ class ActivityProfileApiClientTest extends ApiClientTest
         $this->client = new ActivityProfileApiClient(
             $this->requestHandler,
             '1.0.1',
-            new DocumentSerializer($this->serializer)
+            new DocumentDataSerializer($this->serializer)
         );
     }
 
     public function testCreateOrUpdateDocument()
     {
-        $document = $this->createActivityProfileDocument();
+        $document = DocumentFixtures::getActivityProfileDocument();
 
         $this->validateStoreApiCall(
             'post',
@@ -50,7 +50,7 @@ class ActivityProfileApiClientTest extends ApiClientTest
             ),
             204,
             '',
-            $document
+            $document->getData()
         );
 
         $this->client->createOrUpdateDocument($document);
@@ -58,7 +58,7 @@ class ActivityProfileApiClientTest extends ApiClientTest
 
     public function testCreateOrReplaceDocument()
     {
-        $document = $this->createActivityProfileDocument();
+        $document = DocumentFixtures::getActivityProfileDocument();
 
         $this->validateStoreApiCall(
             'put',
@@ -69,7 +69,7 @@ class ActivityProfileApiClientTest extends ApiClientTest
             ),
             204,
             '',
-            $document
+            $document->getData()
         );
 
         $this->client->createOrReplaceDocument($document);
@@ -89,9 +89,8 @@ class ActivityProfileApiClientTest extends ApiClientTest
 
     public function testGetDocument()
     {
-        $activityProfile = $this->createActivityProfile();
-        $document = new ActivityProfileDocument();
-        $document['x'] = 'foo';
+        $document = DocumentFixtures::getActivityProfileDocument();
+        $activityProfile = $document->getActivityProfile();
 
         $this->validateRetrieveApiCall(
             'get',
@@ -101,8 +100,8 @@ class ActivityProfileApiClientTest extends ApiClientTest
                 'profileId' => 'profile-id',
             ),
             200,
-            'ActivityProfileDocument',
-            $document
+            'DocumentData',
+            $document->getData()
         );
 
         $document = $this->client->getDocument($activityProfile);
@@ -117,14 +116,5 @@ class ActivityProfileApiClientTest extends ApiClientTest
         $activityProfile = new ActivityProfile('profile-id', $activity);
 
         return $activityProfile;
-    }
-
-    private function createActivityProfileDocument()
-    {
-        $activityProfile = $this->createActivityProfile();
-        $document = new ActivityProfileDocument();
-        $document->setActivityProfile($activityProfile);
-
-        return $document;
     }
 }

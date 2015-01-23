@@ -70,7 +70,7 @@ class XApiClient extends ApiClient implements XApiClientInterface
         return new StateApiClient(
             $this->requestHandler,
             $this->version,
-            $this->serializerRegistry->getDocumentSerializer(),
+            $this->serializerRegistry->getDocumentDataSerializer(),
             $this->serializerRegistry->getActorSerializer()
         );
     }
@@ -83,7 +83,7 @@ class XApiClient extends ApiClient implements XApiClientInterface
         return new ActivityProfileApiClient(
             $this->requestHandler,
             $this->version,
-            $this->serializerRegistry->getDocumentSerializer()
+            $this->serializerRegistry->getDocumentDataSerializer()
         );
     }
 
@@ -95,7 +95,7 @@ class XApiClient extends ApiClient implements XApiClientInterface
         return new AgentProfileApiClient(
             $this->requestHandler,
             $this->version,
-            $this->serializerRegistry->getDocumentSerializer(),
+            $this->serializerRegistry->getDocumentDataSerializer(),
             $this->serializerRegistry->getActorSerializer()
         );
     }

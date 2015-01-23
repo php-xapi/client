@@ -13,7 +13,7 @@ namespace Xabbuh\XApi\Client\Api;
 
 use Xabbuh\XApi\Client\Request\HandlerInterface;
 use Xabbuh\XApi\Serializer\ActorSerializerInterface;
-use Xabbuh\XApi\Serializer\DocumentSerializerInterface;
+use Xabbuh\XApi\Serializer\DocumentDataSerializerInterface;
 use Xabbuh\XApi\Model\AgentProfile;
 use Xabbuh\XApi\Model\AgentProfileDocument;
 
@@ -31,18 +31,19 @@ class AgentProfileApiClient extends DocumentApiClient implements AgentProfileApi
     private $actorSerializer;
 
     /**
-     * @param HandlerInterface            $requestHandler     The HTTP request handler
-     * @param string                      $version            The xAPI version
-     * @param DocumentSerializerInterface $documentSerializer The document serializer
-     * @param ActorSerializerInterface    $actorSerializer    The actor serializer
+     * @param HandlerInterface                $requestHandler         The HTTP request handler
+     * @param string                          $version                The xAPI version
+     * @param DocumentDataSerializerInterface $documentDataSerializer The document data serializer
+     * @param ActorSerializerInterface        $actorSerializer        The actor serializer
      */
     public function __construct(
         HandlerInterface $requestHandler,
         $version,
-        DocumentSerializerInterface $documentSerializer,
+        DocumentDataSerializerInterface $documentDataSerializer,
         ActorSerializerInterface $actorSerializer
     ) {
-        parent::__construct($requestHandler, $version, $documentSerializer);
+        parent::__construct($requestHandler, $version, $documentDataSerializer);
+
         $this->actorSerializer = $actorSerializer;
     }
 
@@ -86,21 +87,12 @@ class AgentProfileApiClient extends DocumentApiClient implements AgentProfileApi
      */
     public function getDocument(AgentProfile $profile)
     {
-        /** @var \Xabbuh\XApi\Model\AgentProfileDocument $document */
-        $document = $this->doGetDocument('agents/profile', array(
+        /** @var \Xabbuh\XApi\Model\DocumentData $documentData */
+        $documentData = $this->doGetDocument('agents/profile', array(
             'agent' => $this->actorSerializer->serializeActor($profile->getAgent()),
             'profileId' => $profile->getProfileId(),
         ));
-        $document->setAgentProfile($profile);
 
-        return $document;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    protected function deserializeDocument($serializedDocument)
-    {
-        return $this->documentSerializer->deserializeAgentProfileDocument($serializedDocument);
+        return new AgentProfileDocument($profile, $documentData);
     }
 }

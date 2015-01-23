@@ -13,7 +13,8 @@ namespace Xabbuh\XApi\Client\Api;
 
 use Xabbuh\XApi\Client\Request\HandlerInterface;
 use Xabbuh\XApi\Model\Document;
-use Xabbuh\XApi\Serializer\DocumentSerializerInterface;
+use Xabbuh\XApi\Model\DocumentData;
+use Xabbuh\XApi\Serializer\DocumentDataSerializerInterface;
 
 /**
  * Base class for the document API classes.
@@ -23,19 +24,20 @@ use Xabbuh\XApi\Serializer\DocumentSerializerInterface;
 abstract class DocumentApiClient extends ApiClient
 {
     /**
-     * @var DocumentSerializerInterface
+     * @var DocumentDataSerializerInterface
      */
-    protected $documentSerializer;
+    protected $documentDataSerializer;
 
     /**
-     * @param HandlerInterface            $requestHandler     The HTTP request handler
-     * @param string                      $version            The xAPI version
-     * @param DocumentSerializerInterface $documentSerializer The document serializer
+     * @param HandlerInterface                $requestHandler         The HTTP request handler
+     * @param string                          $version                The xAPI version
+     * @param DocumentDataSerializerInterface $documentDataSerializer The document data serializer
      */
-    public function __construct(HandlerInterface $requestHandler, $version, DocumentSerializerInterface $documentSerializer)
+    public function __construct(HandlerInterface $requestHandler, $version, DocumentDataSerializerInterface $documentDataSerializer)
     {
         parent::__construct($requestHandler, $version);
-        $this->documentSerializer = $documentSerializer;
+
+        $this->documentDataSerializer = $documentDataSerializer;
     }
 
     /**
@@ -52,7 +54,7 @@ abstract class DocumentApiClient extends ApiClient
             $method,
             $uri,
             $urlParameters,
-            $this->documentSerializer->serializeDocument($document)
+            $this->documentDataSerializer->serializeDocumentData($document->getData())
         );
         $this->requestHandler->executeRequest($request, array(204));
     }
@@ -86,5 +88,15 @@ abstract class DocumentApiClient extends ApiClient
         return $document;
     }
 
-    abstract protected function deserializeDocument($serializedDocument);
+    /**
+     * Deserializes the data of a document.
+     *
+     * @param string $data The serialized document data
+     *
+     * @return DocumentData The parsed document data
+     */
+    protected function deserializeDocument($data)
+    {
+        return $this->documentDataSerializer->deserializeDocumentData($data);
+    }
 }

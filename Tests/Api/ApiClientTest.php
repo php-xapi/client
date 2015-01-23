@@ -15,7 +15,7 @@ use JMS\Serializer\SerializerInterface;
 use Xabbuh\XApi\Client\Request\HandlerInterface;
 use Xabbuh\XApi\Common\Exception\NotFoundException;
 use Xabbuh\XApi\Serializer\ActorSerializer;
-use Xabbuh\XApi\Serializer\DocumentSerializer;
+use Xabbuh\XApi\Serializer\DocumentDataSerializer;
 use Xabbuh\XApi\Serializer\SerializerRegistry;
 use Xabbuh\XApi\Serializer\StatementResultSerializer;
 use Xabbuh\XApi\Serializer\StatementSerializer;
@@ -58,7 +58,7 @@ abstract class ApiClientTest extends \PHPUnit_Framework_TestCase
         $registry->setStatementSerializer(new StatementSerializer($this->serializer));
         $registry->setStatementResultSerializer(new StatementResultSerializer($this->serializer));
         $registry->setActorSerializer(new ActorSerializer($this->serializer));
-        $registry->setDocumentSerializer(new DocumentSerializer($this->serializer));
+        $registry->setDocumentDataSerializer(new DocumentDataSerializer($this->serializer));
 
         return $registry;
     }

@@ -13,7 +13,7 @@ namespace Xabbuh\XApi\Client\Api;
 
 use Xabbuh\XApi\Client\Request\HandlerInterface;
 use Xabbuh\XApi\Serializer\ActorSerializerInterface;
-use Xabbuh\XApi\Serializer\DocumentSerializerInterface;
+use Xabbuh\XApi\Serializer\DocumentDataSerializerInterface;
 use Xabbuh\XApi\Model\StateDocument;
 use Xabbuh\XApi\Model\State;
 
@@ -30,18 +30,19 @@ class StateApiClient extends DocumentApiClient implements StateApiClientInterfac
     private $actorSerializer;
 
     /**
-     * @param HandlerInterface            $requestHandler     The HTTP request handler
-     * @param string                      $version            The xAPI version
-     * @param DocumentSerializerInterface $documentSerializer The document serializer
-     * @param ActorSerializerInterface    $actorSerializer    The actor serializer
+     * @param HandlerInterface                $requestHandler         The HTTP request handler
+     * @param string                          $version                The xAPI version
+     * @param DocumentDataSerializerInterface $documentDataSerializer The document data serializer
+     * @param ActorSerializerInterface        $actorSerializer        The actor serializer
      */
     public function __construct(
         HandlerInterface $requestHandler,
         $version,
-        DocumentSerializerInterface $documentSerializer,
+        DocumentDataSerializerInterface $documentDataSerializer,
         ActorSerializerInterface $actorSerializer
     ) {
-        parent::__construct($requestHandler, $version, $documentSerializer);
+        parent::__construct($requestHandler, $version, $documentDataSerializer);
+
         $this->actorSerializer = $actorSerializer;
     }
 
@@ -78,23 +79,14 @@ class StateApiClient extends DocumentApiClient implements StateApiClientInterfac
      */
     public function getDocument(State $state)
     {
-        /** @var \Xabbuh\XApi\Model\StateDocument $document */
-        $document = $this->doGetDocument('activities/state', array(
+        /** @var \Xabbuh\XApi\Model\DocumentData $documentData */
+        $documentData = $this->doGetDocument('activities/state', array(
             'activityId' => $state->getActivity()->getId(),
             'agent' => $this->actorSerializer->serializeActor($state->getActor()),
             'stateId' => $state->getStateId(),
         ));
-        $document->setState($state);
 
-        return $document;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    protected function deserializeDocument($serializedDocument)
-    {
-        return $this->documentSerializer->deserializeStateDocument($serializedDocument);
+        return new StateDocument($state, $documentData);
     }
 
     /**
