@@ -13,15 +13,12 @@ php:
   - 5.6
   - 7.0
   - hhvm
-  - hhvm-nightly
 
 matrix:
   fast_finish: true
   include:
     - php: 5.3
       env: deps="low"
-  allow_failures:
-    - php: hhvm-nightly
 
 install:
   - if [ "$deps" = "low" ]; then composer update --prefer-lowest --prefer-stable; fi
