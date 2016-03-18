@@ -16,7 +16,7 @@
         "guzzle/guzzle": "~3.7",
         "xabbuh/xapi-common": "~0.1",
         "xabbuh/xapi-data-fixtures": "~0.1",
-        "xabbuh/xapi-model": "~0.1",
+        "xabbuh/xapi-model": "~0.2",
         "xabbuh/xapi-serializer": "~0.1"
     },
     "autoload": {
