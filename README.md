@@ -34,7 +34,7 @@ Read the [documentation](doc/index.md) to find out how to use the library.
 Issues
 ------
 
-Report issue in the [issue tracker of the XAPI package](https://github.com/xabbuh/xapi/issues).
+Report issue in the [issue tracker of the XAPI package](https://github.com/php-xapi/xapi/issues).
 
 License
 -------
