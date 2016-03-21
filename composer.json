@@ -14,10 +14,10 @@
     "require": {
         "php": ">=5.3.0",
         "guzzle/guzzle": "~3.7",
-        "xabbuh/xapi-common": "~0.1",
-        "xabbuh/xapi-data-fixtures": "~0.1",
-        "xabbuh/xapi-model": "~0.2",
-        "xabbuh/xapi-serializer": "~0.1"
+        "php-xapi/exception": "~0.1",
+        "php-xapi/model": "~0.1",
+        "php-xapi/serializer": "~0.1",
+        "php-xapi/test-fixtures": "~0.1"
     },
     "autoload": {
         "psr-4": {
