@@ -1,5 +1,5 @@
-Xabbuh xApi Client
-==================
+PHP xApi (Experience API) Client
+================================
 
 [![Build Status](https://travis-ci.org/php-xapi/client.svg?branch=master)](https://travis-ci.org/php-xapi/client)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/php-xapi/client/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/php-xapi/client/?branch=master)
