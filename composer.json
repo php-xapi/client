@@ -1,9 +1,9 @@
 {
-    "name": "xabbuh/xapi-client",
+    "name": "php-xapi/client",
     "type": "library",
     "description": "client library for the Experience API (xAPI)",
     "keywords": ["xAPI", "Experience API", "Tin Can API", "client"],
-    "homepage": "https://github.com/xabbuh/xapi-client",
+    "homepage": "https://github.com/php-xapi/client",
     "license": "MIT",
     "authors": [
         {
@@ -21,6 +21,9 @@
     "require-dev": {
         "php-xapi/test-fixtures": "^0.1.0"
     },
+    "conflict": {
+        "xabbuh/xapi-client": "*"
+    },
     "autoload": {
         "psr-4": {
             "Xabbuh\\XApi\\Client\\": ""
@@ -28,7 +31,7 @@
     },
     "extra": {
         "branch-alias": {
-            "dev-master": "1.0.x-dev"
+            "dev-master": "0.1.x-dev"
         }
     }
 }
