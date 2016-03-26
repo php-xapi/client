@@ -11,11 +11,9 @@ env:
     - deps=""
 
 php:
-  - 5.3
   - 5.4
   - 5.5
   - 5.6
-  - 7.0
   - hhvm
 
 matrix:
@@ -23,12 +21,18 @@ matrix:
   include:
     - php: 5.3
       env: deps="low"
+    - php: 7.0
+      env: xdebug="yes"
+
+before_install:
+  - if [[ "$TRAVIS_PHP_VERSION" != "hhvm" && "$xdebug" != "yes" ]]; then phpenv config-rm xdebug.ini; fi
+  - composer self-update
 
 install:
   - if [ "$deps" = "low" ]; then composer update --prefer-lowest --prefer-stable; fi
   - if [ "$deps" = "" ]; then composer install; fi
 
 script:
-  - phpunit --coverage-clover=coverage.clover
-  - wget https://scrutinizer-ci.com/ocular.phar
-  - php ocular.phar code-coverage:upload --format=php-clover coverage.clover
+  - if [[ "$xdebug" = "yes" ]]; then phpunit --coverage-clover=coverage.clover; else phpunit; fi
+  - if [[ "$xdebug" = "yes" ]]; then wget https://scrutinizer-ci.com/ocular.phar; fi
+  - if [[ "$xdebug" = "yes" ]]; then php ocular.phar code-coverage:upload --format=php-clover coverage.clover; fi
