@@ -15,6 +15,7 @@ use Xabbuh\XApi\Client\Api\StateApiClient;
 use Xabbuh\XApi\DataFixtures\DocumentFixtures;
 use Xabbuh\XApi\Model\Activity;
 use Xabbuh\XApi\Model\Agent;
+use Xabbuh\XApi\Model\InverseFunctionalIdentifier;
 use Xabbuh\XApi\Model\State;
 use Xabbuh\XApi\Serializer\ActorSerializer;
 use Xabbuh\XApi\Serializer\DocumentDataSerializer;
@@ -126,7 +127,7 @@ class StateApiClientTest extends ApiClientTest
 
     private function createState()
     {
-        $agent = new Agent('mailto:alice@example.com');
+        $agent = new Agent(InverseFunctionalIdentifier::withMbox('mailto:alice@example.com'));
         $activity = new Activity('activity-id');
         $state = new State($activity, $agent, 'state-id');
 

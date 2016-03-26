@@ -15,6 +15,7 @@ use Xabbuh\XApi\Client\Api\AgentProfileApiClient;
 use Xabbuh\XApi\DataFixtures\DocumentFixtures;
 use Xabbuh\XApi\Model\Agent;
 use Xabbuh\XApi\Model\AgentProfile;
+use Xabbuh\XApi\Model\InverseFunctionalIdentifier;
 use Xabbuh\XApi\Serializer\ActorSerializer;
 use Xabbuh\XApi\Serializer\DocumentDataSerializer;
 
@@ -125,7 +126,7 @@ class AgentProfileApiClientTest extends ApiClientTest
 
     private function createAgentProfile()
     {
-        $agent = new Agent();
+        $agent = new Agent(InverseFunctionalIdentifier::withMbox('mailto:christian@example.com'));
         $profile = new AgentProfile('profile-id', $agent);
 
         return $profile;

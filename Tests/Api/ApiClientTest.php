@@ -11,7 +11,7 @@
 
 namespace Xabbuh\XApi\Client\Tests\Api;
 
-use JMS\Serializer\SerializerInterface;
+use Symfony\Component\Serializer\SerializerInterface;
 use Xabbuh\XApi\Client\Request\HandlerInterface;
 use Xabbuh\XApi\Common\Exception\NotFoundException;
 use Xabbuh\XApi\Serializer\ActorSerializer;
@@ -65,7 +65,7 @@ abstract class ApiClientTest extends \PHPUnit_Framework_TestCase
 
     protected function createSerializerMock()
     {
-        return $this->getMock('\JMS\Serializer\SerializerInterface');
+        return $this->getMock('\Symfony\Component\Serializer\SerializerInterface');
     }
 
     protected function validateDeserializer($data, $type, $returnValue)
