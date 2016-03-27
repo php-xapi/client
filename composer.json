@@ -26,7 +26,12 @@
     },
     "autoload": {
         "psr-4": {
-            "Xabbuh\\XApi\\Client\\": ""
+            "Xabbuh\\XApi\\Client\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Xabbuh\\XApi\\Client\\Tests\\": "tests/"
         }
     },
     "extra": {
