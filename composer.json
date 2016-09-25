@@ -15,11 +15,11 @@
         "php": ">=5.3.0",
         "guzzle/guzzle": "~3.7",
         "php-xapi/exception": "^0.1.0",
-        "php-xapi/model": "^0.2.0",
-        "php-xapi/serializer": "^0.2.0"
+        "php-xapi/model": "^0.5.0@dev",
+        "php-xapi/serializer": "^0.3.0@dev"
     },
     "require-dev": {
-        "php-xapi/test-fixtures": "^0.2.0"
+        "php-xapi/test-fixtures": "^0.5.0@dev"
     },
     "conflict": {
         "xabbuh/xapi-client": "*"
@@ -36,7 +36,7 @@
     },
     "extra": {
         "branch-alias": {
-            "dev-master": "0.1.x-dev"
+            "dev-master": "0.2.x-dev"
         }
     }
 }

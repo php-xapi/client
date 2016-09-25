@@ -12,6 +12,7 @@
 namespace Xabbuh\XApi\Client\Api;
 
 use Xabbuh\XApi\Client\Request\HandlerInterface;
+use Xabbuh\XApi\Model\StatementId;
 use Xabbuh\XApi\Serializer\ActorSerializerInterface;
 use Xabbuh\XApi\Serializer\StatementResultSerializerInterface;
 use Xabbuh\XApi\Serializer\StatementSerializerInterface;
@@ -71,7 +72,7 @@ class StatementsApiClient extends ApiClient implements StatementsApiClientInterf
             return $this->doStoreStatements(
                 $statement,
                 'put',
-                array('statementId' => $statement->getId()),
+                array('statementId' => $statement->getId()->getValue()),
                 204
             );
         } else {
@@ -109,17 +110,17 @@ class StatementsApiClient extends ApiClient implements StatementsApiClientInterf
     /**
      * {@inheritDoc}
      */
-    public function getStatement($statementId)
+    public function getStatement(StatementId $statementId)
     {
-        return $this->doGetStatements('statements', array('statementId' => $statementId));
+        return $this->doGetStatements('statements', array('statementId' => $statementId->getValue()));
     }
 
     /**
      * {@inheritDoc}
      */
-    public function getVoidedStatement($statementId)
+    public function getVoidedStatement(StatementId $statementId)
     {
-        return $this->doGetStatements('statements', array('voidedStatementId' => $statementId));
+        return $this->doGetStatements('statements', array('voidedStatementId' => $statementId->getValue()));
     }
 
     /**
@@ -179,13 +180,7 @@ class StatementsApiClient extends ApiClient implements StatementsApiClientInterf
             $createdStatements = array();
 
             foreach ($statements as $index => $statement) {
-                $createdStatements[] = new Statement(
-                    $statementIds[$index],
-                    $statement->getActor(),
-                    $statement->getVerb(),
-                    $statement->getObject(),
-                    $statement->getResult()
-                );
+                $createdStatements[] = $statement->withId(StatementId::fromString($statementIds[$index]));
             }
 
             return $createdStatements;
@@ -193,21 +188,9 @@ class StatementsApiClient extends ApiClient implements StatementsApiClientInterf
             /** @var Statement $statements */
 
             if (200 === $validStatusCode) {
-                return new Statement(
-                    $statementIds[0],
-                    $statements->getActor(),
-                    $statements->getVerb(),
-                    $statements->getObject(),
-                    $statements->getResult()
-                );
+                return $statements->withId(StatementId::fromString($statementIds[0]));
             } else {
-                return new Statement(
-                    $statements->getId(),
-                    $statements->getActor(),
-                    $statements->getVerb(),
-                    $statements->getObject(),
-                    $statements->getResult()
-                );
+                return $statements;
             }
         }
     }

@@ -16,6 +16,7 @@ use Xabbuh\XApi\DataFixtures\StatementFixtures;
 use Xabbuh\XApi\Model\Agent;
 use Xabbuh\XApi\Model\InverseFunctionalIdentifier;
 use Xabbuh\XApi\Model\Statement;
+use Xabbuh\XApi\Model\StatementId;
 use Xabbuh\XApi\Model\StatementReference;
 use Xabbuh\XApi\Model\StatementResult;
 use Xabbuh\XApi\Model\StatementsFilter;
@@ -94,7 +95,7 @@ class StatementsApiClientTest extends ApiClientTest
         );
         $storedStatement = $this->client->storeStatement($statement);
 
-        $this->assertEquals($statementId, $storedStatement->getId());
+        $this->assertEquals($statementId, $storedStatement->getId()->getValue());
     }
 
     public function testStoreStatements()
@@ -119,8 +120,8 @@ class StatementsApiClientTest extends ApiClientTest
         $this->assertNotContains($statements[0], array($statement1, $statement2));
         $this->assertNotContains($statements[1], array($statement1, $statement2));
         $this->assertEquals($expectedStatements, $statements);
-        $this->assertEquals($statementId1, $statements[0]->getId());
-        $this->assertEquals($statementId2, $statements[1]->getId());
+        $this->assertEquals($statementId1, $statements[0]->getId()->getValue());
+        $this->assertEquals($statementId2, $statements[1]->getId()->getValue());
     }
 
     /**
@@ -161,7 +162,7 @@ class StatementsApiClientTest extends ApiClientTest
         $voidedStatementId = '12345678-1234-5678-1234-567812345679';
         $voidingStatementId = '12345678-1234-5678-1234-567812345678';
         $agent = new Agent(InverseFunctionalIdentifier::withMbox('mailto:john.doe@example.com'));
-        $statementReference = new StatementReference($voidedStatementId);
+        $statementReference = new StatementReference(StatementId::fromString($voidedStatementId));
         $voidingStatement = new Statement(null, $agent, Verb::createVoidVerb(), $statementReference);
         $voidedStatement = $this->createStatement($voidedStatementId);
         $this->validateStoreApiCall(
@@ -174,7 +175,7 @@ class StatementsApiClientTest extends ApiClientTest
         );
         $returnedVoidingStatement = $this->client->voidStatement($voidedStatement, $agent);
         $expectedVoidingStatement = new Statement(
-            $voidingStatementId,
+            StatementId::fromString($voidingStatementId),
             $agent,
             Verb::createVoidVerb(),
             $statementReference
@@ -196,7 +197,7 @@ class StatementsApiClientTest extends ApiClientTest
             $statement
         );
 
-        $this->client->getStatement($statementId);
+        $this->client->getStatement(StatementId::fromString($statementId));
     }
 
     /**
@@ -214,7 +215,7 @@ class StatementsApiClientTest extends ApiClientTest
             'There is no statement associated with this id'
         );
 
-        $this->client->getStatement($statementId);
+        $this->client->getStatement(StatementId::fromString($statementId));
     }
 
     public function testGetVoidedStatement()
@@ -230,7 +231,7 @@ class StatementsApiClientTest extends ApiClientTest
             $statement
         );
 
-        $this->client->getVoidedStatement($statementId);
+        $this->client->getVoidedStatement(StatementId::fromString($statementId));
     }
 
     /**
@@ -248,7 +249,7 @@ class StatementsApiClientTest extends ApiClientTest
             'There is no statement associated with this id'
         );
 
-        $this->client->getVoidedStatement($statementId);
+        $this->client->getVoidedStatement(StatementId::fromString($statementId));
     }
 
     public function testGetStatements()
@@ -274,7 +275,7 @@ class StatementsApiClientTest extends ApiClientTest
         $this->validateRetrieveApiCall(
             'get',
             'statements',
-            array('limit' => 10, 'ascending' => 'True'),
+            array('limit' => 10, 'ascending' => 'true'),
             200,
             'StatementResult',
             $statementResult
@@ -351,7 +352,13 @@ class StatementsApiClientTest extends ApiClientTest
      */
     private function createStatement($id = null)
     {
-        return StatementFixtures::getMinimalStatement($id);
+        $statement = StatementFixtures::getMinimalStatement($id);
+
+        if (null === $id) {
+            $statement = $statement->withId(null);
+        }
+
+        return $statement;
     }
 
     /**

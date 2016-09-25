@@ -16,6 +16,7 @@ use Xabbuh\XApi\Common\Exception\NotFoundException;
 use Xabbuh\XApi\Common\Exception\XApiException;
 use Xabbuh\XApi\Model\Actor;
 use Xabbuh\XApi\Model\Statement;
+use Xabbuh\XApi\Model\StatementId;
 use Xabbuh\XApi\Model\StatementResult;
 use Xabbuh\XApi\Model\StatementsFilter;
 
@@ -78,26 +79,26 @@ interface StatementsApiClientInterface
     /**
      * Retrieves a single {@link Statement Statement}.
      *
-     * @param string $statementId The Statement id
+     * @param StatementId $statementId The Statement id
      *
      * @return Statement The Statement
      *
      * @throws NotFoundException if no statement with the given id could be found
      * @throws XApiException     for all other xAPI related problems
      */
-    public function getStatement($statementId);
+    public function getStatement(StatementId $statementId);
 
     /**
      * Retrieves a voided {@link Statement Statement}.
      *
-     * @param string $statementId The id of the voided Statement
+     * @param StatementId $statementId The id of the voided Statement
      *
      * @return Statement The voided Statement
      *
      * @throws NotFoundException if no statement with the given id could be found
      * @throws XApiException     for all other xAPI related problems
      */
-    public function getVoidedStatement($statementId);
+    public function getVoidedStatement(StatementId $statementId);
 
     /**
      * Retrieves a collection of {@link Statement Statements}.
