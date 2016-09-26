@@ -28,13 +28,6 @@ use Xabbuh\XApi\Model\StatementsFilter;
 interface StatementsApiClientInterface
 {
     /**
-     * Returns the xAPI version.
-     *
-     * @return string The xAPI version
-     */
-    public function getVersion();
-
-    /**
      * Stores a single {@link Statement}.
      *
      * @param Statement $statement The Statement to store

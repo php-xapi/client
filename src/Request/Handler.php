@@ -49,32 +49,6 @@ final class Handler implements HandlerInterface
     }
 
     /**
-     * Returns the HTTP client used to perform the API requests.
-     *
-     * @return ClientInterface The HTTP client
-     */
-    public function getHttpClient()
-    {
-        return $this->httpClient;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function getUsername()
-    {
-        return $this->username;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function getPassword()
-    {
-        return $this->password;
-    }
-
-    /**
      * {@inheritDoc}
      */
     public function createRequest($method, $uri, array $urlParameters = array(), $body = null)

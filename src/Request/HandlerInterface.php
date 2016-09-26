@@ -22,20 +22,6 @@ use Xabbuh\XApi\Common\Exception\XApiException;
 interface HandlerInterface
 {
     /**
-     * Returns the HTTP auth username.
-     *
-     * @return string The username
-     */
-    public function getUsername();
-
-    /**
-     * Returns the HTTP auth password.
-     *
-     * @return string The password
-     */
-    public function getPassword();
-
-    /**
      * @param string $method        The HTTP method
      * @param string $uri           The URI to send the request to
      * @param array  $urlParameters Optional url parameters

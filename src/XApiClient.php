@@ -43,11 +43,6 @@ final class XApiClient extends ApiClient implements XApiClientInterface
         $this->version = $version;
     }
 
-    public function getSerializerRegistry()
-    {
-        return $this->serializerRegistry;
-    }
-
     /**
      * {@inheritDoc}
      */

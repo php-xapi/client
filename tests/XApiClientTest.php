@@ -42,16 +42,6 @@ class XApiClientTest extends \PHPUnit_Framework_TestCase
         $this->client = new XApiClient($this->requestHandler, $this->serializerRegistry, '1.0.1');
     }
 
-    public function testGetRequestHandler()
-    {
-        $this->assertSame($this->requestHandler, $this->client->getRequestHandler());
-    }
-
-    public function testGetSerializerRegistry()
-    {
-        $this->assertSame($this->serializerRegistry, $this->client->getSerializerRegistry());
-    }
-
     public function testGetStatementsApi()
     {
         $this->assertInstanceOf(

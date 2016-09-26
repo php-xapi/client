@@ -22,13 +22,6 @@ use Xabbuh\XApi\Model\State;
 interface StateApiClientInterface
 {
     /**
-     * Returns the xAPI version.
-     *
-     * @return string The xAPI version
-     */
-    public function getVersion();
-
-    /**
      * Stores a document for a state. Updates an existing document for this
      * state if one exists.
      *

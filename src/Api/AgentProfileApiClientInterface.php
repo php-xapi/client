@@ -23,13 +23,6 @@ use Xabbuh\XApi\Model\AgentProfileDocument;
 interface AgentProfileApiClientInterface
 {
     /**
-     * Returns the xAPI version.
-     *
-     * @return string The xAPI version
-     */
-    public function getVersion();
-
-    /**
      * Stores a document for an agent profile. Updates an existing document for
      * this agent profile if one exists.
      *

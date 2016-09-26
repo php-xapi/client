@@ -33,14 +33,4 @@ abstract class ApiClient
         $this->requestHandler = $requestHandler;
         $this->version = $version;
     }
-
-    public function getRequestHandler()
-    {
-        return $this->requestHandler;
-    }
-
-    public function getVersion()
-    {
-        return $this->version;
-    }
 }

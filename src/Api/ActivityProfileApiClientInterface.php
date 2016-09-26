@@ -23,13 +23,6 @@ use Xabbuh\XApi\Model\ActivityProfileDocument;
 interface ActivityProfileApiClientInterface
 {
     /**
-     * Returns the xAPI version.
-     *
-     * @return string The xAPI version
-     */
-    public function getVersion();
-
-    /**
      * Stores a document for an activity profile. Updates an existing document
      * for this activity profile if one exists.
      *
