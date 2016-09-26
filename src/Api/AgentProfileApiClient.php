@@ -23,7 +23,7 @@ use Xabbuh\XApi\Model\AgentProfileDocument;
  *
  * @author Christian Flothmann <christian.flothmann@xabbuh.de>
  */
-class AgentProfileApiClient extends DocumentApiClient implements AgentProfileApiClientInterface
+final class AgentProfileApiClient extends DocumentApiClient implements AgentProfileApiClientInterface
 {
     /**
      * @var ActorSerializerInterface

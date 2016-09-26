@@ -27,7 +27,7 @@ use Xabbuh\XApi\Model\StatementsFilter;
  *
  * @author Christian Flothmann <christian.flothmann@xabbuh.de>
  */
-class StatementsApiClient extends ApiClient implements StatementsApiClientInterface
+final class StatementsApiClient extends ApiClient implements StatementsApiClientInterface
 {
     /**
      * @var StatementSerializerInterface

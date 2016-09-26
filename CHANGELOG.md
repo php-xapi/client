@@ -1,6 +1,11 @@
 CHANGELOG
 =========
 
+0.3.0
+-----
+
+* Made all classes final.
+
 0.2.0
 -----
 

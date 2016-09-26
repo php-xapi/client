@@ -26,7 +26,7 @@ use Xabbuh\XApi\Serializer\StatementSerializer;
  *
  * @author Christian Flothmann <christian.flothmann@xabbuh.de>
  */
-class XApiClientBuilder implements XApiClientBuilderInterface
+final class XApiClientBuilder implements XApiClientBuilderInterface
 {
     private $baseUrl;
 

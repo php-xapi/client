@@ -20,7 +20,7 @@ use Xabbuh\XApi\Model\ActivityProfileDocument;
  *
  * @author Christian Flothmann <christian.flothmann@xabbuh.de>
  */
-class ActivityProfileApiClient extends DocumentApiClient implements ActivityProfileApiClientInterface
+final class ActivityProfileApiClient extends DocumentApiClient implements ActivityProfileApiClientInterface
 {
     /**
      * {@inheritDoc}

@@ -22,7 +22,7 @@ use Xabbuh\XApi\Model\State;
  *
  * @author Christian Flothmann <christian.flothmann@xabbuh.de>
  */
-class StateApiClient extends DocumentApiClient implements StateApiClientInterface
+final class StateApiClient extends DocumentApiClient implements StateApiClientInterface
 {
     /**
      * @var ActorSerializerInterface

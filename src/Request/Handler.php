@@ -24,7 +24,7 @@ use Xabbuh\XApi\Common\Exception\XApiException;
  *
  * @author Christian Flothmann <christian.flothmann@xabbuh.de>
  */
-class Handler implements HandlerInterface
+final class Handler implements HandlerInterface
 {
     private $httpClient;
 
