@@ -89,6 +89,10 @@ final class XApiClientBuilder implements XApiClientBuilderInterface
      */
     public function build()
     {
+        if (null === $this->baseUrl) {
+            throw new \LogicException('Base URI value was not configured.');
+        }
+
         $httpClient = new Client($this->baseUrl);
 
         if (is_array($this->oAuthCredentials)) {

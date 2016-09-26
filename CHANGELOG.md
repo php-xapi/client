@@ -4,6 +4,10 @@ CHANGELOG
 0.3.0
 -----
 
+* Fixed creating `XApiClient` instances in an invalid state. The `XApiClientBuilder`
+  now throws a `\LogicException` when the `build()` method is called before
+  a base URI was configured.
+
 * Removed the `ApiClient` class. The `$requestHandler` and `$version` attributes
   have been moved to the former child classes of the `ApiClient` class and
   their visibility has been changed to `private`.

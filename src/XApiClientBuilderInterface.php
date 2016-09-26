@@ -62,6 +62,8 @@ interface XApiClientBuilderInterface
      * Builds the xAPI client.
      *
      * @return XApiClientInterface The xAPI client
+     *
+     * @throws \LogicException if no base URI was configured
      */
     public function build();
 }

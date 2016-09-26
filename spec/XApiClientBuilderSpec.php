@@ -13,6 +13,12 @@ class XApiClientBuilderSpec extends ObjectBehavior
 
     function it_creates_an_xapi_client()
     {
+        $this->setBaseUrl('http://example.com/xapi/');
         $this->build()->shouldHaveType('Xabbuh\XApi\Client\XApiClientInterface');
+    }
+
+    function it_throws_an_exception_if_the_base_uri_is_not_configured()
+    {
+        $this->shouldThrow('\LogicException')->during('build');
     }
 }
