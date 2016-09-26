@@ -11,7 +11,6 @@ env:
     - deps=""
 
 php:
-  - 5.4
   - 5.5
   - 5.6
   - hhvm
@@ -19,7 +18,7 @@ php:
 matrix:
   fast_finish: true
   include:
-    - php: 5.3
+    - php: 5.4
       env: deps="low"
     - php: 7.0
       env: xdebug="yes"
@@ -29,7 +28,7 @@ before_install:
   - composer self-update
 
 install:
-  - if [ "$deps" = "low" ]; then composer update --prefer-lowest --prefer-stable; fi
+  - if [ "$deps" = "low" ]; then composer update --prefer-lowest --prefer-stable --ignore-platform-reqs; fi
   - if [ "$deps" = "" ]; then composer install; fi
 
 script:

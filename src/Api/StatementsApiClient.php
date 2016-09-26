@@ -165,7 +165,7 @@ final class StatementsApiClient implements StatementsApiClientInterface
             $serializedStatements
         );
         $response = $this->requestHandler->executeRequest($request, array($validStatusCode));
-        $statementIds = json_decode($response->getBody(true));
+        $statementIds = json_decode((string) $response->getBody());
 
         if (is_array($statements)) {
             /** @var Statement[] $statements */
@@ -201,9 +201,9 @@ final class StatementsApiClient implements StatementsApiClientInterface
         $response = $this->requestHandler->executeRequest($request, array(200));
 
         if (isset($urlParameters['statementId']) || isset($urlParameters['voidedStatementId'])) {
-            return $this->statementSerializer->deserializeStatement($response->getBody(true));
+            return $this->statementSerializer->deserializeStatement((string) $response->getBody());
         } else {
-            return $this->statementResultSerializer->deserializeStatementResult($response->getBody(true));
+            return $this->statementResultSerializer->deserializeStatementResult((string) $response->getBody());
         }
     }
 }

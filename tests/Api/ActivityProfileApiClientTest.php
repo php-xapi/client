@@ -87,8 +87,7 @@ class ActivityProfileApiClientTest extends ApiClientTest
                 'activityId' => 'activity-id',
                 'profileId' => 'profile-id',
             ),
-            '',
-            $this->createResponseMock(204, '')
+            ''
         );
         $this->validateSerializer(array());
 

@@ -11,41 +11,39 @@
 
 namespace Xabbuh\XApi\Client\Request;
 
-use Guzzle\Http\ClientInterface;
-use Guzzle\Http\Exception\ClientErrorResponseException;
-use Guzzle\Http\Message\RequestInterface;
+use Http\Client\Exception;
+use Http\Client\HttpClient;
+use Http\Message\RequestFactory;
+use Psr\Http\Message\RequestInterface;
 use Xabbuh\XApi\Common\Exception\AccessDeniedException;
 use Xabbuh\XApi\Common\Exception\ConflictException;
 use Xabbuh\XApi\Common\Exception\NotFoundException;
 use Xabbuh\XApi\Common\Exception\XApiException;
 
 /**
- * Prepare and execute xAPI HTTP requests.
+ * Prepares and executes xAPI HTTP requests.
  *
  * @author Christian Flothmann <christian.flothmann@xabbuh.de>
  */
 final class Handler implements HandlerInterface
 {
     private $httpClient;
-
+    private $requestFactory;
+    private $baseUri;
     private $version;
 
-    private $username;
-
-    private $password;
-
     /**
-     * @param ClientInterface $httpClient The HTTP client
-     * @param string          $version    The xAPI version
-     * @param string          $username   The optional HTTP auth username
-     * @param string          $password   The optional HTTP auth password
+     * @param HttpClient     $httpClient     The HTTP client sending requests to the remote LRS
+     * @param RequestFactory $requestFactory The factory used to create PSR-7 HTTP requests
+     * @param string         $baseUri        The APIs base URI (all end points will be created relatively to this URI)
+     * @param string         $version        The xAPI version
      */
-    public function __construct(ClientInterface $httpClient, $version, $username = null, $password = null)
+    public function __construct(HttpClient $httpClient, RequestFactory $requestFactory, $baseUri, $version)
     {
         $this->httpClient = $httpClient;
+        $this->requestFactory = $requestFactory;
+        $this->baseUri = $baseUri;
         $this->version = $version;
-        $this->username = $username;
-        $this->password = $password;
     }
 
     /**
@@ -53,35 +51,20 @@ final class Handler implements HandlerInterface
      */
     public function createRequest($method, $uri, array $urlParameters = array(), $body = null)
     {
+        if (!in_array(strtoupper($method), array('GET', 'POST', 'PUT', 'DELETE'))) {
+            throw new \InvalidArgumentException(sprintf('"%s" is no valid HTTP method (expected one of [GET, POST, PUT, DELETE]) in an xAPI context.', $method));
+        }
+
+        $uri = rtrim($this->baseUri, '/').'/'.ltrim($uri, '/');
+
         if (count($urlParameters) > 0) {
             $uri .= '?'.http_build_query($urlParameters);
         }
 
-        switch (strtolower($method)) {
-            case 'get':
-                $request = $this->httpClient->get($uri);
-                break;
-            case 'post':
-                $request = $this->httpClient->post($uri, null, $body);
-                break;
-            case 'put':
-                $request = $this->httpClient->put($uri, null, $body);
-                break;
-            case 'delete':
-                $request = $this->httpClient->delete($uri);
-                break;
-            default:
-                throw new \InvalidArgumentException(
-                    $method.' is no valid HTTP method'
-                );
-        }
-
-        $request->addHeader('X-Experience-API-Version', $this->version);
-        $request->addHeader('Content-Type', 'application/json');
-
-        if (null !== $this->username && null !== $this->password) {
-            $request->setAuth($this->username, $this->password);
-        }
+        $request = $this->requestFactory->createRequest(strtoupper($method), $uri, array(
+            'X-Experience-API-Version' => $this->version,
+            'Content-Type' => 'application/json',
+        ));
 
         return $request;
     }
@@ -92,25 +75,25 @@ final class Handler implements HandlerInterface
     public function executeRequest(RequestInterface $request, array $validStatusCodes)
     {
         try {
-            $response = $request->send();
-        } catch (ClientErrorResponseException $e) {
-            $response = $e->getResponse();
+            $response = $this->httpClient->sendRequest($request);
+        } catch (Exception $e) {
+            throw new XApiException($e->getMessage(), $e->getCode(), $e);
         }
 
         // catch some common errors
         if (in_array($response->getStatusCode(), array(401, 403))) {
             throw new AccessDeniedException(
-                $response->getBody(true),
+                (string) $response->getBody(),
                 $response->getStatusCode()
             );
         } elseif (404 === $response->getStatusCode()) {
-            throw new NotFoundException($response->getBody(true));
+            throw new NotFoundException((string) $response->getBody());
         } elseif (409 === $response->getStatusCode()) {
-            throw new ConflictException($response->getBody(true));
+            throw new ConflictException((string) $response->getBody());
         }
 
         if (!in_array($response->getStatusCode(), $validStatusCodes)) {
-            throw new XApiException($response->getBody(true), $response->getStatusCode());
+            throw new XApiException((string) $response->getBody(), $response->getStatusCode());
         }
 
         return $response;

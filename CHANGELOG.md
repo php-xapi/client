@@ -4,6 +4,42 @@ CHANGELOG
 0.5.0
 -----
 
+* **CAUTION**: This release drops support for PHP 5.3 due to the introduced
+  dependency on `php-http/httplug` (see below).
+
+* The client now depends on the [HTTPlug library](http://httplug.io/) to
+  perform HTTP requests. This means that the package now depends the virtual
+  `php-http/client-implementation`. To satisfy this dependency you have to
+  pick [an implementation](https://packagist.org/providers/php-http/client-implementation)
+  and install it together with `php-xapi/client`.
+
+  For example, if you prefer to use [Guzzle 6](http://docs.guzzlephp.org/en/latest/)
+  you would do the following:
+
+  ```bash
+  $ composer require --no-update php-http/guzzle6-adapter
+  $ composer require php-xapi/client
+  ```
+
+* The `setHttpClient()` and `setRequestFactory()` method have been added
+  to the `XApiClientBuilderInterface` and must be used to configure the
+  `HttpClient` and `RequestFactory` instances you intend to use.
+
+  To use [Guzzle 6](http://docs.guzzlephp.org/en/latest/), for example,
+  this will look like this:
+
+  ```php
+  use Http\Adapter\Guzzle6\Client;
+  use Http\Message\MessageFactory\GuzzleMessageFactory;
+  use Xabbuh\XApi\Client\XApiClientBuilder;
+
+  $builder = new XApiClientBuilder();
+  $client = $builder->setHttpClient(new Client())
+      ->setRequestFactory(new GuzzleMessageFactory())
+      ->setBaseUrl('http://example.com/xapi/')
+      ->build();
+  ```
+
 * Bumped the required versions of all `php-xapi` packages to the `1.x` release
   series.
 

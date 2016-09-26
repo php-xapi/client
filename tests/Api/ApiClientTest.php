@@ -75,31 +75,9 @@ abstract class ApiClientTest extends \PHPUnit_Framework_TestCase
             });
     }
 
-    protected function createResponseMock($statusCode, $body)
+    protected function validateRequest($method, $uri, array $urlParameters, $body = null)
     {
-        $response = $this->getMockBuilder('\Guzzle\Http\Message\Response')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $response->expects($this->any())
-            ->method('getStatusCode')
-            ->willReturn($statusCode);
-        $response->expects($this->any())
-            ->method('getBody')
-            ->willReturn($body);
-
-        return $response;
-    }
-
-    protected function validateRequest($method, $uri, array $urlParameters, $body = null, $response = null)
-    {
-        $request = $this->getMockBuilder('\Guzzle\Http\Message\RequestInterface')->getMock();
-
-        if (null !== $response) {
-            $request->expects($this->any())
-                ->method('send')
-                ->willReturn($response);
-        }
-
+        $request = $this->getMockBuilder('\Psr\Http\Message\RequestInterface')->getMock();
         $this
             ->requestHandler
             ->expects($this->once())
@@ -113,8 +91,10 @@ abstract class ApiClientTest extends \PHPUnit_Framework_TestCase
     protected function validateRetrieveApiCall($method, $uri, array $urlParameters, $statusCode, $type, $transformedResult, array $serializerMap = array())
     {
         $rawResponse = 'the-server-response';
-        $response = $this->createResponseMock($statusCode, $rawResponse);
-        $request = $this->validateRequest($method, $uri, $urlParameters, null, $response);
+        $response = $this->getMockBuilder('\Psr\Http\Message\ResponseInterface')->getMock();
+        $response->expects($this->any())->method('getStatusCode')->willReturn($statusCode);
+        $response->expects($this->any())->method('getBody')->willReturn($rawResponse);
+        $request = $this->validateRequest($method, $uri, $urlParameters);
 
         if (404 === $statusCode) {
             $this
@@ -146,8 +126,10 @@ abstract class ApiClientTest extends \PHPUnit_Framework_TestCase
     protected function validateStoreApiCall($method, $uri, array $urlParameters, $statusCode, $rawResponse, $object, array $serializerMap = array())
     {
         $rawRequest = 'the-request-body';
-        $response = $this->createResponseMock($statusCode, $rawResponse);
-        $request = $this->validateRequest($method, $uri, $urlParameters, $rawRequest, $response);
+        $response = $this->getMockBuilder('\Psr\Http\Message\ResponseInterface')->getMock();
+        $response->expects($this->any())->method('getStatusCode')->willReturn($statusCode);
+        $response->expects($this->any())->method('getBody')->willReturn($rawResponse);
+        $request = $this->validateRequest($method, $uri, $urlParameters, $rawRequest);
         $this
             ->requestHandler
             ->expects($this->once())

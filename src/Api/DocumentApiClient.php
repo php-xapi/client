@@ -82,7 +82,7 @@ abstract class DocumentApiClient
     {
         $request = $this->requestHandler->createRequest('get', $uri, $urlParameters);
         $response = $this->requestHandler->executeRequest($request, array(200));
-        $document = $this->deserializeDocument($response->getBody(true));
+        $document = $this->deserializeDocument((string) $response->getBody());
 
         return $document;
     }

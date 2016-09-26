@@ -96,8 +96,7 @@ class StateApiClientTest extends ApiClientTest
                 'agent' => 'agent-as-json',
                 'stateId' => 'state-id',
             ),
-            '',
-            $this->createResponseMock(204, '')
+            ''
         );
         $this->validateSerializer(array(array('data' => $state->getActor(), 'result' => 'agent-as-json')));
 

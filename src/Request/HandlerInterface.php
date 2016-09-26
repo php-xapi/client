@@ -11,7 +11,8 @@
 
 namespace Xabbuh\XApi\Client\Request;
 
-use Guzzle\Http\Message\RequestInterface;
+use Psr\Http\Message\RequestInterface;
+use Psr\Http\Message\ResponseInterface;
 use Xabbuh\XApi\Common\Exception\XApiException;
 
 /**
@@ -41,7 +42,7 @@ interface HandlerInterface
      *                                           the calling method is able to
      *                                           handle
      *
-     * @return \Guzzle\Http\Message\Response The remote server's response
+     * @return ResponseInterface The remote server's response
      *
      * @throws XApiException when the request fails
      */

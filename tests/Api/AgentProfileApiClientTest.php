@@ -94,8 +94,7 @@ class AgentProfileApiClientTest extends ApiClientTest
                 'agent' => 'agent-as-json',
                 'profileId' => 'profile-id',
             ),
-            '',
-            $this->createResponseMock(204, '')
+            ''
         );
         $this->validateSerializer(array(array('data' => $profile->getAgent(), 'result' => 'agent-as-json')));
 
