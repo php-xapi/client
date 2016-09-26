@@ -4,6 +4,14 @@ CHANGELOG
 0.3.0
 -----
 
+* Removed the `ApiClient` class. The `$requestHandler` and `$version` attributes
+  have been moved to the former child classes of the `ApiClient` class and
+  their visibility has been changed to `private`.
+
+* The visibility of the `$documentDataSerializer` property of the `ActivityProfileApiClient`,
+  `AgentProfileApiClient`, `DocumentApiClient`, and `StateApiClient` classes
+  has been changed to `private`.
+
 * Removed the `getRequestHandler()` method from the API classes:
 
   * `ActivityProfileApiClient::getRequestHandler()`

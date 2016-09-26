@@ -21,12 +21,11 @@ use Xabbuh\XApi\Serializer\DocumentDataSerializerInterface;
  *
  * @author Christian Flothmann <christian.flothmann@xabbuh.de>
  */
-abstract class DocumentApiClient extends ApiClient
+abstract class DocumentApiClient
 {
-    /**
-     * @var DocumentDataSerializerInterface
-     */
-    protected $documentDataSerializer;
+    private $requestHandler;
+    private $version;
+    private $documentDataSerializer;
 
     /**
      * @param HandlerInterface                $requestHandler         The HTTP request handler
@@ -35,8 +34,8 @@ abstract class DocumentApiClient extends ApiClient
      */
     public function __construct(HandlerInterface $requestHandler, $version, DocumentDataSerializerInterface $documentDataSerializer)
     {
-        parent::__construct($requestHandler, $version);
-
+        $this->requestHandler = $requestHandler;
+        $this->version = $version;
         $this->documentDataSerializer = $documentDataSerializer;
     }
 

@@ -27,21 +27,12 @@ use Xabbuh\XApi\Model\StatementsFilter;
  *
  * @author Christian Flothmann <christian.flothmann@xabbuh.de>
  */
-final class StatementsApiClient extends ApiClient implements StatementsApiClientInterface
+final class StatementsApiClient implements StatementsApiClientInterface
 {
-    /**
-     * @var StatementSerializerInterface
-     */
+    private $requestHandler;
+    private $version;
     private $statementSerializer;
-
-    /**
-     * @var StatementResultSerializerInterface
-     */
     private $statementResultSerializer;
-
-    /**
-     * @var ActorSerializerInterface
-     */
     private $actorSerializer;
 
     /**
@@ -58,7 +49,8 @@ final class StatementsApiClient extends ApiClient implements StatementsApiClient
         StatementResultSerializerInterface $statementResultSerializer,
         ActorSerializerInterface $actorSerializer
     ) {
-        parent::__construct($requestHandler, $version);
+        $this->requestHandler = $requestHandler;
+        $this->version = $version;
         $this->statementSerializer = $statementSerializer;
         $this->statementResultSerializer = $statementResultSerializer;
         $this->actorSerializer = $actorSerializer;

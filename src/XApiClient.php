@@ -24,7 +24,7 @@ use Xabbuh\XApi\Serializer\SerializerRegistryInterface;
  *
  * @author Christian Flothmann <christian.flothmann@xabbuh.de>
  */
-final class XApiClient extends ApiClient implements XApiClientInterface
+final class XApiClient implements XApiClientInterface
 {
     /**
      * @var SerializerRegistryInterface
