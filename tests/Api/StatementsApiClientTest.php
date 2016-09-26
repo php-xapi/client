@@ -15,6 +15,8 @@ use Xabbuh\XApi\Client\Api\StatementsApiClient;
 use Xabbuh\XApi\DataFixtures\StatementFixtures;
 use Xabbuh\XApi\Model\Agent;
 use Xabbuh\XApi\Model\InverseFunctionalIdentifier;
+use Xabbuh\XApi\Model\IRI;
+use Xabbuh\XApi\Model\IRL;
 use Xabbuh\XApi\Model\Statement;
 use Xabbuh\XApi\Model\StatementId;
 use Xabbuh\XApi\Model\StatementReference;
@@ -161,7 +163,7 @@ class StatementsApiClientTest extends ApiClientTest
     {
         $voidedStatementId = '12345678-1234-5678-1234-567812345679';
         $voidingStatementId = '12345678-1234-5678-1234-567812345678';
-        $agent = new Agent(InverseFunctionalIdentifier::withMbox('mailto:john.doe@example.com'));
+        $agent = new Agent(InverseFunctionalIdentifier::withMbox(IRI::fromString('mailto:john.doe@example.com')));
         $statementReference = new StatementReference(StatementId::fromString($voidedStatementId));
         $voidingStatement = new Statement(null, $agent, Verb::createVoidVerb(), $statementReference);
         $voidedStatement = $this->createStatement($voidedStatementId);
@@ -288,7 +290,7 @@ class StatementsApiClientTest extends ApiClientTest
     {
         // {"mbox":"mailto:alice@example.com","objectType":"Agent"}
         $filter = new StatementsFilter();
-        $agent = new Agent(InverseFunctionalIdentifier::withMbox('mailto:alice@example.com'));
+        $agent = new Agent(InverseFunctionalIdentifier::withMbox(IRI::fromString('mailto:alice@example.com')));
         $filter->byActor($agent);
         $statementResult = $this->createStatementResult();
         $agentJson = '{"mbox":"mailto:alice@example.com","objectType":"Agent"}';
@@ -312,7 +314,7 @@ class StatementsApiClientTest extends ApiClientTest
     public function testGetStatementsWithVerbInStatementsFilter()
     {
         $filter = new StatementsFilter();
-        $verb = new Verb('http://adlnet.gov/expapi/verbs/attended');
+        $verb = new Verb(IRI::fromString('http://adlnet.gov/expapi/verbs/attended'));
         $filter->byVerb($verb);
         $statementResult = $this->createStatementResult();
         $this->validateRetrieveApiCall(
@@ -330,7 +332,7 @@ class StatementsApiClientTest extends ApiClientTest
     public function testGetNextStatements()
     {
         $moreUrl = '/xapi/statements/more/b381d8eca64a61a42c7b9b4ecc2fabb6';
-        $previousStatementResult = new StatementResult(array(), $moreUrl);
+        $previousStatementResult = new StatementResult(array(), IRL::fromString($moreUrl));
         $this->validateRetrieveApiCall(
             'get',
             $moreUrl,

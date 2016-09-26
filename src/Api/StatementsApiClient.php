@@ -12,6 +12,7 @@
 namespace Xabbuh\XApi\Client\Api;
 
 use Xabbuh\XApi\Client\Request\HandlerInterface;
+use Xabbuh\XApi\Model\IRL;
 use Xabbuh\XApi\Model\StatementId;
 use Xabbuh\XApi\Serializer\ActorSerializerInterface;
 use Xabbuh\XApi\Serializer\StatementResultSerializerInterface;
@@ -147,7 +148,7 @@ class StatementsApiClient extends ApiClient implements StatementsApiClientInterf
      */
     public function getNextStatements(StatementResult $statementResult)
     {
-        return $this->doGetStatements($statementResult->getMoreUrlPath());
+        return $this->doGetStatements($statementResult->getMoreUrlPath()->getValue());
     }
 
     /**

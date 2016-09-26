@@ -15,6 +15,7 @@ use Xabbuh\XApi\Client\Api\ActivityProfileApiClient;
 use Xabbuh\XApi\DataFixtures\DocumentFixtures;
 use Xabbuh\XApi\Model\Activity;
 use Xabbuh\XApi\Model\ActivityProfile;
+use Xabbuh\XApi\Model\IRI;
 use Xabbuh\XApi\Serializer\DocumentDataSerializer;
 
 /**
@@ -112,7 +113,7 @@ class ActivityProfileApiClientTest extends ApiClientTest
 
     private function createActivityProfile()
     {
-        $activity = new Activity('activity-id');
+        $activity = new Activity(IRI::fromString('activity-id'));
         $activityProfile = new ActivityProfile('profile-id', $activity);
 
         return $activityProfile;

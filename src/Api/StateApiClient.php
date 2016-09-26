@@ -68,7 +68,7 @@ class StateApiClient extends DocumentApiClient implements StateApiClientInterfac
     public function deleteDocument(State $state)
     {
         $this->doDeleteDocument('activities/state', array(
-            'activityId' => $state->getActivity()->getId(),
+            'activityId' => $state->getActivity()->getId()->getValue(),
             'agent' => $this->actorSerializer->serializeActor($state->getActor()),
             'stateId' => $state->getStateId(),
         ));
@@ -81,7 +81,7 @@ class StateApiClient extends DocumentApiClient implements StateApiClientInterfac
     {
         /** @var \Xabbuh\XApi\Model\DocumentData $documentData */
         $documentData = $this->doGetDocument('activities/state', array(
-            'activityId' => $state->getActivity()->getId(),
+            'activityId' => $state->getActivity()->getId()->getValue(),
             'agent' => $this->actorSerializer->serializeActor($state->getActor()),
             'stateId' => $state->getStateId(),
         ));
@@ -102,7 +102,7 @@ class StateApiClient extends DocumentApiClient implements StateApiClientInterfac
             $method,
             'activities/state',
             array(
-                'activityId' => $state->getActivity()->getId(),
+                'activityId' => $state->getActivity()->getId()->getValue(),
                 'agent' => $this->actorSerializer->serializeActor($state->getActor()),
                 'stateId' => $state->getStateId(),
             ),

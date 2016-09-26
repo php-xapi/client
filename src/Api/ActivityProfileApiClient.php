@@ -44,7 +44,7 @@ class ActivityProfileApiClient extends DocumentApiClient implements ActivityProf
     public function deleteDocument(ActivityProfile $profile)
     {
         $this->doDeleteDocument('activities/profile', array(
-            'activityId' => $profile->getActivity()->getId(),
+            'activityId' => $profile->getActivity()->getId()->getValue(),
             'profileId' => $profile->getProfileId(),
         ));
     }
@@ -56,7 +56,7 @@ class ActivityProfileApiClient extends DocumentApiClient implements ActivityProf
     {
         /** @var \Xabbuh\XApi\Model\DocumentData $documentData */
         $documentData = $this->doGetDocument('activities/profile', array(
-            'activityId' => $profile->getActivity()->getId(),
+            'activityId' => $profile->getActivity()->getId()->getValue(),
             'profileId' => $profile->getProfileId(),
         ));
 
@@ -76,7 +76,7 @@ class ActivityProfileApiClient extends DocumentApiClient implements ActivityProf
             $method,
             'activities/profile',
             array(
-                'activityId' => $profile->getActivity()->getId(),
+                'activityId' => $profile->getActivity()->getId()->getValue(),
                 'profileId' => $profile->getProfileId(),
             ),
             $document
