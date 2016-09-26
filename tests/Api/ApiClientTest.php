@@ -42,14 +42,9 @@ abstract class ApiClientTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->requestHandler = $this->createRequestHandlerMock();
-        $this->serializer = $this->createSerializerMock();
+        $this->requestHandler = $this->getMockBuilder('\Xabbuh\XApi\Client\Request\HandlerInterface')->getMock();
+        $this->serializer = $this->getMockBuilder('\Symfony\Component\Serializer\SerializerInterface')->getMock();
         $this->serializerRegistry = $this->createSerializerRegistry();
-    }
-
-    protected function createRequestHandlerMock()
-    {
-        return $this->getMock('\Xabbuh\XApi\Client\Request\HandlerInterface');
     }
 
     protected function createSerializerRegistry()
@@ -63,27 +58,13 @@ abstract class ApiClientTest extends \PHPUnit_Framework_TestCase
         return $registry;
     }
 
-    protected function createSerializerMock()
-    {
-        return $this->getMock('\Symfony\Component\Serializer\SerializerInterface');
-    }
-
-    protected function validateDeserializer($data, $type, $returnValue)
-    {
-        $this->serializer
-            ->expects($this->once())
-            ->method('deserialize')
-            ->with($data, 'Xabbuh\XApi\Model\\'.$type, 'json')
-            ->will($this->returnValue($returnValue));
-    }
-
     protected function validateSerializer(array $serializerMap)
     {
         $this
             ->serializer
             ->expects($this->any())
             ->method('serialize')
-            ->will($this->returnCallback(function ($data) use ($serializerMap) {
+            ->willReturnCallback(function ($data) use ($serializerMap) {
                 foreach ($serializerMap as $entry) {
                     if ($data == $entry['data']) {
                         return $entry['result'];
@@ -91,48 +72,40 @@ abstract class ApiClientTest extends \PHPUnit_Framework_TestCase
                 }
 
                 return '';
-            }));
-    }
-
-    protected function createRequestMock($response = null)
-    {
-        $request = $this->getMock('\Guzzle\Http\Message\RequestInterface');
-
-        if (null !== $response) {
-            $request->expects($this->any())
-                ->method('send')
-                ->will($this->returnValue($response));
-        }
-
-        return $request;
+            });
     }
 
     protected function createResponseMock($statusCode, $body)
     {
-        $response = $this->getMock(
-            '\Guzzle\Http\Message\Response',
-            array(),
-            array($statusCode)
-        );
+        $response = $this->getMockBuilder('\Guzzle\Http\Message\Response')
+            ->disableOriginalConstructor()
+            ->getMock();
         $response->expects($this->any())
             ->method('getStatusCode')
-            ->will($this->returnValue($statusCode));
+            ->willReturn($statusCode);
         $response->expects($this->any())
             ->method('getBody')
-            ->will($this->returnValue($body));
+            ->willReturn($body);
 
         return $response;
     }
 
     protected function validateRequest($method, $uri, array $urlParameters, $body = null, $response = null)
     {
-        $request = $this->createRequestMock($response);
+        $request = $this->getMockBuilder('\Guzzle\Http\Message\RequestInterface')->getMock();
+
+        if (null !== $response) {
+            $request->expects($this->any())
+                ->method('send')
+                ->willReturn($response);
+        }
+
         $this
             ->requestHandler
             ->expects($this->once())
             ->method('createRequest')
             ->with($method, $uri, $urlParameters, $body)
-            ->will($this->returnValue($request));
+            ->willReturn($request);
 
         return $request;
     }
@@ -149,20 +122,24 @@ abstract class ApiClientTest extends \PHPUnit_Framework_TestCase
                 ->expects($this->once())
                 ->method('executeRequest')
                 ->with($request)
-                ->will($this->throwException(new NotFoundException('Not found')));
+                ->willThrowException(new NotFoundException('Not found'));
         } else {
             $this
                 ->requestHandler
                 ->expects($this->once())
                 ->method('executeRequest')
                 ->with($request)
-                ->will($this->returnValue($response));
+                ->willReturn($response);
         }
 
         $this->validateSerializer($serializerMap);
 
         if ($statusCode < 400) {
-            $this->validateDeserializer($rawResponse, $type, $transformedResult);
+            $this->serializer
+                ->expects($this->once())
+                ->method('deserialize')
+                ->with($rawResponse, 'Xabbuh\XApi\Model\\'.$type, 'json')
+                ->willReturn($transformedResult);
         }
     }
 
@@ -176,15 +153,8 @@ abstract class ApiClientTest extends \PHPUnit_Framework_TestCase
             ->expects($this->once())
             ->method('executeRequest')
             ->with($request, array($statusCode))
-            ->will($this->returnValue($response));
+            ->willReturn($response);
         $serializerMap[] = array('data' => $object, 'result' => $rawRequest);
-        $this->validateSerializer($serializerMap);
-    }
-
-    protected function validateDeleteDocumentCall($uri, array $urlParameters, array $serializerMap = array())
-    {
-        $response = $this->createResponseMock(204, '');
-        $this->validateRequest('delete', $uri, $urlParameters, '', $response);
         $this->validateSerializer($serializerMap);
     }
 }

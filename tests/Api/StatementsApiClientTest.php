@@ -298,7 +298,7 @@ class StatementsApiClientTest extends ApiClientTest
             ->expects($this->once())
             ->method('serialize')
             ->with($agent, 'json')
-            ->will($this->returnValue($agentJson));
+            ->willReturn($agentJson);
         $this->validateRetrieveApiCall(
             'get',
             'statements',

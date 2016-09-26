@@ -87,14 +87,17 @@ class AgentProfileApiClientTest extends ApiClientTest
     {
         $profile = $this->createAgentProfile();
 
-        $this->validateDeleteDocumentCall(
+        $this->validateRequest(
+            'delete',
             'agents/profile',
             array(
                 'agent' => 'agent-as-json',
                 'profileId' => 'profile-id',
             ),
-            array(array('data' => $profile->getAgent(), 'result' => 'agent-as-json'))
+            '',
+            $this->createResponseMock(204, '')
         );
+        $this->validateSerializer(array(array('data' => $profile->getAgent(), 'result' => 'agent-as-json')));
 
         $this->client->deleteDocument(
             $profile

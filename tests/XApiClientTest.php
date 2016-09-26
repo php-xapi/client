@@ -103,25 +103,25 @@ class XApiClientTest extends \PHPUnit_Framework_TestCase
         $serializerRegistry
             ->expects($this->any())
             ->method('getStatementSerializer')
-            ->will($this->returnValue($statementSerializer));
+            ->willReturn($statementSerializer);
 
         $statementResultSerializer = $this->getMock('\Xabbuh\XApi\Serializer\StatementResultSerializerInterface');
         $serializerRegistry
             ->expects($this->any())
             ->method('getStatementResultSerializer')
-            ->will($this->returnValue($statementResultSerializer));
+            ->willReturn($statementResultSerializer);
 
         $actorSerializer = $this->getMock('\Xabbuh\XApi\Serializer\ActorSerializerInterface');
         $serializerRegistry
             ->expects($this->any())
             ->method('getActorSerializer')
-            ->will($this->returnValue($actorSerializer));
+            ->willReturn($actorSerializer);
 
         $documentDataSerializer = $this->getMock('\Xabbuh\XApi\Serializer\DocumentDataSerializerInterface');
         $serializerRegistry
             ->expects($this->any())
             ->method('getDocumentDataSerializer')
-            ->will($this->returnValue($documentDataSerializer));
+            ->willReturn($documentDataSerializer);
 
         return $serializerRegistry;
     }

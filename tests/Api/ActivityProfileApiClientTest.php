@@ -80,10 +80,17 @@ class ActivityProfileApiClientTest extends ApiClientTest
     {
         $activityProfile = $this->createActivityProfile();
 
-        $this->validateDeleteDocumentCall('activities/profile', array(
-            'activityId' => 'activity-id',
-            'profileId' => 'profile-id',
-        ));
+        $this->validateRequest(
+            'delete',
+            'activities/profile',
+            array(
+                'activityId' => 'activity-id',
+                'profileId' => 'profile-id',
+            ),
+            '',
+            $this->createResponseMock(204, '')
+        );
+        $this->validateSerializer(array());
 
         $this->client->deleteDocument($activityProfile);
     }

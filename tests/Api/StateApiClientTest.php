@@ -88,15 +88,18 @@ class StateApiClientTest extends ApiClientTest
     {
         $state = $this->createState();
 
-        $this->validateDeleteDocumentCall(
+        $this->validateRequest(
+            'delete',
             'activities/state',
             array(
                 'activityId' => 'activity-id',
                 'agent' => 'agent-as-json',
                 'stateId' => 'state-id',
             ),
-            array(array('data' => $state->getActor(), 'result' => 'agent-as-json'))
+            '',
+            $this->createResponseMock(204, '')
         );
+        $this->validateSerializer(array(array('data' => $state->getActor(), 'result' => 'agent-as-json')));
 
         $this->client->deleteDocument($state);
     }
