@@ -24,7 +24,18 @@ class HandlerSpec extends ObjectBehavior
         $client->get('/xapi/statements')->willReturn($request);
         $request->addHeader('X-Experience-API-Version', '1.0.1')->shouldBeCalled();
         $request->addHeader('Content-Type', 'application/json')->shouldBeCalled();
-        $request->setAuth(null, null)->shouldBeCalled();
+
+        $this->createRequest('get', '/xapi/statements');
+    }
+
+    function it_sets_basic_auth_data_when_credentials_are_configured_when_creating_a_request(ClientInterface $client, RequestInterface $request)
+    {
+        $this->beConstructedWith($client, '1.0.1', 'username', 'password');
+
+        $client->get('/xapi/statements')->willReturn($request);
+        $request->addHeader('X-Experience-API-Version', '1.0.1')->shouldBeCalled();
+        $request->addHeader('Content-Type', 'application/json')->shouldBeCalled();
+        $request->setAuth('username', 'password')->shouldBeCalled();
 
         $this->createRequest('get', '/xapi/statements');
     }

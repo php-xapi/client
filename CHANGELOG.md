@@ -4,6 +4,8 @@ CHANGELOG
 0.3.0
 -----
 
+* Do not send authentication headers when no credentials have been configured.
+
 * Fixed treating HTTP methods case insensitive. Rejecting uppercased HTTP
   method names contradicts the HTTP specification. Lowercased method names
   will still be supported to keep backwards compatibility though.

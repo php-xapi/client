@@ -78,7 +78,10 @@ final class Handler implements HandlerInterface
 
         $request->addHeader('X-Experience-API-Version', $this->version);
         $request->addHeader('Content-Type', 'application/json');
-        $request->setAuth($this->username, $this->password);
+
+        if (null !== $this->username && null !== $this->password) {
+            $request->setAuth($this->username, $this->password);
+        }
 
         return $request;
     }
