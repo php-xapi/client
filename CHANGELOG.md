@@ -4,6 +4,10 @@ CHANGELOG
 0.3.0
 -----
 
+* Fixed treating HTTP methods case insensitive. Rejecting uppercased HTTP
+  method names contradicts the HTTP specification. Lowercased method names
+  will still be supported to keep backwards compatibility though.
+
 * Fixed creating `XApiClient` instances in an invalid state. The `XApiClientBuilder`
   now throws a `\LogicException` when the `build()` method is called before
   a base URI was configured.

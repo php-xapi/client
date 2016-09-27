@@ -34,6 +34,7 @@ class HandlerSpec extends ObjectBehavior
         $client->get('/xapi/statements')->willReturn($request);
 
         $this->createRequest('get', '/xapi/statements')->shouldReturn($request);
+        $this->createRequest('GET', '/xapi/statements')->shouldReturn($request);
     }
 
     function it_returns_post_request_created_by_the_http_client(ClientInterface $client, RequestInterface $request)
@@ -41,6 +42,7 @@ class HandlerSpec extends ObjectBehavior
         $client->post('/xapi/statements', null, 'body')->willReturn($request);
 
         $this->createRequest('post', '/xapi/statements', array(), 'body')->shouldReturn($request);
+        $this->createRequest('POST', '/xapi/statements', array(), 'body')->shouldReturn($request);
     }
 
     function it_returns_put_request_created_by_the_http_client(ClientInterface $client, RequestInterface $request)
@@ -48,6 +50,7 @@ class HandlerSpec extends ObjectBehavior
         $client->put('/xapi/statements', null, 'body')->willReturn($request);
 
         $this->createRequest('put', '/xapi/statements', array(), 'body')->shouldReturn($request);
+        $this->createRequest('PUT', '/xapi/statements', array(), 'body')->shouldReturn($request);
     }
 
     function it_returns_delete_request_created_by_the_http_client(ClientInterface $client, RequestInterface $request)
@@ -55,6 +58,7 @@ class HandlerSpec extends ObjectBehavior
         $client->delete('/xapi/statements')->willReturn($request);
 
         $this->createRequest('delete', '/xapi/statements')->shouldReturn($request);
+        $this->createRequest('DELETE', '/xapi/statements')->shouldReturn($request);
     }
 
     function it_throws_an_access_denied_exception_when_a_401_status_code_is_returned(RequestInterface $request, Response $response)

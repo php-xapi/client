@@ -57,7 +57,7 @@ final class Handler implements HandlerInterface
             $uri .= '?'.http_build_query($urlParameters);
         }
 
-        switch ($method) {
+        switch (strtolower($method)) {
             case 'get':
                 $request = $this->httpClient->get($uri);
                 break;
