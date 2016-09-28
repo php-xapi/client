@@ -1,6 +1,12 @@
 CHANGELOG
 =========
 
+0.5.0
+-----
+
+* Bumped the required versions of all `php-xapi` packages to the `1.x` release
+  series.
+
 0.4.0
 -----
 
