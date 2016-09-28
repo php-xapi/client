@@ -16,7 +16,7 @@ use Xabbuh\XApi\DataFixtures\DocumentFixtures;
 use Xabbuh\XApi\Model\Activity;
 use Xabbuh\XApi\Model\ActivityProfile;
 use Xabbuh\XApi\Model\IRI;
-use Xabbuh\XApi\Serializer\DocumentDataSerializer;
+use Xabbuh\XApi\Serializer\Symfony\DocumentDataSerializer;
 
 /**
  * @author Christian Flothmann <christian.flothmann@xabbuh.de>

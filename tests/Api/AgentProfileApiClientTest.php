@@ -17,8 +17,8 @@ use Xabbuh\XApi\Model\Agent;
 use Xabbuh\XApi\Model\AgentProfile;
 use Xabbuh\XApi\Model\InverseFunctionalIdentifier;
 use Xabbuh\XApi\Model\IRI;
-use Xabbuh\XApi\Serializer\ActorSerializer;
-use Xabbuh\XApi\Serializer\DocumentDataSerializer;
+use Xabbuh\XApi\Serializer\Symfony\ActorSerializer;
+use Xabbuh\XApi\Serializer\Symfony\DocumentDataSerializer;
 
 /**
  * @author Christian Flothmann <christian.flothmann@xabbuh.de>

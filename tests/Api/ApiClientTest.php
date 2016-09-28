@@ -14,11 +14,11 @@ namespace Xabbuh\XApi\Client\Tests\Api;
 use Symfony\Component\Serializer\SerializerInterface;
 use Xabbuh\XApi\Client\Request\HandlerInterface;
 use Xabbuh\XApi\Common\Exception\NotFoundException;
-use Xabbuh\XApi\Serializer\ActorSerializer;
-use Xabbuh\XApi\Serializer\DocumentDataSerializer;
 use Xabbuh\XApi\Serializer\SerializerRegistry;
-use Xabbuh\XApi\Serializer\StatementResultSerializer;
-use Xabbuh\XApi\Serializer\StatementSerializer;
+use Xabbuh\XApi\Serializer\Symfony\ActorSerializer;
+use Xabbuh\XApi\Serializer\Symfony\DocumentDataSerializer;
+use Xabbuh\XApi\Serializer\Symfony\StatementResultSerializer;
+use Xabbuh\XApi\Serializer\Symfony\StatementSerializer;
 
 /**
  * @author Christian Flothmann <christian.flothmann@xabbuh.de>

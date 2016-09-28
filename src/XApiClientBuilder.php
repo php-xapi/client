@@ -14,12 +14,9 @@ namespace Xabbuh\XApi\Client;
 use Guzzle\Http\Client;
 use Guzzle\Plugin\Oauth\OauthPlugin;
 use Xabbuh\XApi\Client\Request\Handler;
-use Xabbuh\XApi\Serializer\ActorSerializer;
-use Xabbuh\XApi\Serializer\DocumentDataSerializer;
-use Xabbuh\XApi\Serializer\Serializer;
+use Xabbuh\XApi\Serializer\SerializerFactoryInterface;
 use Xabbuh\XApi\Serializer\SerializerRegistry;
-use Xabbuh\XApi\Serializer\StatementResultSerializer;
-use Xabbuh\XApi\Serializer\StatementSerializer;
+use Xabbuh\XApi\Serializer\Symfony\SerializerFactory;
 
 /**
  * xAPI client builder.
@@ -28,15 +25,17 @@ use Xabbuh\XApi\Serializer\StatementSerializer;
  */
 final class XApiClientBuilder implements XApiClientBuilderInterface
 {
+    private $serializerFactory;
     private $baseUrl;
-
     private $version;
-
     private $username;
-
     private $password;
-
     private $oAuthCredentials;
+
+    public function __construct(SerializerFactoryInterface $serializerFactory = null)
+    {
+        $this->serializerFactory = $serializerFactory ?: new SerializerFactory();
+    }
 
     /**
      * {@inheritDoc}
@@ -99,12 +98,11 @@ final class XApiClientBuilder implements XApiClientBuilderInterface
             $httpClient->addSubscriber(new OauthPlugin($this->oAuthCredentials));
         }
 
-        $serializer = Serializer::createSerializer();
         $serializerRegistry = new SerializerRegistry();
-        $serializerRegistry->setStatementSerializer(new StatementSerializer($serializer));
-        $serializerRegistry->setStatementResultSerializer(new StatementResultSerializer($serializer));
-        $serializerRegistry->setActorSerializer(new ActorSerializer($serializer));
-        $serializerRegistry->setDocumentDataSerializer(new DocumentDataSerializer($serializer));
+        $serializerRegistry->setStatementSerializer($this->serializerFactory->createStatementSerializer());
+        $serializerRegistry->setStatementResultSerializer($this->serializerFactory->createStatementResultSerializer());
+        $serializerRegistry->setActorSerializer($this->serializerFactory->createActorSerializer());
+        $serializerRegistry->setDocumentDataSerializer($this->serializerFactory->createDocumentDataSerializer());
 
         $version = null === $this->version ? '1.0.1' : $this->version;
         $requestHandler = new Handler($httpClient, $version, $this->username, $this->password);

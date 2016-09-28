@@ -23,9 +23,9 @@ use Xabbuh\XApi\Model\StatementReference;
 use Xabbuh\XApi\Model\StatementResult;
 use Xabbuh\XApi\Model\StatementsFilter;
 use Xabbuh\XApi\Model\Verb;
-use Xabbuh\XApi\Serializer\ActorSerializer;
-use Xabbuh\XApi\Serializer\StatementResultSerializer;
-use Xabbuh\XApi\Serializer\StatementSerializer;
+use Xabbuh\XApi\Serializer\Symfony\ActorSerializer;
+use Xabbuh\XApi\Serializer\Symfony\StatementResultSerializer;
+use Xabbuh\XApi\Serializer\Symfony\StatementSerializer;
 
 /**
  * @author Christian Flothmann <christian.flothmann@xabbuh.de>

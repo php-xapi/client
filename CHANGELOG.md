@@ -1,6 +1,19 @@
 CHANGELOG
 =========
 
+0.4.0
+-----
+
+* The `XApiClientBuilder` class now makes use of the `SerializerFactoryInterface`
+  introduced in release `0.4.0` of the `php-xapi/serializer` package. By
+  default, it will fall back to the `SerializerFactory` implemented provided
+  by the `php-xapi/symfony-serializer` to maintain backwards-compatibility
+  with the previous release. However, you are now able to inject arbitrary
+  implementations of the `SerializerFactoryInterface` into the constructor
+  of the `XApiClientBuilder` to use whatever alternative implementation
+  (packages providing such an implementation should provide the virtual
+  `php-xapi/serializer-implementation` package).
+
 0.3.0
 -----
 

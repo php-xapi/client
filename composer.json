@@ -16,7 +16,9 @@
         "guzzle/guzzle": "~3.7",
         "php-xapi/exception": "^0.1.0",
         "php-xapi/model": "^0.5.1",
-        "php-xapi/serializer": "^0.3.0"
+        "php-xapi/serializer": "^0.4",
+        "php-xapi/serializer-implementation": "^1.0",
+        "php-xapi/symfony-serializer": "^0.1"
     },
     "require-dev": {
         "phpspec/phpspec": "^2.3",
