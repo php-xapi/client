@@ -64,7 +64,7 @@ final class Handler implements HandlerInterface
         $request = $this->requestFactory->createRequest(strtoupper($method), $uri, array(
             'X-Experience-API-Version' => $this->version,
             'Content-Type' => 'application/json',
-        ));
+        ), $body);
 
         return $request;
     }

@@ -25,7 +25,7 @@ class HandlerSpec extends ObjectBehavior
         $requestFactory->createRequest('GET', 'http://example.com/xapi/statements', array(
             'X-Experience-API-Version' => '1.0.1',
             'Content-Type' => 'application/json',
-        ))->willReturn($request);
+        ), null)->willReturn($request);
 
         $this->createRequest('get', '/statements')->shouldReturn($request);
         $this->createRequest('GET', '/statements')->shouldReturn($request);
@@ -36,7 +36,7 @@ class HandlerSpec extends ObjectBehavior
         $requestFactory->createRequest('POST', 'http://example.com/xapi/statements', array(
             'X-Experience-API-Version' => '1.0.1',
             'Content-Type' => 'application/json',
-        ))->willReturn($request);
+        ), 'body')->willReturn($request);
 
         $this->createRequest('post', '/statements', array(), 'body')->shouldReturn($request);
         $this->createRequest('POST', '/statements', array(), 'body')->shouldReturn($request);
@@ -47,7 +47,7 @@ class HandlerSpec extends ObjectBehavior
         $requestFactory->createRequest('PUT', 'http://example.com/xapi/statements', array(
             'X-Experience-API-Version' => '1.0.1',
             'Content-Type' => 'application/json',
-        ))->willReturn($request);
+        ), 'body')->willReturn($request);
 
         $this->createRequest('put', '/statements', array(), 'body')->shouldReturn($request);
         $this->createRequest('PUT', '/statements', array(), 'body')->shouldReturn($request);
@@ -58,7 +58,7 @@ class HandlerSpec extends ObjectBehavior
         $requestFactory->createRequest('DELETE', 'http://example.com/xapi/statements', array(
             'X-Experience-API-Version' => '1.0.1',
             'Content-Type' => 'application/json',
-        ))->willReturn($request);
+        ), null)->willReturn($request);
 
         $this->createRequest('delete', '/statements')->shouldReturn($request);
         $this->createRequest('DELETE', '/statements')->shouldReturn($request);
