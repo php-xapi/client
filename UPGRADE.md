@@ -43,6 +43,14 @@ Upgrading from 0.4 to 0.5
   You can avoid calling `setHttpClient()` and `setRequestFactory` by installing
   the [HTTP discovery](http://php-http.org/en/latest/discovery.html) package.
 
+* A second optional `$attachments` argument (defaulting to `true`) has been added
+  to the `getStatement()`, `getVoidedStatement()`, and `getStatements()` methods
+  of the `StatementsApiClient` class and the `StatementsApiClientInterface`.
+
+* An optional fifth `$headers` parameter has been added to the `createRequest()`
+  method of the `HandlerInterface` and the `Handler` class which allows to pass
+  custom headers when performing HTTP requests.
+
 Upgrading from 0.2 to 0.3
 -------------------------
 

@@ -49,7 +49,7 @@ final class Handler implements HandlerInterface
     /**
      * {@inheritDoc}
      */
-    public function createRequest($method, $uri, array $urlParameters = array(), $body = null)
+    public function createRequest($method, $uri, array $urlParameters = array(), $body = null, array $headers = array())
     {
         if (!in_array(strtoupper($method), array('GET', 'POST', 'PUT', 'DELETE'))) {
             throw new \InvalidArgumentException(sprintf('"%s" is no valid HTTP method (expected one of [GET, POST, PUT, DELETE]) in an xAPI context.', $method));
@@ -61,12 +61,15 @@ final class Handler implements HandlerInterface
             $uri .= '?'.http_build_query($urlParameters);
         }
 
-        $request = $this->requestFactory->createRequest(strtoupper($method), $uri, array(
-            'X-Experience-API-Version' => $this->version,
-            'Content-Type' => 'application/json',
-        ), $body);
+        if (!isset($headers['X-Experience-API-Version'])) {
+            $headers['X-Experience-API-Version'] = $this->version;
+        }
 
-        return $request;
+        if (!isset($headers['Content-Type'])) {
+            $headers['Content-Type'] = 'application/json';
+        }
+
+        return $this->requestFactory->createRequest(strtoupper($method), $uri, $headers, $body);
     }
 
     /**

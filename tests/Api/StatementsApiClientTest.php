@@ -193,7 +193,7 @@ class StatementsApiClientTest extends ApiClientTest
         $this->validateRetrieveApiCall(
             'get',
             'statements',
-            array('statementId' => $statementId),
+            array('statementId' => $statementId, 'attachments' => 'true'),
             200,
             'Statement',
             $statement
@@ -211,7 +211,7 @@ class StatementsApiClientTest extends ApiClientTest
         $this->validateRetrieveApiCall(
             'get',
             'statements',
-            array('statementId' => $statementId),
+            array('statementId' => $statementId, 'attachments' => 'true'),
             404,
             'Statement',
             'There is no statement associated with this id'
@@ -227,7 +227,7 @@ class StatementsApiClientTest extends ApiClientTest
         $this->validateRetrieveApiCall(
             'get',
             'statements',
-            array('voidedStatementId' => $statementId),
+            array('voidedStatementId' => $statementId, 'attachments' => 'true'),
             200,
             'Statement',
             $statement
@@ -245,7 +245,7 @@ class StatementsApiClientTest extends ApiClientTest
         $this->validateRetrieveApiCall(
             'get',
             'statements',
-            array('voidedStatementId' => $statementId),
+            array('voidedStatementId' => $statementId, 'attachments' => 'true'),
             404,
             'Statement',
             'There is no statement associated with this id'

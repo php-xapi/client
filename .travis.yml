@@ -19,7 +19,7 @@ matrix:
   fast_finish: true
   include:
     - php: 5.4
-      env: deps="low"
+      env: $COMPOSER_OPTIONS="--prefer-lowest --ignore-platform-reqs"
     - php: 5.6
       env: PACKAGES="php-http/discovery:^1.0 php-http/guzzle6-adapter:^1.0 php-http/message:^1.0"
     - php: 7.0
@@ -31,8 +31,7 @@ before_install:
 
 install:
   - if [ "$PACKAGES" != "" ]; then composer require --no-update $PACKAGES; fi
-  - if [ "$deps" = "low" ]; then composer update --prefer-lowest --prefer-stable --ignore-platform-reqs; fi
-  - if [ "$deps" = "" ]; then composer install; fi
+  - composer update --prefer-stable $COMPOSER_OPTIONS
 
 script:
   - vendor/bin/phpspec run

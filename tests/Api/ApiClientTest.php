@@ -93,6 +93,7 @@ abstract class ApiClientTest extends \PHPUnit_Framework_TestCase
         $rawResponse = 'the-server-response';
         $response = $this->getMockBuilder('\Psr\Http\Message\ResponseInterface')->getMock();
         $response->expects($this->any())->method('getStatusCode')->willReturn($statusCode);
+        $response->expects($this->any())->method('getHeader')->with('Content-Type')->willReturn(array('application/json'));
         $response->expects($this->any())->method('getBody')->willReturn($rawResponse);
         $request = $this->validateRequest($method, $uri, $urlParameters);
 

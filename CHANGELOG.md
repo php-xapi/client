@@ -46,6 +46,19 @@ CHANGELOG
 * Bumped the required versions of all `php-xapi` packages to the `1.x` release
   series.
 
+* Include the raw attachment content wrapped in a `multipart/mixed` encoded
+  request when raw content is part of a statement's attachment.
+
+* Added the possibility to decide whether or not to include attachments when
+  requesting statements from an LRS. A second optional `$attachments` argument
+  (defaulting to `true`) has been added for this purpose to the `getStatement()`,
+  `getVoidedStatement()`, and `getStatements()` methods of the `StatementsApiClient`
+  class and the `StatementsApiClientInterface`.
+
+* An optional fifth `$headers` parameter has been added to the `createRequest()`
+  method of the `HandlerInterface` and the `Handler` class which allows to pass
+  custom headers when performing HTTP requests.
+
 0.4.0
 -----
 

@@ -73,36 +73,39 @@ interface StatementsApiClientInterface
      * Retrieves a single {@link Statement Statement}.
      *
      * @param StatementId $statementId The Statement id
+     * @param bool        $attachments Whether or not to request raw attachment data
      *
      * @return Statement The Statement
      *
      * @throws NotFoundException if no statement with the given id could be found
      * @throws XApiException     for all other xAPI related problems
      */
-    public function getStatement(StatementId $statementId);
+    public function getStatement(StatementId $statementId, $attachments = true);
 
     /**
      * Retrieves a voided {@link Statement Statement}.
      *
      * @param StatementId $statementId The id of the voided Statement
+     * @param bool        $attachments Whether or not to request raw attachment data
      *
      * @return Statement The voided Statement
      *
      * @throws NotFoundException if no statement with the given id could be found
      * @throws XApiException     for all other xAPI related problems
      */
-    public function getVoidedStatement(StatementId $statementId);
+    public function getVoidedStatement(StatementId $statementId, $attachments = true);
 
     /**
      * Retrieves a collection of {@link Statement Statements}.
      *
-     * @param StatementsFilter $filter Optional Statements filter
+     * @param StatementsFilter $filter      Optional Statements filter
+     * @param bool             $attachments Whether or not to request raw attachment data
      *
      * @return StatementResult The {@link StatementResult}
      *
      * @throws XApiException in case of any problems related to the xAPI
      */
-    public function getStatements(StatementsFilter $filter = null);
+    public function getStatements(StatementsFilter $filter = null, $attachments = true);
 
     /**
      * Returns the next {@link Statement Statements} for a limited Statement

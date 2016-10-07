@@ -11,6 +11,7 @@
 
 namespace Xabbuh\XApi\Client\Api;
 
+use Xabbuh\XApi\Client\Http\MultipartStatementBody;
 use Xabbuh\XApi\Client\Request\HandlerInterface;
 use Xabbuh\XApi\Model\StatementId;
 use Xabbuh\XApi\Serializer\ActorSerializerInterface;
@@ -102,23 +103,29 @@ final class StatementsApiClient implements StatementsApiClientInterface
     /**
      * {@inheritDoc}
      */
-    public function getStatement(StatementId $statementId)
+    public function getStatement(StatementId $statementId, $attachments = true)
     {
-        return $this->doGetStatements('statements', array('statementId' => $statementId->getValue()));
+        return $this->doGetStatements('statements', array(
+            'statementId' => $statementId->getValue(),
+            'attachments' => $attachments ? 'true' : 'false',
+        ));
     }
 
     /**
      * {@inheritDoc}
      */
-    public function getVoidedStatement(StatementId $statementId)
+    public function getVoidedStatement(StatementId $statementId, $attachments = true)
     {
-        return $this->doGetStatements('statements', array('voidedStatementId' => $statementId->getValue()));
+        return $this->doGetStatements('statements', array(
+            'voidedStatementId' => $statementId->getValue(),
+            'attachments' => $attachments ? 'true' : 'false',
+        ));
     }
 
     /**
      * {@inheritDoc}
      */
-    public function getStatements(StatementsFilter $filter = null)
+    public function getStatements(StatementsFilter $filter = null, $attachments = true)
     {
         $urlParameters = array();
 
@@ -152,17 +159,50 @@ final class StatementsApiClient implements StatementsApiClientInterface
      */
     private function doStoreStatements($statements, $method = 'post', $parameters = array(), $validStatusCode = 200)
     {
+        $attachments = array();
+
         if (is_array($statements)) {
+            foreach ($statements as $statement) {
+                if (null !== $statement->getAttachments()) {
+                    foreach ($statement->getAttachments() as $attachment) {
+                        if ($attachment->getContent()) {
+                            $attachments[] = $attachment;
+                        }
+                    }
+                }
+            }
+
             $serializedStatements = $this->statementSerializer->serializeStatements($statements);
         } else {
+            if (null !== $statements->getAttachments()) {
+                foreach ($statements->getAttachments() as $attachment) {
+                    if ($attachment->getContent()) {
+                        $attachments[] = $attachment;
+                    }
+                }
+            }
+
             $serializedStatements = $this->statementSerializer->serializeStatement($statements);
+        }
+
+        $headers = array();
+
+        if (!empty($attachments)) {
+            $builder = new MultipartStatementBody($serializedStatements, $attachments);
+            $headers = array(
+                'Content-Type' => 'multipart/mixed; boundary='.$builder->getBoundary(),
+            );
+            $body = $builder->build();
+        } else {
+            $body = $serializedStatements;
         }
 
         $request = $this->requestHandler->createRequest(
             $method,
             'statements',
             $parameters,
-            $serializedStatements
+            $body,
+            $headers
         );
         $response = $this->requestHandler->executeRequest($request, array($validStatusCode));
         $statementIds = json_decode((string) $response->getBody());
@@ -200,10 +240,70 @@ final class StatementsApiClient implements StatementsApiClientInterface
         $request = $this->requestHandler->createRequest('get', $url, $urlParameters);
         $response = $this->requestHandler->executeRequest($request, array(200));
 
-        if (isset($urlParameters['statementId']) || isset($urlParameters['voidedStatementId'])) {
-            return $this->statementSerializer->deserializeStatement((string) $response->getBody());
+        $contentType = $response->getHeader('Content-Type')[0];
+        $body = (string) $response->getBody();
+        $attachments = array();
+
+        if (false !== strpos($contentType, 'application/json')) {
+            $serializedStatement = $body;
         } else {
-            return $this->statementResultSerializer->deserializeStatementResult((string) $response->getBody());
+            $boundary = substr($contentType, strpos($contentType, '=') + 1);
+            $parts = $this->parseMultipartResponseBody($body, $boundary);
+            $serializedStatement = $parts[0]['content'];
+
+            unset($parts[0]);
+
+            foreach ($parts as $part) {
+                $attachments[$part['headers']['X-Experience-API-Hash'][0]] = array(
+                    'type' => $part['headers']['Content-Type'][0],
+                    'content' => $part['content'],
+                );
+            }
         }
+
+        if (isset($urlParameters['statementId']) || isset($urlParameters['voidedStatementId'])) {
+            return $this->statementSerializer->deserializeStatement($serializedStatement, $attachments);
+        } else {
+            return $this->statementResultSerializer->deserializeStatementResult($serializedStatement, $attachments);
+        }
+    }
+
+    private function parseMultipartResponseBody($body, $boundary)
+    {
+        $parts = array();
+        $lines = explode("\r\n", $body);
+        $currentPart = null;
+        $isHeaderLine = true;
+
+        foreach ($lines as $line) {
+            if (false !== strpos($line, '--'.$boundary)) {
+                if (null !== $currentPart) {
+                    $parts[] = $currentPart;
+                }
+
+                $currentPart = array(
+                    'headers' => array(),
+                    'content' => '',
+                );
+                $isBoundaryLine = true;
+                $isHeaderLine = true;
+            } else {
+                $isBoundaryLine = false;
+            }
+
+            if ('' === $line) {
+                $isHeaderLine = false;
+                continue;
+            }
+
+            if (!$isBoundaryLine && !$isHeaderLine) {
+                $currentPart['content'] .= $line;
+            } elseif (!$isBoundaryLine && $isHeaderLine) {
+                list($name, $value) = explode(':', $line, 2);
+                $currentPart['headers'][$name][] = $value;
+            }
+        }
+
+        return $parts;
     }
 }
