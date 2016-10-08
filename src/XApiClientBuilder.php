@@ -14,6 +14,8 @@ namespace Xabbuh\XApi\Client;
 use Http\Client\Common\Plugin\AuthenticationPlugin;
 use Http\Client\Common\PluginClient;
 use Http\Client\HttpClient;
+use Http\Discovery\HttpClientDiscovery;
+use Http\Discovery\MessageFactoryDiscovery;
 use Http\Message\Authentication\BasicAuth;
 use Http\Message\RequestFactory;
 use Xabbuh\XApi\Client\Request\Handler;
@@ -122,8 +124,22 @@ final class XApiClientBuilder implements XApiClientBuilderInterface
      */
     public function build()
     {
+        if (null === $this->httpClient && class_exists('\Http\Discovery\HttpClientDiscovery')) {
+            try {
+                $this->httpClient = HttpClientDiscovery::find();
+            } catch (\Exception $e) {
+            }
+        }
+
         if (null === $httpClient = $this->httpClient) {
             throw new \LogicException('No HTTP client was configured.');
+        }
+
+        if (null === $this->requestFactory && class_exists('\Http\Discovery\MessageFactoryDiscovery')) {
+            try {
+                $this->requestFactory = MessageFactoryDiscovery::find();
+            } catch (\Exception $e) {
+            }
         }
 
         if (null === $this->requestFactory) {

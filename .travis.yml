@@ -20,6 +20,8 @@ matrix:
   include:
     - php: 5.4
       env: deps="low"
+    - php: 5.6
+      env: PACKAGES="php-http/discovery:^1.0 php-http/guzzle6-adapter:^1.0 php-http/message:^1.0"
     - php: 7.0
       env: xdebug="yes"
 
@@ -28,6 +30,7 @@ before_install:
   - composer self-update
 
 install:
+  - if [ "$PACKAGES" != "" ]; then composer require --no-update $PACKAGES; fi
   - if [ "$deps" = "low" ]; then composer update --prefer-lowest --prefer-stable --ignore-platform-reqs; fi
   - if [ "$deps" = "" ]; then composer install; fi
 

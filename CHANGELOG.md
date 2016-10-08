@@ -40,6 +40,9 @@ CHANGELOG
       ->build();
   ```
 
+  You can avoid calling `setHttpClient()` and `setRequestFactory` by installing
+  the [HTTP discovery](http://php-http.org/en/latest/discovery.html) package.
+
 * Bumped the required versions of all `php-xapi` packages to the `1.x` release
   series.
 

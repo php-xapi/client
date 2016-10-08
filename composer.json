@@ -30,6 +30,9 @@
         "php-http/mock-client": "^0.3",
         "php-xapi/test-fixtures": "^1.0"
     },
+    "suggest": {
+        "php-http/discovery": "For automatic discovery of HTTP clients and request factories"
+    },
     "conflict": {
         "xabbuh/xapi-client": "*"
     },

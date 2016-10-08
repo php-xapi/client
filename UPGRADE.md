@@ -40,6 +40,9 @@ Upgrading from 0.4 to 0.5
       ->build();
   ```
 
+  You can avoid calling `setHttpClient()` and `setRequestFactory` by installing
+  the [HTTP discovery](http://php-http.org/en/latest/discovery.html) package.
+
 Upgrading from 0.2 to 0.3
 -------------------------
 
