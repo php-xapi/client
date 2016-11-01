@@ -43,6 +43,9 @@ CHANGELOG
   You can avoid calling `setHttpClient()` and `setRequestFactory` by installing
   the [HTTP discovery](http://php-http.org/en/latest/discovery.html) package.
 
+* The `xabbuh/oauth1-authentication` package now must be installed if you want
+  to use OAuth1 authentication.
+
 * Bumped the required versions of all `php-xapi` packages to the `1.x` release
   series.
 

@@ -32,7 +32,8 @@
     },
     "minimum-stability": "dev",
     "suggest": {
-        "php-http/discovery": "For automatic discovery of HTTP clients and request factories"
+        "php-http/discovery": "For automatic discovery of HTTP clients and request factories",
+        "xabbuh/oauth1-authentication": "For OAuth1 authentication support"
     },
     "conflict": {
         "xabbuh/xapi-client": "*"

@@ -85,6 +85,33 @@ class XApiClientBuilderSpec extends ObjectBehavior
         $this->shouldThrow('\LogicException')->during('build');
     }
 
+    function it_throws_an_exception_when_oauth_credentials_are_configured_but_the_auth_package_is_missing(HttpClient $httpClient, RequestFactory $requestFactory)
+    {
+        if (class_exists('Xabbuh\Http\Authentication\OAuth1')) {
+            throw new SkippingException('OAuth1 credentials can be used when the "xabbuh/oauth1-authentication" package is present.');
+        }
+
+        $this->setHttpClient($httpClient);
+        $this->setRequestFactory($requestFactory);
+        $this->setBaseUrl('http://example.com/xapi/');
+        $this->setOAuthCredentials('consumer_key', 'consumer_secret', 'access_token', 'token_secret');
+
+        $this->shouldThrow(new \LogicException('The "xabbuh/oauth1-authentication package is needed to use OAuth1 authorization.'))->during('build');
+    }
+
+    function it_accepts_oauth_credentials_when_the_auth_package_is_present(HttpClient $httpClient, RequestFactory $requestFactory)
+    {
+        if (!class_exists('Xabbuh\Http\Authentication\OAuth1')) {
+            throw new SkippingException('OAuth1 credentials cannot be used when the "xabbuh/oauth1-authentication" package is missing.');
+        }
+
+        $this->setHttpClient($httpClient);
+        $this->setRequestFactory($requestFactory);
+        $this->setBaseUrl('http://example.com/xapi/');
+        $this->setOAuthCredentials('consumer_key', 'consumer_secret', 'access_token', 'token_secret');
+        $this->build();
+    }
+
     private function isAbleToDiscoverHttpClient()
     {
         try {

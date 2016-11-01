@@ -43,6 +43,9 @@ Upgrading from 0.4 to 0.5
   You can avoid calling `setHttpClient()` and `setRequestFactory` by installing
   the [HTTP discovery](http://php-http.org/en/latest/discovery.html) package.
 
+* The `xabbuh/oauth1-authentication` package now must be installed if you want
+  to use OAuth1 authentication.
+
 * A second optional `$attachments` argument (defaulting to `true`) has been added
   to the `getStatement()`, `getVoidedStatement()`, and `getStatements()` methods
   of the `StatementsApiClient` class and the `StatementsApiClientInterface`.

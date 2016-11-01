@@ -11,6 +11,11 @@
 
 namespace Xabbuh\XApi\Client;
 
+use ApiClients\Tools\Psr7\Oauth1\Definition\AccessToken;
+use ApiClients\Tools\Psr7\Oauth1\Definition\ConsumerKey;
+use ApiClients\Tools\Psr7\Oauth1\Definition\ConsumerSecret;
+use ApiClients\Tools\Psr7\Oauth1\Definition\TokenSecret;
+use ApiClients\Tools\Psr7\Oauth1\RequestSigning\RequestSigner;
 use Http\Client\Common\Plugin\AuthenticationPlugin;
 use Http\Client\Common\PluginClient;
 use Http\Client\HttpClient;
@@ -18,6 +23,7 @@ use Http\Discovery\HttpClientDiscovery;
 use Http\Discovery\MessageFactoryDiscovery;
 use Http\Message\Authentication\BasicAuth;
 use Http\Message\RequestFactory;
+use Xabbuh\Http\Authentication\OAuth1;
 use Xabbuh\XApi\Client\Request\Handler;
 use Xabbuh\XApi\Serializer\SerializerFactoryInterface;
 use Xabbuh\XApi\Serializer\SerializerRegistry;
@@ -46,7 +52,10 @@ final class XApiClientBuilder implements XApiClientBuilderInterface
     private $version;
     private $username;
     private $password;
-    private $oAuthCredentials;
+    private $consumerKey;
+    private $consumerSecret;
+    private $accessToken;
+    private $tokenSecret;
 
     public function __construct(SerializerFactoryInterface $serializerFactory = null)
     {
@@ -109,12 +118,10 @@ final class XApiClientBuilder implements XApiClientBuilderInterface
      */
     public function setOAuthCredentials($consumerKey, $consumerSecret, $token, $tokenSecret)
     {
-        $this->oAuthCredentials = array(
-            'consumer_key' => $consumerKey,
-            'consumer_secret' => $consumerSecret,
-            'token' => $token,
-            'token_secret' => $tokenSecret,
-        );
+        $this->consumerKey = $consumerKey;
+        $this->consumerSecret = $consumerSecret;
+        $this->accessToken = $token;
+        $this->tokenSecret = $tokenSecret;
 
         return $this;
     }
@@ -156,8 +163,24 @@ final class XApiClientBuilder implements XApiClientBuilderInterface
         $serializerRegistry->setActorSerializer($this->serializerFactory->createActorSerializer());
         $serializerRegistry->setDocumentDataSerializer($this->serializerFactory->createDocumentDataSerializer());
 
+        $plugins = array();
+
         if (null !== $this->username && null !== $this->password) {
-            $httpClient = new PluginClient($httpClient, array(new AuthenticationPlugin(new BasicAuth($this->username, $this->password))));
+            $plugins[] = new AuthenticationPlugin(new BasicAuth($this->username, $this->password));
+        }
+
+        if (null !== $this->consumerKey && null !== $this->consumerSecret && null !== $this->accessToken && null !== $this->tokenSecret) {
+            if (!class_exists('Xabbuh\Http\Authentication\OAuth1')) {
+                throw new \LogicException('The "xabbuh/oauth1-authentication package is needed to use OAuth1 authorization.');
+            }
+
+            $requestSigner = new RequestSigner(new ConsumerKey($this->consumerKey), new ConsumerSecret($this->consumerSecret));
+            $oauth = new OAuth1($requestSigner, new AccessToken($this->accessToken), new TokenSecret($this->tokenSecret));
+            $plugins[] = new AuthenticationPlugin($oauth);
+        }
+
+        if (!empty($plugins)) {
+            $httpClient = new PluginClient($httpClient, $plugins);
         }
 
         $version = null === $this->version ? '1.0.1' : $this->version;
