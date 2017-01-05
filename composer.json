@@ -19,7 +19,7 @@
         "php-http/message": "^1.0",
         "php-http/message-factory": "^1.0",
         "php-xapi/exception": "^0.1.0",
-        "php-xapi/model": "^1.0",
+        "php-xapi/model": "^1.0 || ^2.0",
         "php-xapi/serializer": "^2.0",
         "php-xapi/serializer-implementation": "^2.0",
         "php-xapi/symfony-serializer": "^2.0",
@@ -51,7 +51,7 @@
     },
     "extra": {
         "branch-alias": {
-            "dev-master": "0.5.x-dev"
+            "dev-master": "0.6.x-dev"
         }
     }
 }
