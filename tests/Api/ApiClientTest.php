@@ -11,6 +11,7 @@
 
 namespace Xabbuh\XApi\Client\Tests\Api;
 
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Serializer\SerializerInterface;
 use Xabbuh\XApi\Client\Request\HandlerInterface;
 use Xabbuh\XApi\Common\Exception\NotFoundException;
@@ -23,7 +24,7 @@ use Xabbuh\XApi\Serializer\Symfony\StatementSerializer;
 /**
  * @author Christian Flothmann <christian.flothmann@xabbuh.de>
  */
-abstract class ApiClientTest extends \PHPUnit_Framework_TestCase
+abstract class ApiClientTest extends TestCase
 {
     /**
      * @var HandlerInterface|\PHPUnit_Framework_MockObject_MockObject
