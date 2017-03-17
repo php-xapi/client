@@ -4,6 +4,9 @@ CHANGELOG
 0.6.0
 -----
 
+* updated the `X-Experience-API-Version` header to default to the latest patch
+  version (`1.0.3`)
+
 * allow `2.x` releases of the `php-xapi/model` package too
 
 0.5.0

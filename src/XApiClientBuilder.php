@@ -183,7 +183,7 @@ final class XApiClientBuilder implements XApiClientBuilderInterface
             $httpClient = new PluginClient($httpClient, $plugins);
         }
 
-        $version = null === $this->version ? '1.0.1' : $this->version;
+        $version = null === $this->version ? '1.0.3' : $this->version;
         $requestHandler = new Handler($httpClient, $this->requestFactory, $this->baseUrl, $version);
 
         return new XApiClient($requestHandler, $serializerRegistry, $this->version);
