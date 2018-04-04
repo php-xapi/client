@@ -11,6 +11,14 @@
             "homepage": "https://github.com/xabbuh"
         }
     ],
+    "repositories": [
+      {
+        "type": "vcs",
+        "url": "https://github.com/djoudi/model.git"
+      },
+     
+    ],
+    
     "require": {
         "php": ">=5.4.0",
         "php-http/client-common": "^1.0",
@@ -19,7 +27,7 @@
         "php-http/message": "^1.0",
         "php-http/message-factory": "^1.0",
         "php-xapi/exception": "^0.1.0",
-        "php-xapi/model": "^1.0 || ^2.0",
+        "djoudi/model": "^1.0 || ^2.0",
         "php-xapi/serializer": "^2.0",
         "php-xapi/serializer-implementation": "^2.0",
         "php-xapi/symfony-serializer": "^2.0",
