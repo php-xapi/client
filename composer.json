@@ -1,5 +1,5 @@
 {
-    "name": "php-xapi/client",
+    "name": "djoudi/client",
     "type": "library",
     "description": "client library for the Experience API (xAPI)",
     "keywords": ["xAPI", "Experience API", "Tin Can API", "client"],
