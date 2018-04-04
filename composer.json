@@ -30,7 +30,7 @@
         "djoudi/model": "^1.0 || ^2.0",
         "php-xapi/serializer": "^2.0",
         "php-xapi/serializer-implementation": "^2.0",
-        "php-xapi/symfony-serializer": "^2.0",
+        "djoudi/symfony-serializer": "^2.0",
         "psr/http-message": "^1.0"
     },
     "require-dev": {
