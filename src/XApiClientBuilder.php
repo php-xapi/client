@@ -131,7 +131,7 @@ final class XApiClientBuilder implements XApiClientBuilderInterface
      */
     public function build()
     {
-        if (null === $this->httpClient && class_exists('\Http\Discovery\HttpClientDiscovery')) {
+        if (null === $this->httpClient && class_exists(HttpClientDiscovery::class)) {
             try {
                 $this->httpClient = HttpClientDiscovery::find();
             } catch (\Exception $e) {
@@ -142,7 +142,7 @@ final class XApiClientBuilder implements XApiClientBuilderInterface
             throw new \LogicException('No HTTP client was configured.');
         }
 
-        if (null === $this->requestFactory && class_exists('\Http\Discovery\MessageFactoryDiscovery')) {
+        if (null === $this->requestFactory && class_exists(MessageFactoryDiscovery::class)) {
             try {
                 $this->requestFactory = MessageFactoryDiscovery::find();
             } catch (\Exception $e) {
@@ -170,7 +170,7 @@ final class XApiClientBuilder implements XApiClientBuilderInterface
         }
 
         if (null !== $this->consumerKey && null !== $this->consumerSecret && null !== $this->accessToken && null !== $this->tokenSecret) {
-            if (!class_exists('Xabbuh\Http\Authentication\OAuth1')) {
+            if (!class_exists(OAuth1::class)) {
                 throw new \LogicException('The "xabbuh/oauth1-authentication package is needed to use OAuth1 authorization.');
             }
 

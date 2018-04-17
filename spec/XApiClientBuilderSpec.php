@@ -60,7 +60,7 @@ class XApiClientBuilderSpec extends ObjectBehavior
 
     function it_can_build_the_client_when_it_is_able_to_discover_the_http_client_and_the_request_factory_without_configuring_them_explicitly()
     {
-        if (!class_exists('\Http\Discovery\HttpClientDiscovery')) {
+        if (!class_exists(HttpClientDiscovery::class)) {
             throw new SkippingException('The "\Http\Discovery\HttpClientDiscovery" class is required to let the builder auto discover the HTTP client and request factory.');
         }
 
@@ -87,7 +87,7 @@ class XApiClientBuilderSpec extends ObjectBehavior
 
     function it_throws_an_exception_when_oauth_credentials_are_configured_but_the_auth_package_is_missing(HttpClient $httpClient, RequestFactory $requestFactory)
     {
-        if (class_exists('Xabbuh\Http\Authentication\OAuth1')) {
+        if (class_exists(OAuth1::class)) {
             throw new SkippingException('OAuth1 credentials can be used when the "xabbuh/oauth1-authentication" package is present.');
         }
 
@@ -101,7 +101,7 @@ class XApiClientBuilderSpec extends ObjectBehavior
 
     function it_accepts_oauth_credentials_when_the_auth_package_is_present(HttpClient $httpClient, RequestFactory $requestFactory)
     {
-        if (!class_exists('Xabbuh\Http\Authentication\OAuth1')) {
+        if (!class_exists(OAuth1::class)) {
             throw new SkippingException('OAuth1 credentials cannot be used when the "xabbuh/oauth1-authentication" package is missing.');
         }
 

@@ -13,6 +13,9 @@ env:
 php:
   - 5.5
   - 5.6
+  - 7.0
+  - 7.1
+  - 7.2
   - hhvm
 
 matrix:
@@ -23,6 +26,8 @@ matrix:
     - php: 5.6
       env: PACKAGES="php-http/discovery:^1.0 php-http/guzzle6-adapter:^1.0 php-http/message:^1.0 xabbuh/oauth1-authentication:~1.0"
     - php: 7.0
+    - php: 7.1
+    - php: 7.2
       env: xdebug="yes"
 
 before_install:

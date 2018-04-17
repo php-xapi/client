@@ -70,7 +70,7 @@ class HandlerSpec extends ObjectBehavior
         $response->getStatusCode()->willReturn(401);
         $response->getBody()->willReturn('body');
 
-        $this->shouldThrow('Xabbuh\XApi\Common\Exception\AccessDeniedException')->during('executeRequest', array($request, array(200)));
+        $this->shouldThrow(AccessDeniedException::class)->during('executeRequest', array($request, array(200)));
     }
 
     function it_throws_an_access_denied_exception_when_a_403_status_code_is_returned(HttpClient $client, RequestInterface $request, ResponseInterface $response)
@@ -79,7 +79,7 @@ class HandlerSpec extends ObjectBehavior
         $response->getStatusCode()->willReturn(403);
         $response->getBody()->willReturn('body');
 
-        $this->shouldThrow('Xabbuh\XApi\Common\Exception\AccessDeniedException')->during('executeRequest', array($request, array(200)));
+        $this->shouldThrow(AccessDeniedException::class)->during('executeRequest', array($request, array(200)));
     }
 
     function it_throws_a_not_found_exception_when_a_404_status_code_is_returned(HttpClient $client, RequestInterface $request, ResponseInterface $response)
@@ -88,7 +88,7 @@ class HandlerSpec extends ObjectBehavior
         $response->getStatusCode()->willReturn(404);
         $response->getBody()->willReturn('body');
 
-        $this->shouldThrow('Xabbuh\XApi\Common\Exception\NotFoundException')->during('executeRequest', array($request, array(200)));
+        $this->shouldThrow(NotFoundException::class)->during('executeRequest', array($request, array(200)));
     }
 
     function it_throws_a_conflict_exception_when_a_409_status_code_is_returned(HttpClient $client, RequestInterface $request, ResponseInterface $response)
@@ -97,7 +97,7 @@ class HandlerSpec extends ObjectBehavior
         $response->getStatusCode()->willReturn(409);
         $response->getBody()->willReturn('body');
 
-        $this->shouldThrow('Xabbuh\XApi\Common\Exception\ConflictException')->during('executeRequest', array($request, array(200)));
+        $this->shouldThrow(ConflictException::class)->during('executeRequest', array($request, array(200)));
     }
 
     function it_throws_an_xapi_exception_when_an_unexpected_status_code_is_returned(HttpClient $client, RequestInterface $request, ResponseInterface $response)
@@ -106,7 +106,7 @@ class HandlerSpec extends ObjectBehavior
         $response->getStatusCode()->willReturn(204);
         $response->getBody()->willReturn('body');
 
-        $this->shouldThrow('Xabbuh\XApi\Common\Exception\XApiException')->during('executeRequest', array($request, array(200)));
+        $this->shouldThrow(XApiException::class)->during('executeRequest', array($request, array(200)));
     }
 
     function it_returns_the_response_on_success(HttpClient $client, RequestInterface $request, ResponseInterface $response)
