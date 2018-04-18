@@ -4,6 +4,8 @@ CHANGELOG
 0.6.0
 -----
 
+* dropped the support for HHVM
+
 * updated the `X-Experience-API-Version` header to default to the latest patch
   version (`1.0.3`)
 
