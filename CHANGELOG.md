@@ -11,6 +11,8 @@ CHANGELOG
 
 * allow `2.x` releases of the `php-xapi/model` package too
 
+* allow `3.x` releases of the `php-xapi/model` package for PHP 7.2 compatibility
+
 0.5.0
 -----
 
