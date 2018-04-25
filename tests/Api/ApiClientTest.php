@@ -12,6 +12,8 @@
 namespace Xabbuh\XApi\Client\Tests\Api;
 
 use PHPUnit\Framework\TestCase;
+use Psr\Http\Message\RequestInterface;
+use Psr\Http\Message\ResponseInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 use Xabbuh\XApi\Client\Request\HandlerInterface;
 use Xabbuh\XApi\Common\Exception\NotFoundException;
@@ -43,8 +45,8 @@ abstract class ApiClientTest extends TestCase
 
     protected function setUp()
     {
-        $this->requestHandler = $this->getMockBuilder('\Xabbuh\XApi\Client\Request\HandlerInterface')->getMock();
-        $this->serializer = $this->getMockBuilder('\Symfony\Component\Serializer\SerializerInterface')->getMock();
+        $this->requestHandler = $this->getMockBuilder(HandlerInterface::class)->getMock();
+        $this->serializer = $this->getMockBuilder(SerializerInterface::class)->getMock();
         $this->serializerRegistry = $this->createSerializerRegistry();
     }
 
@@ -78,7 +80,7 @@ abstract class ApiClientTest extends TestCase
 
     protected function validateRequest($method, $uri, array $urlParameters, $body = null)
     {
-        $request = $this->getMockBuilder('\Psr\Http\Message\RequestInterface')->getMock();
+        $request = $this->getMockBuilder(RequestInterface::class)->getMock();
         $this
             ->requestHandler
             ->expects($this->once())
@@ -92,7 +94,7 @@ abstract class ApiClientTest extends TestCase
     protected function validateRetrieveApiCall($method, $uri, array $urlParameters, $statusCode, $type, $transformedResult, array $serializerMap = array())
     {
         $rawResponse = 'the-server-response';
-        $response = $this->getMockBuilder('\Psr\Http\Message\ResponseInterface')->getMock();
+        $response = $this->getMockBuilder(ResponseInterface::class)->getMock();
         $response->expects($this->any())->method('getStatusCode')->willReturn($statusCode);
         $response->expects($this->any())->method('getHeader')->with('Content-Type')->willReturn(array('application/json'));
         $response->expects($this->any())->method('getBody')->willReturn($rawResponse);
@@ -128,7 +130,7 @@ abstract class ApiClientTest extends TestCase
     protected function validateStoreApiCall($method, $uri, array $urlParameters, $statusCode, $rawResponse, $object, array $serializerMap = array())
     {
         $rawRequest = 'the-request-body';
-        $response = $this->getMockBuilder('\Psr\Http\Message\ResponseInterface')->getMock();
+        $response = $this->getMockBuilder(ResponseInterface::class)->getMock();
         $response->expects($this->any())->method('getStatusCode')->willReturn($statusCode);
         $response->expects($this->any())->method('getBody')->willReturn($rawResponse);
         $request = $this->validateRequest($method, $uri, $urlParameters, $rawRequest);

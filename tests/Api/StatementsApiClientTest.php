@@ -344,7 +344,7 @@ class StatementsApiClientTest extends ApiClientTest
 
         $statementResult = $this->client->getNextStatements($previousStatementResult);
 
-        $this->assertInstanceOf('\Xabbuh\XApi\Model\StatementResult', $statementResult);
+        $this->assertInstanceOf(StatementResult::class, $statementResult);
     }
 
     /**

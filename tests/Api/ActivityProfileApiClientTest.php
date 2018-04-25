@@ -15,6 +15,7 @@ use Xabbuh\XApi\Client\Api\ActivityProfileApiClient;
 use Xabbuh\XApi\DataFixtures\DocumentFixtures;
 use Xabbuh\XApi\Model\Activity;
 use Xabbuh\XApi\Model\ActivityProfile;
+use Xabbuh\XApi\Model\ActivityProfileDocument;
 use Xabbuh\XApi\Model\IRI;
 use Xabbuh\XApi\Serializer\Symfony\DocumentDataSerializer;
 
@@ -113,7 +114,7 @@ class ActivityProfileApiClientTest extends ApiClientTest
 
         $document = $this->client->getDocument($activityProfile);
 
-        $this->assertInstanceOf('Xabbuh\XApi\Model\ActivityProfileDocument', $document);
+        $this->assertInstanceOf(ActivityProfileDocument::class, $document);
         $this->assertEquals($activityProfile, $document->getActivityProfile());
     }
 

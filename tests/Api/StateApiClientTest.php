@@ -18,6 +18,7 @@ use Xabbuh\XApi\Model\Agent;
 use Xabbuh\XApi\Model\InverseFunctionalIdentifier;
 use Xabbuh\XApi\Model\IRI;
 use Xabbuh\XApi\Model\State;
+use Xabbuh\XApi\Model\StateDocument;
 use Xabbuh\XApi\Serializer\Symfony\ActorSerializer;
 use Xabbuh\XApi\Serializer\Symfony\DocumentDataSerializer;
 
@@ -124,7 +125,7 @@ class StateApiClientTest extends ApiClientTest
 
         $document = $this->client->getDocument($state);
 
-        $this->assertInstanceOf('Xabbuh\XApi\Model\StateDocument', $document);
+        $this->assertInstanceOf(StateDocument::class, $document);
         $this->assertEquals($state, $document->getState());
     }
 
