@@ -3,6 +3,10 @@
 namespace spec\Xabbuh\XApi\Client;
 
 use PhpSpec\ObjectBehavior;
+use Xabbuh\XApi\Client\Api\ActivityProfileApiClientInterface;
+use Xabbuh\XApi\Client\Api\AgentProfileApiClientInterface;
+use Xabbuh\XApi\Client\Api\StateApiClientInterface;
+use Xabbuh\XApi\Client\Api\StatementsApiClientInterface;
 use Xabbuh\XApi\Client\Request\HandlerInterface;
 use Xabbuh\XApi\Serializer\ActorSerializerInterface;
 use Xabbuh\XApi\Serializer\DocumentDataSerializerInterface;
@@ -30,21 +34,21 @@ class XApiClientSpec extends ObjectBehavior
 
     function it_returns_a_statements_api_client_instance()
     {
-        $this->getStatementsApiClient()->shouldBeAnInstanceOf('\Xabbuh\XApi\Client\Api\StatementsApiClientInterface');
+        $this->getStatementsApiClient()->shouldBeAnInstanceOf(StatementsApiClientInterface::class);
     }
 
     function it_returns_an_activity_profile_api_client_instance()
     {
-        $this->getActivityProfileApiClient()->shouldBeAnInstanceOf('\Xabbuh\XApi\Client\Api\ActivityProfileApiClientInterface');
+        $this->getActivityProfileApiClient()->shouldBeAnInstanceOf(ActivityProfileApiClientInterface::class);
     }
 
     function it_returns_an_agent_profile_api_client_instance()
     {
-        $this->getAgentProfileApiClient()->shouldBeAnInstanceOf('\Xabbuh\XApi\Client\Api\AgentProfileApiClientInterface');
+        $this->getAgentProfileApiClient()->shouldBeAnInstanceOf(AgentProfileApiClientInterface::class);
     }
 
     function it_returns_a_state_api_client_instance()
     {
-        $this->getStateApiClient()->shouldBeAnInstanceOf('\Xabbuh\XApi\Client\Api\StateApiClientInterface');
+        $this->getStateApiClient()->shouldBeAnInstanceOf(StateApiClientInterface::class);
     }
 }

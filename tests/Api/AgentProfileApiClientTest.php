@@ -15,6 +15,7 @@ use Xabbuh\XApi\Client\Api\AgentProfileApiClient;
 use Xabbuh\XApi\DataFixtures\DocumentFixtures;
 use Xabbuh\XApi\Model\Agent;
 use Xabbuh\XApi\Model\AgentProfile;
+use Xabbuh\XApi\Model\AgentProfileDocument;
 use Xabbuh\XApi\Model\InverseFunctionalIdentifier;
 use Xabbuh\XApi\Model\IRI;
 use Xabbuh\XApi\Serializer\Symfony\ActorSerializer;
@@ -123,7 +124,7 @@ class AgentProfileApiClientTest extends ApiClientTest
 
         $document = $this->client->getDocument($profile);
 
-        $this->assertInstanceOf('Xabbuh\XApi\Model\AgentProfileDocument', $document);
+        $this->assertInstanceOf(AgentProfileDocument::class, $document);
         $this->assertEquals($profile, $document->getAgentProfile());
     }
 
