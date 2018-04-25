@@ -11,20 +11,15 @@ env:
     - deps=""
     - COMPOSER_OPTIONS="--prefer-stable"
 
-php:
-  - 5.5
-  - 5.6
-
 matrix:
   fast_finish: true
   include:
-    - php: 5.4
-      env: $COMPOSER_OPTIONS="--prefer-lowest --prefer-stable --ignore-platform-reqs"
     - php: 5.6
-      env: PACKAGES="php-http/discovery:^1.0 php-http/guzzle6-adapter:^1.0 php-http/message:^1.0 xabbuh/oauth1-authentication:~1.0"
+      env: $COMPOSER_OPTIONS="--prefer-lowest --prefer-stable --ignore-platform-reqs"
     - php: 7.0
-      env: xdebug="yes"
+      env: PACKAGES="php-http/discovery:^1.0 php-http/guzzle6-adapter:^1.0 php-http/message:^1.0 xabbuh/oauth1-authentication:~1.0"
     - php: 7.1
+      env: xdebug="yes"
     - php: 7.2
 
 before_install:
