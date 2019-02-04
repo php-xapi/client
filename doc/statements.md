@@ -60,7 +60,7 @@ $result = $statementsApiClient->getStatements();
 You can even filter Statements using a StatementFilter:
 
 ```php
-use Xabbuh\XApi\Client\StatementsFilter;
+use Xabbuh\XApi\Model\StatementsFilter;
 
 // ...
 $filter = new StatementsFilter();
