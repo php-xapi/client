@@ -4,6 +4,8 @@ CHANGELOG
 0.6.0
 -----
 
+* added compatibility with HTTPlug 2
+
 * dropped the support for HHVM and for PHP < 5.6
 
 * updated the `X-Experience-API-Version` header to default to the latest patch
