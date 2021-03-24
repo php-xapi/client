@@ -32,7 +32,7 @@ class StateApiClientTest extends ApiClientTest
      */
     private $client;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->client = new StateApiClient(
