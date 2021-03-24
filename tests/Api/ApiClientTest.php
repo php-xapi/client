@@ -43,7 +43,7 @@ abstract class ApiClientTest extends TestCase
      */
     protected $serializerRegistry;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->requestHandler = $this->getMockBuilder(HandlerInterface::class)->getMock();
         $this->serializer = $this->getMockBuilder(SerializerInterface::class)->getMock();

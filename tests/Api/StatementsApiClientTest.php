@@ -12,6 +12,7 @@
 namespace Xabbuh\XApi\Client\Tests\Api;
 
 use Xabbuh\XApi\Client\Api\StatementsApiClient;
+use Xabbuh\XApi\Common\Exception\NotFoundException;
 use Xabbuh\XApi\DataFixtures\StatementFixtures;
 use Xabbuh\XApi\Model\Agent;
 use Xabbuh\XApi\Model\InverseFunctionalIdentifier;
@@ -37,7 +38,7 @@ class StatementsApiClientTest extends ApiClientTest
      */
     private $client;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->client = new StatementsApiClient(
@@ -126,33 +127,30 @@ class StatementsApiClientTest extends ApiClientTest
         $this->assertEquals($statementId2, $statements[1]->getId()->getValue());
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     */
     public function testStoreStatementsWithNonStatementObject()
     {
+        $this->expectException(\InvalidArgumentException::class);
+
         $statement1 = $this->createStatement();
         $statement2 = $this->createStatement();
 
         $this->client->storeStatements(array($statement1, new \stdClass(), $statement2));
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     */
     public function testStoreStatementsWithNonObject()
     {
+        $this->expectException(\InvalidArgumentException::class);
+
         $statement1 = $this->createStatement();
         $statement2 = $this->createStatement();
 
         $this->client->storeStatements(array($statement1, 'foo', $statement2));
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     */
     public function testStoreStatementsWithId()
     {
+        $this->expectException(\InvalidArgumentException::class);
+
         $statement1 = $this->createStatement();
         $statement2 = $this->createStatement('12345678-1234-5678-1234-567812345679');
 
@@ -202,11 +200,10 @@ class StatementsApiClientTest extends ApiClientTest
         $this->client->getStatement(StatementId::fromString($statementId));
     }
 
-    /**
-     * @expectedException \Xabbuh\XApi\Common\Exception\NotFoundException
-     */
     public function testGetStatementWithNotExistingStatement()
     {
+        $this->expectException(NotFoundException::class);
+
         $statementId = '12345678-1234-5678-1234-567812345678';
         $this->validateRetrieveApiCall(
             'get',
@@ -236,11 +233,10 @@ class StatementsApiClientTest extends ApiClientTest
         $this->client->getVoidedStatement(StatementId::fromString($statementId));
     }
 
-    /**
-     * @expectedException \Xabbuh\XApi\Common\Exception\NotFoundException
-     */
     public function testGetVoidedStatementWithNotExistingStatement()
     {
+        $this->expectException(NotFoundException::class);
+
         $statementId = '12345678-1234-5678-1234-567812345678';
         $this->validateRetrieveApiCall(
             'get',
