@@ -28,7 +28,8 @@
     "require-dev": {
         "phpspec/phpspec": "^2.4",
         "php-http/mock-client": "^1.2",
-        "php-xapi/test-fixtures": "^1.0"
+        "php-xapi/test-fixtures": "^1.0",
+        "symfony/phpunit-bridge": "^5.2"
     },
     "minimum-stability": "dev",
     "suggest": {
