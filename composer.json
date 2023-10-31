@@ -12,23 +12,22 @@
         }
     ],
     "require": {
-        "php": "^7.1",
+        "php": "^7.4 || ^8.0",
         "php-http/client-common": "^1.0 || ^2.0",
         "php-http/client-implementation": "^1.0",
         "php-http/httplug": "^1.0 || ^2.0",
         "php-http/message": "^1.0",
         "php-http/message-factory": "^1.0",
-        "php-xapi/exception": "^0.1 || ^0.2",
-        "php-xapi/model": "^1.0 || ^2.0 || ^3.0",
-        "php-xapi/serializer": "^2.0",
-        "php-xapi/serializer-implementation": "^2.0",
-        "php-xapi/symfony-serializer": "^2.0",
+        "php-xapi/exception": "^1.0",
+        "php-xapi/model": "^4.0",
+        "php-xapi/serializer": "^4.0",
+        "php-xapi/symfony-serializer": "^3.0",
         "psr/http-message": "^1.0"
     },
     "require-dev": {
-        "phpspec/phpspec": "^2.4",
+        "phpspec/phpspec": "^6.0 || ^7.0",
         "php-http/mock-client": "^1.2",
-        "php-xapi/test-fixtures": "^1.0",
+        "php-xapi/test-fixtures": "^2.0",
         "symfony/phpunit-bridge": "^5.2"
     },
     "minimum-stability": "dev",
@@ -54,5 +53,35 @@
         "branch-alias": {
             "dev-master": "0.7.x-dev"
         }
-    }
+    },
+    "config": {
+        "allow-plugins": {
+            "php-http/discovery": false
+        }
+    },
+    "repositories": [
+        {
+            "type": "git",
+            "url": "https://github.com/erickr/php-xapi-exception.git"
+        },
+        {
+            "type": "git",
+            "url": "https://github.com/erickr/php-xapi-model.git"
+        },
+        {
+            "type": "git",
+            "url": "https://github.com/erickr/php-xapi-json-test-fixtures.git"
+        },        {
+            "type": "git",
+            "url": "https://github.com/erickr/php-xapi-test-fixtures.git"
+        },
+        {
+            "type": "git",
+            "url": "https://github.com/erickr/php-xapi-serializer.git"
+        },
+        {
+            "type": "git",
+            "url": "https://github.com/erickr/php-xapi-symfony-serializer.git"
+        }
+    ]
 }
